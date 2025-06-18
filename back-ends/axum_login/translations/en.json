@@ -1,0 +1,17 @@
+{
+    "locale": "en",
+    "email_trans": "email",
+    "password_trans": "password",
+    "email_footer_reason": "This email has been sent here because an account with this email adress exists on our website. If this is an error, please send an email to this adress : ",
+    "create_account_email_subject": "Create your new account",
+    "create_account_email_title": "Create your new account on ",
+    "create_account_email_body1": "Hi, an administrator created you an account. You can now log in via this link : ",
+    "create_account_email_body2": "with those credentials : ",
+    "forgot_password_email_subject": "Reset your password",
+    "forgot_password_email_title": "Have you forgot your password ?",
+    "forgot_password_email_body1": "Here is the link to reset your password : ",
+    "forgot_password_email_body2": "if this is not you, please ignore and delete this email. Do not give this link to anyone.",
+    "verify_email_email_subject": "Verify your email adress.",
+    "verify_email_email_title": "Verify your email adress",
+    "verify_email_email_body": "Here is your code : "
+}

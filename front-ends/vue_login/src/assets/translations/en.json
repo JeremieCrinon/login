@@ -1,0 +1,224 @@
+{
+    "locale": "en",
+    "loading": "Loading, please wait....",
+    "errors": {
+        "invalidTypeReceivedUndefined": "The type received is not correct.",
+        "tooSmall": {
+            "string": {
+                "inclusive": "The string is too short. The minimum length is {minimum} characters."
+            }
+        },
+        "tooBig": {
+            "string": {
+                "inclusive": "The string is too long. The maximum length is {maximum} characters."
+            }
+        },
+        "invalidString": {
+            "email": "This is not an email"
+        }
+    },
+    "privacy": {
+        "title": "Privacy Statement",
+        "link": "Privacy",
+        "text": "Blablabla."
+    },
+    "credits": {
+        "title": "Credits",
+        "link": "Credits",
+        "jeremie": "Jérémie Crinon - App's developer : https://jcrinon.com",
+        "lucide": "Lucide - Icons library : https://lucide.dev/license",
+        "symfony": "Symfony - Back-end php framework",
+        "vue": "Vue.js - Front-end JavaScript framework",
+        "shadcnVue": "shadcnVue - shadcn port for vue",
+        "shadcn": "shadcn - Ui kit",
+        "tailwind": "tailwind - CSS framework"
+    },
+    "login": {
+        "title": "Login",
+        "email": "E-mail",
+        "password": "Password",
+        "remember_me": "Remember me",
+        "submit": "Login",
+        "error": {
+            "invalidCredentials": "Invalid email or password",
+            "other": "An error occured, please try again later"
+        }
+    },
+    "forgot_password": {
+        "trigger": "I forgot my password",
+        "title": "I forgot my password",
+        "email": "The email of your account",
+        "submit": "Send a reset password email",
+        "confirm": "An email to reset your password has been sent if the email exists",
+        "errors": {
+            "other":"An error occured, please try again later"
+        }
+    },
+    "reset_password": {
+        "password": {
+            "no_uppercase": "Password must contain at least one uppercase letter",
+            "no_lowercase": "Password must contain at least one lowercase letter",
+            "no_number": "Password must contain at least one number",
+            "no_special_char": "Password must contain at least one special character",
+            "confirm_not_matching": "Both password do not match"
+        },
+        "confirm": "Your password has been changed, you can now connect with the new one",
+        "error": {
+            "bad_code": "The link seems to not be correct, have you modified it ?",
+            "other":"An error occured, please try again later"
+        },
+        "title": "Change your password",
+        "new_password": "New password",
+        "confirm_password": "Confirm your password",
+        "submit": "Change my password"
+    },
+    "new_account": {
+        "title": "Modify your infos",
+        "email": "E-mail",
+        "new_password": "New password",
+        "confirm_password": "Confirm your password",
+        "submit": "Confirm",
+        "password": {
+            "no_uppercase": "Password must contain at least one uppercase letter",
+            "no_lowercase": "Password must contain at least one lowercase letter",
+            "no_number": "Password must contain at least one number",
+            "no_special_char": "Password must contain at least one special character",
+            "confirm_not_matching": "Both password do not match"
+        },
+        "errors": {
+            "existing_mail": "A user with this email adress already exists",
+            "other": "An error occured, please try again later"
+        },
+        "confirm": "Your infos have been changed, please log in with the new credentials you provided"
+    },
+    "verify_email": {
+        "title": "Verify your email",
+        "code": "Code sent by mail",
+        "code_description": "Enter here the code received by email",
+        "submit": "Verify my email",
+        "errors": {
+            "invalid_code": "The code you entered is not valid",
+            "other": "An error occured, please try again later"
+        }
+    },
+    "edit_unverified_email": {
+        "confirm": "The email has successfully been changed, please connect with the new one, and with the same password you entered before",
+        "resend_confirm": "A new email has been sent.",
+        "errors": {
+            "existing_mail": "A user with this email adress already exists",
+            "other": "An error occured, please try again later"
+        },
+        "submit": "Change the email",
+        "trigger": "I entred the wrong email",
+        "email": "New email",
+        "submit_new_email": "Send a new email"
+    },
+    "not_found": {
+        "title": "404",
+        "description": "Page not found<br />The page where you try to go does not exist.",
+        "link": "Return to safety"
+    },
+    "switch_color": {
+        "button_span": "Modify theme",
+        "light": "light",
+        "dark": "dark",
+        "system": "system"
+    },
+    "menu": {
+        "modify_account": "Modify my account",
+        "disconnect": "Logout",
+        "home": "Home",
+        "users": "Users"
+    },
+    "modify_account": {
+        "title": "Modify your account",
+        "email": {
+            "confirm": "Your email have successfully been changed, please log in with your new email.",
+            "email": "New email",
+            "password": "Your password",
+            "submit": "Change the email"
+        },
+        "password": {
+            "errors": {
+                "no_uppercase": "Password must contain at least one uppercase letter",
+                "no_lowercase": "Password must contain at least one lowercase letter",
+                "no_number": "Password must contain at least one number",
+                "no_special_char": "Password must contain at least one special character",
+                "confirm_not_matching": "Both password do not match"
+            },
+            "confirm": "Your password has successfully been modified",
+            "old_password": "Your current password",
+            "new_password": "Your new password",
+            "confirm_password": "Confirm your new password",
+            "submit": "Change my password"
+        },
+        "errors": {
+            "existing_mail": "A user with this email adress already exists",
+            "bad_old_password": "The old password you entered is not correct",
+            "other": "An error occured, please try again later"
+        }
+    },
+    "users": {
+        "table": {
+            "email": "email",
+            "roles": "roles",
+            "edit": "edit the user",
+            "delete": "delete the user",
+            "per_page": "number of users per page",
+            "filter_email": "Filter users by email"
+        } 
+    },
+    "delete_user": {
+        "title": "Confirm the user deletion",
+        "description": "Are you sure you want to delete the user, the user will be permanently deleted and lost all access to the app.",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "success": "The user has successfully been deleted",
+        "error": "There has been an error deleting the user"
+    },
+    "create_user": {
+        "trigger": "Create a new user",
+        "title": "Create a new user",
+        "email": "email",
+        "lang": {
+            "title": "Langage of the user",
+            "trigger": "Choose a langage",
+            "description": "The langage in which the email to invite the user to create is account will be",
+            "error": "Please choose a langage"
+        },
+        "submit": "Create the user",
+        "errors": {
+            "existing_mail":"A user with this email adress already exists",
+            "other": "An error occured, please try again later"
+        },
+        "confirm": "The user has successfully been created"
+    },
+    "edit_user": {
+        "title": "Edit the user with the email {email}",
+        "email": {
+            "invalid_email": "This is not a valid email",
+            "confirm": "The email has successfully been changed.",
+            "errors": {
+                "existing_mail": "A user with this email adress already exists",
+                "other": "An error occured, please try again later"
+            },
+            "title": "Edit the email",
+            "new_email": "New email",
+            "lang": {
+                "title": "Langage of the user",
+                "trigger": "Choose a langage",
+                "description": "The langage in which the email with the code to verify the email adress will be",
+                "error": "Please choose a langage"
+            },
+            "submit": "Change the email"
+        },
+        "roles": {
+            "confirm": "The roles have successfully been changed.",
+            "errors": {
+                "other": "An error occured, please try again later"
+            },
+            "title": "Change the roles",
+            "submit": "Change the roles"
+        }
+    }
+}

@@ -1,0 +1,224 @@
+{
+    "locale": "fr",
+    "loading": "Chargement, veuillez patienter....",
+    "errors": {
+        "invalidTypeReceivedUndefined": "Le type reçu n'est pas correct.",
+        "tooSmall": {
+            "string": {
+                "inclusive": "Le texte est trop court. La longueure minimum est de {minimum} caractères."
+            }
+        },
+        "tooBig": {
+            "string": {
+                "inclusive": "Le texte est trop long. La longueure maximum est de  {maximum} caractères."
+            }
+        },
+        "invalidString": {
+            "email": "Ce n'est pas un email."
+        }
+    },
+    "privacy": {
+        "title": "Politique de confidentialité",
+        "link": "Politique de confidentialité",
+        "text": "Blablabla."
+    },
+    "credits": {
+        "title": "Crédits",
+        "link": "Crédits",
+        "jeremie": "Jérémie Crinon - Développeur de l'application : https://jcrinon.com",
+        "lucide": "Lucide - Librairie de l'application : https://lucide.dev/license",
+        "symfony": "Symfony - Framework php pour le back-end",
+        "vue": "Vue.js - Framework JavaScript pour le front-end",
+        "shadcnVue": "shadcnVue - Port de shadcn pour Vue.js",
+        "shadcn": "shadcn - Ui kit",
+        "tailwind": "tailwind - Framework CSS"
+    },
+    "login": {
+        "title": "Se connecter",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "remember_me": "Se souvenir de moi",
+        "submit": "Se connecter",
+        "error": {
+            "invalidCredentials": "Email ou mot de passe invalide",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        }
+    },
+    "forgot_password": {
+        "trigger": "J'ai oublié mon mot de passe",
+        "title": "Mot de passe oublié ?",
+        "email": "L'adresse e-mail de votre compte",
+        "submit": "Envoyer un email de réinitialisation de mot de passe",
+        "confirm": "Un email pour réinitialiser votre mot de passe à été envoyé à l'adresse e-mail si elle existe",
+        "errors": {
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        }
+    },
+    "reset_password": {
+        "password": {
+            "no_uppercase": "Le mot de passe doit contenir au moins une lettre majuscule",
+            "no_lowercase": "Le mot de passe doit contenir au moins une lettre minuscule",
+            "no_number": "Le mot de passe doit contenir au moins un nombre",
+            "no_special_char": "Le mot de passe doit contenir au moins un caractère spécial",
+            "confirm_not_matching": "Les deux mot de passe ne correspondent pas"
+        },
+        "confirm": "Votre mot de passe a bien été",
+        "error": {
+            "bad_code": "The link seems to not be correct, have you modified it ?",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        },
+        "title": "Change your password",
+        "new_password": "New password",
+        "confirm_password": "Confirm your password",
+        "submit": "Change my password"
+    },
+    "new_account": {
+        "title": "Modify your infos",
+        "email": "E-mail",
+        "new_password": "New password",
+        "confirm_password": "Confirm your password",
+        "submit": "Confirm",
+        "password": {
+            "no_uppercase": "Le mot de passe doit contenir au moins une lettre majuscule",
+            "no_lowercase": "Le mot de passe doit contenir au moins une lettre minuscule",
+            "no_number": "Le mot de passe doit contenir au moins un nombre",
+            "no_special_char": "Le mot de passe doit contenir au moins un caractère spécial",
+            "confirm_not_matching": "Les deux mot de passe ne correspondent pas"
+        },
+        "errors": {
+            "existing_mail": "Un utilisateur avec cette adresse e-mail existe déjà",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        },
+        "confirm": "Vos informations ont bien été changés, veuillez vous reconnecter avec ces nouvelles informations"
+    },
+    "verify_email": {
+        "title": "Vérifiez votre adresse email",
+        "code": "Code envoyé par e-mail",
+        "code_description": "Entrez ici le code reçu par e-mail",
+        "submit": "Confirmer mon adresse e-mail",
+        "errors": {
+            "invalid_code": "Le code que vous avez entré n'est pas correct",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        }
+    },
+    "edit_unverified_email": {
+        "confirm": "L'e-mail à bien été changé, veuillez vous reconnecter avec ce nouvel e-mail et le même mot de passe",
+        "resend_confirm": "Un nouvel email a bien été envoyé.",
+        "errors": {
+            "existing_mail": "Un utilisateur avec cette adresse e-mail existe déjà",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        },
+        "submit": "Changer l'e-mail",
+        "trigger": "J'ai entré le mauvais email",
+        "email": "Nouvel e-mail",
+        "submit_new_email": "Envoyer un nouvel e-mail"
+    },
+    "not_found": {
+        "title": "404",
+        "description": "Page non trouvée<br />La page que vous essayé d'acceder n'existe pas.",
+        "link": "Retourner en sécurité"
+    },
+    "switch_color": {
+        "button_span": "Modifier le thème",
+        "light": "clair",
+        "dark": "sombre",
+        "system": "système"
+    },
+    "menu": {
+        "modify_account": "Modifier mon compte",
+        "disconnect": "Se déconnecter",
+        "home": "Accueil",
+        "users": "Utilisateurs"
+    },
+    "modify_account": {
+        "title": "Modifier mon compte",
+        "email": {
+            "confirm": "Votre e-mail a bien été changé, veuillez vous reconnecter avec ce nouvel e-mail.",
+            "email": "Nouvel e-mail",
+            "password": "Votre mot de passe",
+            "submit": "Changer l'e-mail"
+        },
+        "password": {
+            "errors": {
+                "no_uppercase": "Le mot de passe doit contenir au moins une lettre majuscule",
+                "no_lowercase": "Le mot de passe doit contenir au moins une lettre minuscule",
+                "no_number": "Le mot de passe doit contenir au moins un nombre",
+                "no_special_char": "Le mot de passe doit contenir au moins un caractère spécial",
+                "confirm_not_matching": "Les deux mot de passe ne correspondent pas"
+            },
+            "confirm": "Votre mot de passe a bien été modifié",
+            "old_password": "Votre mot de passe actuel",
+            "new_password": "Votre nouveau mot de passe",
+            "confirm_password": "Confirmer votre nouveau mot de passe",
+            "submit": "Changer de mot de passe"
+        },
+        "errors": {
+            "existing_mail": "Un utilisateur avec cette adresse e-mail existe déjà",
+            "bad_old_password": "L'ancien mot de passe que vous avez entré n'est pas correct",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        }
+    },
+    "users": {
+        "table": {
+            "email": "email",
+            "roles": "roles",
+            "edit": "modifier l'utilisateur",
+            "delete": "supprimer l'utilisateur",
+            "per_page": "Nombre d'utilisateurs par page",
+            "filter_email": "Filtrer les utilisateurs par e-mail"
+        } 
+    },
+    "delete_user": {
+        "title": "Confirmer la suppression de l'utilisateur",
+        "description": "Êtes-vous sur(e) de vouloir supprimer cet utilisateur-trice. Il/elle vas perdre tout accès à l'application. Cette action est définitive.",
+        "cancel": "Annuler",
+        "confirm": "Confirmer",
+        "success": "L'utilisateur-trice a bien été supprimé-e.",
+        "error": "Une erreur est survenue durant la suppression de l'utilisateur-trice"
+    },
+    "create_user": {
+        "trigger": "Créer un utilisateur-trice",
+        "title": "Créer un-e nouvel-le utilisateur-trice",
+        "email": "email",
+        "lang": {
+            "title": "Langue de l'utilisateur-trice",
+            "trigger": "Choisissez un language",
+            "description": "Le language dans lequel l'email d'invitation vas être envoyé",
+            "error": "Veuillez choisir un language"
+        },
+        "submit": "Créer l'utilisateur-trice",
+        "errors": {
+            "existing_mail":"Un utilisateur avec cette adresse e-mail existe déjà",
+            "other": "Une erreur est survenue, veuillez réessayer plus tard"
+        },
+        "confirm": "L'utilisateur-trice a bien été créé-e"
+    },
+    "edit_user": {
+        "title": "Modifier l'utilisater-trice avec l'adresse e-mail {email}",
+        "email": {
+            "invalid_email": "Ce n'est pas une adresse e-mail valide",
+            "confirm": "L'e-mail a bien été modifié.",
+            "errors": {
+                "existing_mail": "Un utilisateur avec cette adresse e-mail existe déjà",
+                "other": "Une erreur est survenue, veuillez réessayer plus tard"
+            },
+            "title": "Modifier l'adresse e-mail",
+            "new_email": "Nouvelle adresse",
+            "lang": {
+                "title": "Langue de l'utilisateur-trice",
+                "trigger": "Choisissez un language",
+                "description": "Le language dans lequel l'email d'invitation vas être envoyé",
+                "error": "Veuillez choisir un language"
+            },
+            "submit": "Changer l'e-mail"
+        },
+        "roles": {
+            "confirm": "Les roles ont bien été changés.",
+            "errors": {
+                "other": "Une erreur est survenue, veuillez réessayer plus tard"
+            },
+            "title": "Changer les roles",
+            "submit": "Confirmer le changement"
+        }
+    }
+}

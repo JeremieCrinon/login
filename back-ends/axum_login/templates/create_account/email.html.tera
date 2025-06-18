@@ -1,0 +1,12 @@
+{% extends "base_email.html.tera" %}
+{% block title %}{{ create_account_email_subject }}{% endblock title %}
+{% block content %}
+    <img class="logo" src={{logo_url}} />
+    <h1 class="email-title">{{ create_account_email_title }}{{ app_name }}.</h1>
+    <p class="email-body">{{ create_account_email_body1 }}<a href={{app_main_front_end}}>{{ app_main_front_end }}</a> {{ create_account_email_body2 }}</p>
+    <ul class="email-list">
+        <li>{{ email_trans }}: {{ email }}</li>
+        <li>{{ password_trans}}: {{ password }}</li>
+    </ul>
+
+{% endblock content %}

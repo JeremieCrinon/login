@@ -1,0 +1,18 @@
+{
+    "locale": "fr",
+    "email_trans": "email",
+    "password_trans": "mot de passe",
+    "email_footer_reason": "Cet email vous a été envoyé parce qu'un compte avec cette adresse email existe sur notre site. Si il s'agit d'une erreur, merci d'envoyer un email à cette adresse : ",
+    "create_account_email_subject": "Créez votre compte",
+    "create_account_email_title": "Créez votre nouveau compte sur ",
+    "create_account_email_body1": "Bonjour, un administrateur vous a créé un compte. Vous pouvez vous connecter via se lien : ",
+    "create_account_email_body2": "avec ces identifiants : ",
+    "forgot_password_email_subject": "Réinitialiser votre mot de passe",
+    "forgot_password_email_title": "Avez-vous oublié.e votre mot de passe ?",
+    "forgot_password_email_body1": "Voici le lien pour réinitialiser votre mot de passe : ",
+    "forgot_password_email_body2": "si se n'était pas vous, veuillez ignorer et supprimer cet email. Ne donnez surtout pas ce lien à qui que ce soit.",
+    "verify_email_email_subject": "Vérifiez votre adresse email",
+    "verify_email_email_title": "Vérifiez votre adresse email.",
+    "verify_email_email_body": "Voici votre code : "
+}
+    

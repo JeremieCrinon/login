@@ -1,0 +1,2 @@
+{{ verify_email_email_title }}
+{{ verify_email_email_body }}{{ code }}.

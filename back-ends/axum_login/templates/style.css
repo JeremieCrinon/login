@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+#email-container {
+    width: 500px;
+    /* background-color: red; */
+}
+
+.logo {
+    width: 25%;
+    /* margin-left: 5%; */
+}
+
+.email-title {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.email-body, .email-list li {
+    font-size: 1.6rem;
+}
+
+.email-list {
+    list-style-type: none;
+}
+
+#footer {
+    margin-top: 50px;
+}

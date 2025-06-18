@@ -1,0 +1,4 @@
+{{ create_account_email_title }}{{ app_name }}.
+{{ create_account_email_body1 }}{{ app_main_front_end }} {{ create_account_email_body2 }}
+{{ email_trans }}: {{ email }}
+{{ password_trans}}: {{ password }}

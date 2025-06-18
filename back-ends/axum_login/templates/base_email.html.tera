@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang={{locale}}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+    <style>
+        /* Injecting the css in the tera context. VS Code (and maybe other editors) displays an error here, but it is actually valid. */
+        {{ inline_css | safe }}
+    </style>
+    <title>{% block title %}{% endblock title %}</title>
+    {% endblock head %}
+</head>
+<body>
+    <div id="email-container">
+        <div id="content">{% block content %}{% endblock content %}</div>
+        <div id="footer">
+            {% block footer %}
+            <p>{{ email_footer_reason }}{{ admin_email }}</p>
+            {% endblock footer %}
+        </div>
+    </div>
+</body>
+</html>
