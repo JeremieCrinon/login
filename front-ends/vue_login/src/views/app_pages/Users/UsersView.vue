@@ -59,19 +59,14 @@ interface User {
     roles: string[];
 }
 
-const per_page = ref(parseInt(localStorage.getItem("users_per_page") ?? "10"));
-const page = ref(1);
+
 const users = ref<User[]>([]);
 const total_users = ref(0);
 const loading = ref(true);
-const filter_email = ref('');
 
-const getUsers = (per_page: number = 10, page: number = 1) => {
+const getUsers = () => {
     loading.value = true;
-    per_page = per_page < 1 ? 1 : per_page; // Just to be sure that it is not inferior to 1
-    page = page < 1 ? 1 : page; // Just to be sure that it is not inferior to 1
 
-    // axios.get(API_URL + `/users?per_page=${per_page}&page=${page}${filter_email.value ? '&email=' + filter_email.value : ''}`, {
     axios.get(API_URL + `/users`, {
         headers: { Authorization: "Bearer " + token }
     })
@@ -97,14 +92,8 @@ const filterUsers = (users: Array<User>) => {
   return users;
 };
 
-getUsers(per_page.value, page.value);
+getUsers();
 
-watch(per_page, () => {
-    localStorage.setItem('users_per_page', per_page.value.toString());
-    getUsers(per_page.value, page.value);
-});
-watch(page, () => getUsers(per_page.value, page.value));
-watch(filter_email, () => getUsers(per_page.value, page.value));
 
 const user_email = sessionStorage.getItem("user_email");
 </script>
@@ -113,25 +102,7 @@ const user_email = sessionStorage.getItem("user_email");
     <Menu>
 
         <div class="mt-10">
-            <CreateUser @user_change="() => getUsers(per_page, page)" />
-        </div>
-    
-        <div class="flex mt-5">
-            <!-- The filed for users per page -->
-            <NumberField :model-value="per_page" @update:model-value="(newValue) => per_page = newValue" :min="1" :max="100">
-                <Label>{{ $t("users.table.per_page") }}</Label>
-                <NumberFieldContent>
-                <NumberFieldDecrement />
-                <NumberFieldInput />
-                <NumberFieldIncrement />
-                </NumberFieldContent>
-            </NumberField>
-
-            <!-- The input to filter users by email -->
-            <div class="grid w-full max-w-sm items-center gap-1.5 ml-5">
-                <Label for="filter_email">{{ $t("users.table.filter_email") }}</Label>
-                <Input v-model="filter_email" id="filter_email" type="text" />
-            </div>
+            <CreateUser @user_change="() => getUsers()" />
         </div>
 
         <!-- The user's table itself -->
@@ -146,7 +117,7 @@ const user_email = sessionStorage.getItem("user_email");
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow v-for="n in per_page" :key="n" >
+                    <TableRow v-for="n in 10" :key="n" >
                         <TableCell>
                             <Skeleton class="w-48 h-7" />
                         </TableCell>
@@ -182,34 +153,14 @@ const user_email = sessionStorage.getItem("user_email");
                             {{ user.roles.join(', ') }}
                         </TableCell>
                         <TableCell>
-                            <EditUser v-if="user.id !== 1 && user.email !== user_email" :id="user.id" :user="user" @user_change="() => getUsers(per_page, page)" />
+                            <EditUser v-if="user.id !== 1 && user.email !== user_email" :id="user.id" :user="user" @user_change="() => getUsers()" />
                         </TableCell>
                         <TableCell>
-                            <DeleteUser v-if="user.id !== 1 && user.email !== user_email" :id="user.id" @user_change="() => getUsers(per_page, page)" />
+                            <DeleteUser v-if="user.id !== 1 && user.email !== user_email" :id="user.id" @user_change="() => getUsers()" />
                         </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-
-            <!-- Pagination -->
-            <Pagination v-slot="{ page }" :total="(total_users / per_page) * 10" show-edges :default-page="page" @update:page="(newPage) => page = newPage">
-                <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-                    <PaginationFirst />
-                    <PaginationPrev />
-
-                    <template v-for="(item, index) in items">
-                        <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                        <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'">
-                            {{ item.value }}
-                        </Button>
-                        </PaginationListItem>
-                        <PaginationEllipsis v-else :key="item.type" :index="index" />
-                    </template>
-
-                    <PaginationNext />
-                    <PaginationLast />
-                </PaginationList>
-            </Pagination>
         </div>
 
   </Menu>
