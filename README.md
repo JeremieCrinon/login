@@ -47,8 +47,8 @@ There is a back-end route `/user-infos` that gets the user's JWT token and tells
 ### Roles
 One or multiple roles can be assigned to a user. Here is a list of each role and what they do : 
 - admin: Gives all permissions to the user.
-- user: It can be given to the user depending on the back-end. It gives no permissions at all.
-- new_account: Tells that it is a new_account, the user does not have the permission to do anything except call the `/modify-new-account` route.
+- user: It may be given to the user depending on the back-end. It gives no permissions at all.
+- new_account: Tells that it is a new account, the user does not have the permission to do anything except call the `/modify-new-account` route.
 - unverified_email: Tells that the email hasn't been verified, the user does not have the permission to do anything except call the `verify-email` route and the `/edit-email` route.
 - edit_users: Grants the permission to create, read, update, and delete other users.
 
