@@ -32,7 +32,7 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
-        // Create a default user with password = "Admin12345@"
+        // Create a default user with password = "Admin12345@" using raw sql
         manager
             .get_connection()
             .execute_unprepared(

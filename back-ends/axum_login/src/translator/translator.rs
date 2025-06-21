@@ -23,19 +23,7 @@ impl Translator {
             "fr" => &self.fr,
             _ => &self.en
         };
-        // if lang == "fr" {
-        //     self.fr.as_object()
-        //     .unwrap()
-        //     .iter()
-        //     .map(|(k, v)| (k.clone(), v.as_str().unwrap().to_string()))
-        //     .collect()
-        // } else {
-        //     self.en.as_object()
-        //     .unwrap()
-        //     .iter()
-        //     .map(|(k, v)| (k.clone(), v.as_str().unwrap().to_string()))
-        //     .collect()
-        // }
+        
         return json
             .as_object()
             .unwrap()
