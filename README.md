@@ -3,7 +3,7 @@
 
 These templates are made to provide a base for apps requiring a login system. It is intended to choose one back-end, and one or multiple front-ends, based on your needs.
 All back-ends are HTTP APIs that all have the same routes and return the same results (except in places where it will not affect the front-ends if it is different. i.e.: an error message destined to developers).
-I tried to the best of my abilities to follow best practices and make the code as readable as I can.
+It is intended to follow best practices and make the code as readable as possible.
 It also can be a way for you to learn a new technology, to serve as an example.
 It is intended to use a PostgreSQL database with it, you can try to adapt it to other DB, it should not be too hard, but I cannot guarantee anything.
 
@@ -26,7 +26,7 @@ Here is a list of the frameworks with their pros and cons to help you choose :
 - More will be coming
 
 ### Back-ends : 
-- Axum (Rust) : INSANE performances, steep learning curve, not recommended to beginners.
+- Axum (Rust) : Really good performances, steep learning curve, not recommended to beginners.
 - More will be coming
 
 
@@ -86,3 +86,6 @@ These routes are intended to be used by users with the role `admin` or `edit_use
 - React (JavaScript)
 - SwiftUI (Swift) - For iOS, iPadOS, macOS, and WatchOS
 - An Android version (don't know which language or framework I will use)
+
+## Contributing
+I am all open to contributions, but I will not accept PRs in other frameworks/languages than the one already in the project or in the [Planned frameworks to add section](#planned-frameworks-to-add).
