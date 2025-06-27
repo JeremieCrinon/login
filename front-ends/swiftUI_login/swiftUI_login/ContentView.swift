@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var loadingManager = LoadingManager.preview()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            Group {
+                Text("Hello, World !")
+            }
+            
+            Loading()
+                .environmentObject(loadingManager)
         }
-        .padding()
     }
 }
 
