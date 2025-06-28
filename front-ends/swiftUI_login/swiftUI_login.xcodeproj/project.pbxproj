@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FDAFC8732E0F03080006930A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FDAFC8722E0F03080006930A /* Localizable.xcstrings */; };
+		FDAFC87C2E104ACA0006930A /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FDAFC87B2E104ACA0006930A /* KeychainSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDAFC87C2E104ACA0006930A /* KeychainSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +73,7 @@
 			);
 			name = swiftUI_login;
 			packageProductDependencies = (
+				FDAFC87B2E104ACA0006930A /* KeychainSwift */,
 			);
 			productName = swiftUI_login;
 			productReference = FDD8B6752E0EF519001FEB2E /* swiftUI_login.app */;
@@ -101,6 +104,9 @@
 			);
 			mainGroup = FDD8B66C2E0EF519001FEB2E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FDAFC87A2E104ACA0006930A /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FDD8B6762E0EF519001FEB2E /* Products */;
 			projectDirPath = "";
@@ -340,6 +346,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FDAFC87A2E104ACA0006930A /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FDAFC87B2E104ACA0006930A /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FDAFC87A2E104ACA0006930A /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FDD8B66D2E0EF519001FEB2E /* Project object */;
 }
