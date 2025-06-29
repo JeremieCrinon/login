@@ -9,6 +9,7 @@ import Foundation
 
 enum UserInfosError: Error {
     case invalidURL
+    case invalidToken
 }
 
 struct UserInfosResponse: Codable {

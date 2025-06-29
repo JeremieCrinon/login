@@ -15,13 +15,17 @@ struct ContentView: View {
         ZStack {
             Group {
                 if authManager.token == nil {
-                    Text("Not logged in")
+                    LoginView()
                 } else if authManager.roles.contains("new_account") {
                     Text("New account")
                 } else if authManager.roles.contains("unverified_email") {
                     Text("Unverified email")
                 } else {
-                    Text("Logged in")
+                    VStack {
+                        Text("Logged in")
+                        Logout()
+                            .environmentObject(authManager)
+                    }
                 }
             }
             

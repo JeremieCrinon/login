@@ -25,7 +25,9 @@ struct Loading: View {
             .padding()
             .glassEffect()
             .ignoresSafeArea()
-            
+            .allowsHitTesting(true)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
                 
         }
     }
@@ -33,7 +35,6 @@ struct Loading: View {
 
 #Preview {
     ZStack { // We put a Zstack here to have a similar displaying as in the complete app
-        Text("Preview")
         #if DEBUG // We add this condition, even tough it should always be true, to really make sure we display this only in debug mode, as the preview function of loading manager is only avaible in debug mode
             Loading()
                 .environmentObject(LoadingManager.preview())
