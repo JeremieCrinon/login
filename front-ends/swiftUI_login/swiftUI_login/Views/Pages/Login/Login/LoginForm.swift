@@ -34,8 +34,6 @@ struct LoginForm: View {
 }
 
 #Preview {
-    #if DEBUG
     LoginForm()
         .environmentObject(LoginViewModel())
-    #endif
 }

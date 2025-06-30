@@ -10,10 +10,6 @@ import SwiftUI
 struct LoginView: View {
     @StateObject private var loginViewModel = LoginViewModel()
     
-    @State private var loginError: String? = nil;
-    @State private var email: String = "";
-    @State private var password: String = "";
-    
     var body: some View {
         VStack {
             ZStack {
