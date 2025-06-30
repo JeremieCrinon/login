@@ -190,6 +190,43 @@
         }
       }
     },
+    "new_account_success_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please log in with the new credentials you entered."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci de vous connecter avec les nouveaux identifiants que vous avez entré.e."
+          }
+        }
+      }
+    },
+    "new_account_success_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account created"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte crée"
+          }
+        }
+      }
+    },
+    "OK" : {
+
+    },
     "password" : {
       "localizations" : {
         "en" : {

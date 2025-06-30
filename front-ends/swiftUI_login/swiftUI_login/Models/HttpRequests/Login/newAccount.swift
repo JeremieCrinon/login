@@ -25,9 +25,3 @@ enum NewAccountError: Error {
         }
     }
 }
-
-
-
-//struct LoginResponse: Codable {
-//    let token: String
-//}

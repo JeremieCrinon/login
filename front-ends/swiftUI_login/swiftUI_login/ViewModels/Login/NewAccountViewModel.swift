@@ -61,7 +61,7 @@ class NewAccountViewModel: ObservableObject {
             }
             
             AuthManager.shared.logout()
-    //        MessagesManager.shared.setMessage(title: "Success!",message: "Your informations have successfully been updated, please login with those new credentials.")
+            MessagesManager.shared.setMessage(title: MessageTitle.newAccount, message: MessageDesc.newAccount)
             LoadingManager.shared.isLoading = false
             
             
