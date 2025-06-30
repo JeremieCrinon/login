@@ -18,9 +18,6 @@ struct ContentView: View {
                     LoginView()
                 } else if authManager.roles.contains("new_account") {
                     NewAccountView()
-                    
-                    Logout()
-                        .environmentObject(authManager)
                 } else if authManager.roles.contains("unverified_email") {
                     Logout()
                         .environmentObject(authManager)

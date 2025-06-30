@@ -17,14 +17,6 @@ struct LoginView: View {
                     .font(.title)
                     .fontWeight(.semibold)
                 
-                HStack {
-                    Spacer()
-                    
-                    LoginValidateButton()
-                        .environmentObject(loginViewModel)
-                        .padding()
-                }
-                
             }
             
             

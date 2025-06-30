@@ -103,6 +103,23 @@
         }
       }
     },
+    "login_button" : {
+      "comment" : "The text on the login button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion"
+          }
+        }
+      }
+    },
     "login_error_invalidCredentials" : {
       "comment" : "The error in case the credentials are invalid in the loginView",
       "extractionState" : "manual",
@@ -152,6 +169,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Modifiez votre nouveau compte"
+          }
+        }
+      }
+    },
+    "new_account_button" : {
+      "comment" : "The text on the new account validate form button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create my new account"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer mon compte"
           }
         }
       }

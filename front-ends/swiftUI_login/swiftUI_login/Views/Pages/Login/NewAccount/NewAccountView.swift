@@ -17,14 +17,6 @@ struct NewAccountView: View {
                     .fontWeight(.semibold)
                     .frame(width: 250)
                 
-                HStack {
-                    Spacer()
-                    
-                    NewAccountValidateButton()
-                        .environmentObject(newAccountViewModel)
-                        .padding()
-                }
-                
             }
             
             NewAccountForm()

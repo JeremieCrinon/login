@@ -41,6 +41,13 @@ struct NewAccountForm: View {
                 
             }
             
+            Group {
+                NewAccountValidateButton()
+                    .environmentObject(newAccountViewModel)
+                    .environmentObject(LoadingManager.shared)
+                    .padding()
+            }
+            
         }
     }
 }

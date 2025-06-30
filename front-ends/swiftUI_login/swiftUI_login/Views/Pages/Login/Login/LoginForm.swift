@@ -29,6 +29,12 @@ struct LoginForm: View {
                     .disableAutocorrection(true)
             }
             
+            Group {
+                LoginValidateButton()
+                    .environmentObject(loginViewModel)
+                    .environmentObject(LoadingManager.shared)
+                    .padding()
+            }
         }
     }
 }

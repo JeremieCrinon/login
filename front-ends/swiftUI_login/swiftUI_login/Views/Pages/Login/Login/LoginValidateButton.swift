@@ -9,25 +9,36 @@ import SwiftUI
 
 struct LoginValidateButton: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
+    @EnvironmentObject var loadingManager: LoadingManager
+    
+    var disabled: Bool {
+        loginViewModel.email.isEmpty || loadingManager.isLoading
+    }
     
     var body: some View {
         Button(action: {
             Task {
-                await loginViewModel.login();
+                await loginViewModel.login()
             }
         }) {
-            Image(systemName: "checkmark")
-                .imageScale(.large)
-                .padding(10)
+            Text("login_button", comment: "The text on the login button")
+                .padding()
+                .font(.title2)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity)
         }
-        .background(Color.blue)
-        .foregroundStyle(.white)
+        .background(disabled ? Color.gray.opacity(0.4) : Color.blue)
+        .foregroundStyle(disabled ? Color.gray : Color.white)
         .cornerRadius(50)
-        .scaleEffect(1)
+        .disabled(disabled)
+        .opacity(disabled ? 0.5 : 1)
+        .padding(.horizontal, 40)
         
     }
 }
 
 #Preview {
     LoginValidateButton()
+        .environmentObject(LoginViewModel())
+        .environmentObject(LoadingManager.shared)
 }
