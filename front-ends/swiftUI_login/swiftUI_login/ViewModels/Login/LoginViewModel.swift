@@ -13,7 +13,7 @@ internal import Combine
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
-    @Published var error: String? = nil
+    @Published var error: LoginError? = nil
     
     let keychain = KeychainSwift();
     
@@ -21,7 +21,7 @@ class LoginViewModel: ObservableObject {
         LoadingManager.shared.isLoading = true;
         do {
             guard let url = URL(string: "\(Config.apiUrl)/login") else {
-                throw LoginError.invalidURL;
+                throw LoginError.unknown;
             }
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
@@ -49,15 +49,16 @@ class LoginViewModel: ObservableObject {
             
             await AuthManager.shared.verifyToken();
         } catch {
+
             switch error {
             case LoginError.invalidCredentials:
-                LoadingManager.shared.isLoading = false;
-                self.error = "Invalid credentials"
+                self.error = LoginError.invalidCredentials
             default:
                 print(error)
-                LoadingManager.shared.isLoading = false;
-                self.error = "An error occurred, please try again later."
+                self.error = LoginError.unknown
             }
+            
+            LoadingManager.shared.isLoading = false;
             
         }
         

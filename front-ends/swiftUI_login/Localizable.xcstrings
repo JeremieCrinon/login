@@ -17,6 +17,24 @@
         }
       }
     },
+    "error_unknown" : {
+      "comment" : "The general error message in case an unexpected error occurred",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occured, please try again later."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un erreur est survenue, veuillez réessayer plus tard."
+          }
+        }
+      }
+    },
     "loading" : {
       "comment" : "The text in the loading view next to the ProgressView",
       "localizations" : {
@@ -50,6 +68,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se connecter"
+          }
+        }
+      }
+    },
+    "login_error_invalidCredentials" : {
+      "comment" : "The error in case the credentials are invalid in the loginView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid credentials, please verify the email address and password you entered."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identifiants invalides, veuillez vérifier votre adresse email et mot de passe."
           }
         }
       }

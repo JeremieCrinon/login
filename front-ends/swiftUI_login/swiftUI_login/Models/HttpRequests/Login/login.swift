@@ -13,9 +13,18 @@ struct LoginRequest: Codable {
 }
 
 enum LoginError: Error {
-    case invalidURL
     case invalidCredentials
+    case unknown
+    
+    var localizationKey: String {
+        switch self {
+        case .invalidCredentials: return "login_error_invalidCredentials"
+        case .unknown: return "error_unknown"
+        }
+    }
 }
+
+
 
 struct LoginResponse: Codable {
     let token: String
