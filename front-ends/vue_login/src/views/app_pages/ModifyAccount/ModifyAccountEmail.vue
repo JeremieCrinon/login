@@ -62,7 +62,7 @@ const onEmailSubmit = handleEmailSubmit((values) => {
     })
     .catch((error) => {
         if(error && error.response.status === 401) { // The user does not have a valid token
-            router.push("/logout");
+            emailErrorMessage.value = t("modify_account.errors.bad_old_password");
         } else if (error && error.response.status === 409) {
             emailErrorMessage.value = t("modify_account.errors.existing_mail");
         } else {

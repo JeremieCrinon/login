@@ -486,7 +486,7 @@ pub async fn edit_email (State(state): State<AppState>, Extension(user): Extensi
             })?;
 
         if !is_valid {
-            return Err((StatusCode::BAD_REQUEST, "The password sent is incorrect.").into_response());
+            return Err((StatusCode::UNAUTHORIZED, "The password sent is incorrect.").into_response());
         }
     }
 

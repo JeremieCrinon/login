@@ -1,6 +1,22 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "account" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte"
+          }
+        }
+      }
+    },
     "code" : {
       "localizations" : {
         "en" : {
@@ -13,6 +29,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "code"
+          }
+        }
+      }
+    },
+    "edit_email" : {
+      "comment" : "The title of the form to edit the email in the account page",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit email"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier l’adresse email"
+          }
+        }
+      }
+    },
+    "edit_email_success_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please log in with your new email address."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci de vous re-connecter avec votre nouvelle adresse email."
+          }
+        }
+      }
+    },
+    "edit_email_success_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email edited successfully"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse email modifiée"
+          }
+        }
+      }
+    },
+    "edit_email_validate" : {
+      "comment" : "The text on the button to validate the email change on the account page",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change the email"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier l’adresse email"
           }
         }
       }
@@ -81,6 +165,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un erreur est survenue, veuillez réessayer plus tard."
+          }
+        }
+      }
+    },
+    "home" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accueil"
           }
         }
       }
@@ -386,6 +486,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le mot de passe doit faire au moins 8 charactères."
+          }
+        }
+      }
+    },
+    "users" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Users"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisateurs"
           }
         }
       }

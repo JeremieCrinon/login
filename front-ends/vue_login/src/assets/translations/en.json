@@ -154,7 +154,7 @@
         },
         "errors": {
             "existing_mail": "A user with this email adress already exists",
-            "bad_old_password": "The old password you entered is not correct",
+            "bad_old_password": "The password you entered is not correct",
             "other": "An error occured, please try again later"
         }
     },

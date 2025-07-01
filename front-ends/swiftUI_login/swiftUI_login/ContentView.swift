@@ -22,8 +22,22 @@ struct ContentView: View {
                 } else if authManager.roles.contains("unverified_email") {
                     VerifyEmailView()
                 } else {
-                    Logout()
-                        .environmentObject(authManager)
+                    TabView {
+                        Tab("home", systemImage: "house.fill") {
+                            Text("home")
+                        }
+                        
+                        if authManager.roles.contains("edit_users") || authManager.roles.contains("admin") {
+                            Tab("users", systemImage: "person.3.sequence.fill") {
+                                Text("users")
+                            }
+                        }
+                        
+                        Tab("account", systemImage: "person.crop.circle.fill") {
+                            AccountView()
+                        }
+                        
+                    }
                 }
             }
             

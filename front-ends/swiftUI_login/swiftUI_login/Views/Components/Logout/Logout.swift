@@ -15,8 +15,17 @@ struct Logout: View {
                 authManager.logout()
             }
         }) {
-            Text("logout", comment: "The text on the logout button") // Temporary, I need a logout button for testing, but I don't know how it would look like for now
+            Text("logout", comment: "The text on the logout button")
+                .padding()
+                .font(.title2)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity)
         }
+        .foregroundStyle(Color.red)
+        .background(Color.gray .opacity(0.15))
+        .cornerRadius(50)
+        .padding(.horizontal, 40)
+        
     }
 }
 
