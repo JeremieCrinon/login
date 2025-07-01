@@ -1,6 +1,22 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "code" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "code"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "code"
+          }
+        }
+      }
+    },
     "email" : {
       "localizations" : {
         "en" : {
@@ -65,6 +81,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un erreur est survenue, veuillez réessayer plus tard."
+          }
+        }
+      }
+    },
+    "invalid_email_code" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The code you entered is not correct."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le code que vous avez entré.e n’est pas correct."
           }
         }
       }
@@ -225,7 +258,20 @@
       }
     },
     "OK" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "password" : {
       "localizations" : {
@@ -340,6 +386,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le mot de passe doit faire au moins 8 charactères."
+          }
+        }
+      }
+    },
+    "verify_email" : {
+      "comment" : "The title of the verify email adress page",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verify your email address"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez votre adresse email"
           }
         }
       }
