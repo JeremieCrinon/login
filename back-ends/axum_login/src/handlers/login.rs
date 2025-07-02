@@ -588,11 +588,7 @@ pub async fn edit_password (State(state): State<AppState>, Extension(user): Exte
         })?;
 
     if !is_valid {
-        let error = ErrorResponse {
-            error_code: "bad_old_password",
-            message: "The current password sent is incorrect.",
-        };
-        return Err((StatusCode::BAD_REQUEST, Json(error)).into_response());
+        return Err((StatusCode::UNAUTHORIZED, "The current password sent is incorrect.").into_response());
     }
 
     // We've done our verifications, now, we modify the user

@@ -10,12 +10,22 @@ import SwiftUI
 struct AccountView: View {
     var authManager = AuthManager.shared
     var body: some View {
+        Form {
             EditEmailForm()
         
+            Spacer()
+            
+            EditPasswordForm()
+            
+            Spacer()
+            
             Logout()
                 .environmentObject(authManager)
+        }
+            
         
     }
+    
 }
 
 #Preview {

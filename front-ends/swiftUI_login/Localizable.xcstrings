@@ -33,6 +33,38 @@
         }
       }
     },
+    "confirm_password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm the password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmez le mot de passe"
+          }
+        }
+      }
+    },
+    "current_password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe actuel"
+          }
+        }
+      }
+    },
     "edit_email" : {
       "comment" : "The title of the form to edit the email in the account page",
       "localizations" : {
@@ -97,6 +129,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Modifier l’adresse email"
+          }
+        }
+      }
+    },
+    "edit_password" : {
+      "comment" : "The title of the form to edit the password in the account page",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit the password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le mot de passe"
+          }
+        }
+      }
+    },
+    "edit_password_error_invalidCredentials" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The current password you entered is not correct."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le mot de passe actuel que vous avez entré.e n’est pas le bon."
+          }
+        }
+      }
+    },
+    "edit_password_success_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can now use your new password."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez maintenant utiliser votre nouveau mot de passe."
+          }
+        }
+      }
+    },
+    "edit_password_success_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password edited"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe modifié"
+          }
+        }
+      }
+    },
+    "edit_password_validate" : {
+      "comment" : "The text on the button to validate the password change on the account page",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change the password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le mot de passe"
           }
         }
       }
@@ -353,6 +470,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compte crée"
+          }
+        }
+      }
+    },
+    "new_password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau mot de passe"
           }
         }
       }
