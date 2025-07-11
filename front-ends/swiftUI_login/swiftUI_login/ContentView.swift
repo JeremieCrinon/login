@@ -29,9 +29,13 @@ struct ContentView: View {
                         
                         if authManager.roles.contains("edit_users") || authManager.roles.contains("admin") {
                             Tab("users", systemImage: "person.3.sequence.fill") {
-                                Text("users")
+                                UsersView()
                             }
                         }
+                        
+                        
+                        
+                        
                         
                         Tab("account", systemImage: "person.crop.circle.fill") {
                             AccountView()

@@ -31,6 +31,7 @@ class AuthManager: ObservableObject {
     
     // Sets self.token to the token in keychain if it is valid. Also sets self.roles to the user's roles. Should be called on app's startup or when logging in
     func verifyToken() async {
+        
         LoadingManager.shared.isLoading = true;
         
         let token = self.keychain.get("token");

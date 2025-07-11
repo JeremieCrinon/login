@@ -28,13 +28,6 @@ pub struct UserClaims {
     pub id: i32,
 }
 
-/// A generic error response when more details are needed for the front-end than just plain text
-#[derive(Serialize)]
-struct ErrorResponse {
-    error_code: &'static str,
-    message: &'static str,
-}
-
 #[derive(Serialize)]
 struct UserInfosResponse {
     result: bool,

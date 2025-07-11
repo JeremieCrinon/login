@@ -10,6 +10,10 @@ import SwiftUI
 struct AccountView: View {
     var authManager = AuthManager.shared
     var body: some View {
+        Text("account")
+            .font(.title)
+            .fontWeight(.semibold)
+        
         Form {
             EditEmailForm()
         

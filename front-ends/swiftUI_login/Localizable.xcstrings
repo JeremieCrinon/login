@@ -49,6 +49,23 @@
         }
       }
     },
+    "create_user" : {
+      "comment" : "The title of the create user sheet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create a new user"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer un nouvel utilisateur"
+          }
+        }
+      }
+    },
     "current_password" : {
       "localizations" : {
         "en" : {
@@ -268,6 +285,57 @@
         }
       }
     },
+    "en" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anglais"
+          }
+        }
+      }
+    },
+    "error_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please try again later."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Veuillez réessayer plus tard."
+          }
+        }
+      }
+    },
+    "error_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur est survenue"
+          }
+        }
+      }
+    },
     "error_unknown" : {
       "comment" : "The general error message in case an unexpected error occurred",
       "extractionState" : "manual",
@@ -282,6 +350,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un erreur est survenue, veuillez réessayer plus tard."
+          }
+        }
+      }
+    },
+    "fr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "French"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français"
           }
         }
       }
@@ -315,6 +400,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le code que vous avez entré.e n’est pas correct."
+          }
+        }
+      }
+    },
+    "lang" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue"
           }
         }
       }
@@ -490,6 +591,23 @@
         }
       }
     },
+    "new_user_email_taken" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This email already exists"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cet email existe déjà"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "en" : {
@@ -623,6 +741,23 @@
         }
       }
     },
+    "roles" : {
+      "comment" : "The text in top of the roles picker",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roles"
+          }
+        }
+      }
+    },
     "users" : {
       "localizations" : {
         "en" : {
@@ -655,6 +790,9 @@
           }
         }
       }
+    },
+    "VVV" : {
+
     }
   },
   "version" : "1.1"
