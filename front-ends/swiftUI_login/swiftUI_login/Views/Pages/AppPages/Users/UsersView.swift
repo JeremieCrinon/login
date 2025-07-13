@@ -22,9 +22,7 @@ struct UsersView: View {
             
         }
         
-        Form {
-            Text("VVV")
-        }
+        UsersList()
         
     }
 }

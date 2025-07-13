@@ -23,18 +23,15 @@ struct ContentView: View {
                     VerifyEmailView()
                 } else {
                     TabView {
-                        Tab("home", systemImage: "house.fill") {
-                            Text("home")
-                        }
-                        
                         if authManager.roles.contains("edit_users") || authManager.roles.contains("admin") {
                             Tab("users", systemImage: "person.3.sequence.fill") {
                                 UsersView()
                             }
                         }
                         
-                        
-                        
+                        Tab("home", systemImage: "house.fill") {
+                            Text("home")
+                        }
                         
                         
                         Tab("account", systemImage: "person.crop.circle.fill") {
