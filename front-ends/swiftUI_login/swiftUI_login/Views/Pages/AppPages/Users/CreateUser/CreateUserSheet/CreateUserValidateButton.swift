@@ -9,11 +9,13 @@ import SwiftUI
 
 struct CreateUserValidateButton: View {
     @EnvironmentObject var createUserViewModel: CreateUserViewModel
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     var body: some View {
         Button(action: {
             Task {
                 await createUserViewModel.createUser()
+                await usersViewModel.getUsers()
             }
         }) {
             Image(systemName: "checkmark.circle.fill")
@@ -26,4 +28,5 @@ struct CreateUserValidateButton: View {
 #Preview {
     CreateUserValidateButton()
         .environmentObject(CreateUserViewModel())
+        .environmentObject(UsersViewModel())
 }

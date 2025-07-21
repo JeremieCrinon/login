@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UsersView: View {
+    @StateObject private var usersViewModel: UsersViewModel = UsersViewModel()
+    
     var body: some View {
         ZStack {
             Text("users")
@@ -18,11 +20,13 @@ struct UsersView: View {
                 Spacer()
                 CreateUser()
                     .padding(25)
+                    .environmentObject(usersViewModel)
             }
             
         }
         
         UsersList()
+            .environmentObject(usersViewModel)
         
     }
 }

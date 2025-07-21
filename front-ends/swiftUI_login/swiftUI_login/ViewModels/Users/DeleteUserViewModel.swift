@@ -1,24 +1,24 @@
 //
-//  UsersViewModel.swift
+//  DeleteUserViewModel.swift
 //  swiftUI_login
 //
-//  Created by Jeremie Crinon on 13/07/2025.
+//  Created by Jeremie Crinon on 21/07/2025.
 //
 
 import Foundation
 internal import Combine
 
 @MainActor
-class UsersViewModel: ObservableObject {
-    @Published var users: [UserShort] = []
+class DeleteUserViewModel: ObservableObject {
+    @Published var error: DeleteUserError? = nil
     
-    func getUsers() async -> Void {
+    func deleteUser(user: UserShort) async -> Void {
         do {
-            guard let url = URL(string: "\(Config.apiUrl)/users") else {
-                throw GetUsersError.unknown;
+            guard let url = URL(string: "\(Config.apiUrl)/users/\(user.id)") else {
+                throw DeleteUserError.unknown
             }
             var request = URLRequest(url: url)
-            request.httpMethod = "GET"
+            request.httpMethod = "DELETE"
             request.addValue("Bearer \(AuthManager.shared.token!)", forHTTPHeaderField: "Authorization")
             
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -31,16 +31,9 @@ class UsersViewModel: ObservableObject {
                 throw URLError(.badServerResponse)
             }
             
-            let decoded = try JSONDecoder().decode(GetUsersResponse.self, from: data)
-            
-            // Reset the users var to not have duplicates in case it is called more than once
-            self.users = []
-            
-            for user in decoded.users {
-                self.users.append(user)
-            }
         } catch {
             print(error)
+            self.error = DeleteUserError.unknown
         }
     }
 }
