@@ -70,10 +70,8 @@ const onPasswordSubmit = handlePasswordSubmit((values) => {
         router.push("/");
     })
     .catch((error) => {
-        if (error && error.response.data.error_code === "bad_old_password") {
+        if(error && error.response.status === 401) {
             passwordErrorMessage.value = t("modify_account.errors.bad_old_password");
-        } else if(error && error.response.status === 401) { // The user does not have a valid token
-            router.push("/logout");
         } else {
             passwordErrorMessage.value = t("modify_account.errors.other");
         }

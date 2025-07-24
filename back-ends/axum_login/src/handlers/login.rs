@@ -28,13 +28,6 @@ pub struct UserClaims {
     pub id: i32,
 }
 
-/// A generic error response when more details are needed for the front-end than just plain text
-#[derive(Serialize)]
-struct ErrorResponse {
-    error_code: &'static str,
-    message: &'static str,
-}
-
 #[derive(Serialize)]
 struct UserInfosResponse {
     result: bool,
@@ -486,7 +479,7 @@ pub async fn edit_email (State(state): State<AppState>, Extension(user): Extensi
             })?;
 
         if !is_valid {
-            return Err((StatusCode::BAD_REQUEST, "The password sent is incorrect.").into_response());
+            return Err((StatusCode::UNAUTHORIZED, "The password sent is incorrect.").into_response());
         }
     }
 
@@ -588,11 +581,7 @@ pub async fn edit_password (State(state): State<AppState>, Extension(user): Exte
         })?;
 
     if !is_valid {
-        let error = ErrorResponse {
-            error_code: "bad_old_password",
-            message: "The current password sent is incorrect.",
-        };
-        return Err((StatusCode::BAD_REQUEST, Json(error)).into_response());
+        return Err((StatusCode::UNAUTHORIZED, "The current password sent is incorrect.").into_response());
     }
 
     // We've done our verifications, now, we modify the user
