@@ -12,3 +12,11 @@ struct UserShort: Codable, Hashable {
     let email: String
     let roles: [String]
 }
+
+struct User: Codable, Hashable {
+    let id: Int
+    var email: String
+    var roles: [String]
+    let created_at: String
+    let updated_at: String
+}

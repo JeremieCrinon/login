@@ -10,6 +10,7 @@ import SwiftUI
 struct UsersList: View {
     @EnvironmentObject var usersViewModel: UsersViewModel
     @StateObject private var deleteUserViewModel: DeleteUserViewModel = DeleteUserViewModel()
+    @StateObject private var editUserViewModel: EditUserViewModel = EditUserViewModel()
     
     var body: some View {
         if let error = deleteUserViewModel.error {
@@ -30,17 +31,11 @@ struct UsersList: View {
                                 }
                             }
                         }) {
-                            Text("delete")
+                            Image(systemName: "trash")
                         }
                         
-                        Button(action: {
-                            Task {
-                                print("info")
-                                print(user)
-                            }
-                        }) {
-                            Text("info")
-                        }
+                        EditUserToggleButton(userId: user.id)
+                            .environmentObject(editUserViewModel)
                     }
             }
         }
@@ -48,6 +43,10 @@ struct UsersList: View {
             await usersViewModel.getUsers()
         }
         .background(Color(.systemGroupedBackground))
+        .sheet(isPresented: $editUserViewModel.isOpened, onDismiss: {editUserViewModel.isOpened = false}) {
+            EditUserSheet()
+                .environmentObject(editUserViewModel)
+        }
     }
 }
 

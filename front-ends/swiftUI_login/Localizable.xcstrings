@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+      "shouldTranslate" : false
+    },
     "account" : {
       "localizations" : {
         "en" : {
@@ -235,6 +238,57 @@
         }
       }
     },
+    "edit_user" : {
+      "comment" : "The title of the edit user sheet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit a user"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier un utilisateur"
+          }
+        }
+      }
+    },
+    "edit_user_email" : {
+      "comment" : "The text on the button to edit the email address of another user as an admin",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit the email"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier l’email"
+          }
+        }
+      }
+    },
+    "edit_user_role" : {
+      "comment" : "The text on the button to edit the roles of another user as an admin",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit the roles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier les roles"
+          }
+        }
+      }
+    },
     "email" : {
       "localizations" : {
         "en" : {
@@ -313,7 +367,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Veuillez réessayer plus tard."
           }
         }
@@ -790,9 +844,6 @@
           }
         }
       }
-    },
-    "VVV" : {
-
     }
   },
   "version" : "1.1"
