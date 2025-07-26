@@ -23,6 +23,7 @@ pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
 
+// Add the struct ListUser, which corresponds to what it will return when it lists all the users to the front-end.
 #[derive(Serialize)]
 pub struct ListUser {
     pub id: i32,
@@ -40,6 +41,7 @@ impl From<Model> for ListUser {
     }
 }
 
+// Add the struct GetUser, which corresponds to what it will return when it returns a user details to the front-end.
 #[derive(Serialize)]
 pub struct GetUser {
     pub id: i32,

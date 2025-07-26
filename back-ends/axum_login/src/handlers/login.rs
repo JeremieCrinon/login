@@ -36,9 +36,9 @@ struct UserInfosResponse {
 }
 
 /// Handler for the /user-infos route. It returns a result that can be true if the user has the role admin, or false if he dont, the user's roles, and the user's email.
-pub async fn user_infos(Extension(user): Extension<Option<user::Model>>) -> Result<impl IntoResponse, Response> {
+pub async fn user_infos(Extension(user): Extension<Option<user::Model>>) -> Result<impl IntoResponse, Response> { // Get the user from the auth middleware 
     let user = user.unwrap();
-    
+     
     let roles_array = user.roles.as_array().cloned().unwrap_or_default();
 
     let roles: Vec<String> = roles_array
@@ -70,18 +70,18 @@ struct LoginResponse {
 
 /// Handler for the /login route. Takes an email and password, verifies that they are correct, and returns a JWT if it is.
 pub async fn login(State(state): State<AppState>, Json(payload): Json<LoginRequest>) -> Result<impl IntoResponse, Response> {
-    let db = &state.db;
-    let key = &state.key;
+    let db = &state.db; // Get the DB from the AppState
+    let key = &state.key; // Get the JWT key from the AppState
     let max_threads = 4;
     let password_worker = PasswordWorker::new_bcrypt(max_threads).map_err(|e| {
         error!("Could not create password worker : {}", e);
         axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()
     })?;
 
-    let app_name = std::env::var("APP_NAME").expect("APP_NAME is missing");
+    let app_name = std::env::var("APP_NAME").expect("APP_NAME is missing"); // Get the app name from the .env
 
-    let user: Option<user::Model> = User::find()
-        .filter(user::Column::Email.eq(payload.email))
+    let user: Option<user::Model> = User::find() // Make a DB query to get the user
+        .filter(user::Column::Email.eq(payload.email)) // Search only the one that has the email sent in the request
         .one(db)
         .await
         .map_err(|e| {
@@ -90,30 +90,30 @@ pub async fn login(State(state): State<AppState>, Json(payload): Json<LoginReque
         })?;
 
     let user = match user {
-        Some(u) => u,
-        None => return Err((axum::http::StatusCode::BAD_REQUEST, "Email or password incorrect").into_response()),
+        Some(u) => u, // If we find a user, we continue
+        None => return Err((axum::http::StatusCode::BAD_REQUEST, "Email or password incorrect").into_response()), // Else, we return an error
     };
 
     let is_valid = password_worker
-        .verify(payload.password, user.password)
+        .verify(payload.password, user.password) // Verify the password sent in the request with the password worker
         .await
         .map_err(|e| {
             error!("Password verification failed: {}", e);
             axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()
         })?;
 
-    if !is_valid {
+    if !is_valid { // If the password worker returned false, it means the password sent isn't correct
         return Err((axum::http::StatusCode::BAD_REQUEST, "Email or password incorrect").into_response());
     }
 
-    let mut claims = Claims::with_custom_claims(
+    let mut claims = Claims::with_custom_claims( // We prepare our  claims (what the JWT will contain)
         UserClaims {
-            id: user.id
+            id: user.id // We put the user ID in the JWT, so we will be able to get it in our middleware, then get them in DB to know their roles and if they still exists. We could put the roles directly in the JWT, so we won't have to do a DB request each time we wanna verify permissions, but it will mean that if we delete the user or change roles, it will not update immediatly.
         },
-        Duration::from_secs(3600 * 24 * 2), // 2 days
+        Duration::from_secs(3600 * 24 * 30), // The token is valid for 30 days
     );
 
-    claims.issuer = Some(app_name.to_string());
+    claims.issuer = Some(app_name.to_string()); // We put the issuer value to us
 
     let token = key 
     .authenticate(claims)
@@ -121,7 +121,7 @@ pub async fn login(State(state): State<AppState>, Json(payload): Json<LoginReque
     .map_err(|e| {
         error!("Token generation error : {}", e);
         axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()
-    })?;
+    })?; // Create the token with the claims we made
 
     let response = LoginResponse {
         token: token.to_string(),
@@ -311,6 +311,7 @@ pub async fn forgot_password (State(state): State<AppState>, Path(locale): Path<
         .map(char::from)
         .collect();
     
+    // Edit the user to have the verification code we generated
     let new_user = user::ActiveModel {
         id: ActiveValue::Set(user.id),
         password_reset_code: ActiveValue::set(Some(code.clone())),
@@ -324,7 +325,7 @@ pub async fn forgot_password (State(state): State<AppState>, Path(locale): Path<
         StatusCode::INTERNAL_SERVER_ERROR.into_response()
     })?;
 
-    let link = format!("{}/forgot-password/{}", web_front_end, code);
+    let link = format!("{}/forgot-password/{}", web_front_end, code); // We make the link that will be in the email with the random code we made above
 
     // Get the tera templates for the mail (one for the HTML, one for the fallback text)
     let translations = translator.get_translation(&locale);

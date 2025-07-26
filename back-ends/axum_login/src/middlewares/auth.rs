@@ -66,13 +66,14 @@ pub async fn auth(
     let db = &state.db;
     let key = &state.key;
 
-    let claims = key
+    let claims = key // Get the claims (data in JWT) if there is an error, it means the token isn't
+        // valid
         .verify_token::<UserClaims>(token, None)
         .map_err(|_| {
             StatusCode::UNAUTHORIZED
         })?;
 
-    let user = User::find_by_id(claims.custom.id)
+    let user = User::find_by_id(claims.custom.id) // Get the user in DB with the id in the claims
         .one(db)
         .await
         .map_err(|e| {
@@ -89,6 +90,8 @@ pub async fn auth(
     Ok(next.run(request).await)
 }
 
+/// This function is called by the auth middleware, and verifies the user fetched in the DB has the
+/// required role.
 async fn token_is_valid(user: Option<UserModel>, required_role: Role) -> Result<(), StatusCode> {
 
     if user.is_none() {
@@ -102,7 +105,7 @@ async fn token_is_valid(user: Option<UserModel>, required_role: Role) -> Result<
         let has_unverified_email = roles_array.iter().any(|val| val.as_str() == Some(Role::UnverifiedEmail.as_str()));
 
         if required_role == Role::None {
-            return Ok(()) // We do not require anything, the middleware is just used to get the user.
+            return Ok(()) // If the role is None, it means we do not require anything, the middleware is just used to get the user.
         }
 
         if (has_new_account && required_role != Role::NewAccount) || (has_unverified_email && (required_role != Role::UnverifiedEmail && required_role!= Role::NewAccount)) {
@@ -110,7 +113,8 @@ async fn token_is_valid(user: Option<UserModel>, required_role: Role) -> Result<
         }
 
         if required_role == Role::User {
-            return Ok(()) // No need to ge further, we don't require any role
+            return Ok(()) // No need to ge further, we don't require any role, just the the user
+            // hasn't the NewAccount or UnverifiedEmail role.
         }
 
         let has_admin = roles_array.iter().any(|val| val.as_str() == Some(Role::Admin.as_str()));

@@ -23,7 +23,7 @@ Here is a list of the frameworks with their pros and cons to help you choose :
 
 ### Front-ends :
 - Vue.js (JavaScript) : A pretty popular JavaScript framework, not really hard to learn for beginners. The code is a bit cleaner than React in my opinion, but it also is less popular.
-- More will be coming
+- SwiftUI (IOS) : The intended way by Apple to create apps for it's platforms. It is still work in progress, documentation, code commenting, small features and support for other platforms are still missing.
 
 ### Back-ends : 
 - Axum (Rust) : Really good performances, steep learning curve, not recommended to beginners.
@@ -84,7 +84,6 @@ These routes are intended to be used by users with the role `admin` or `edit_use
 
 ### Front-ends
 - React (JavaScript)
-- SwiftUI (Swift) - For iOS, iPadOS, macOS, and WatchOS
 - An Android version (don't know which language or framework I will use)
 
 ## Contributing

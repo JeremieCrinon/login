@@ -23,9 +23,12 @@ struct ListRolesResponse {
     roles: Vec<&'static str>,
 }
 
+// This list all the avaible roles so the front-end can display a list of the roles when creating
+// or editing a user.
 pub async fn list_roles () -> Result<impl IntoResponse, Response> {
     let roles = Role::iter()
-    .filter(|r| *r != Role::None && *r != Role::NewAccount && *r != Role::UnverifiedEmail)
+    .filter(|r| *r != Role::None && *r != Role::NewAccount && *r != Role::UnverifiedEmail) // We
+        // filter the NewAccount and UnverifiedEmail, as we don't want to send them
     .map(|r| r.as_str())
     .collect::<Vec<_>>();
 
@@ -128,7 +131,8 @@ pub async fn create_user (State(state): State<AppState>, Path(locale): Path<Stri
 
     let mut roles = payload.roles;
 
-    if !roles.contains(&Role::NewAccount.as_str().to_string()) {
+    if !roles.contains(&Role::NewAccount.as_str().to_string()) { // We add the NewAccount role if
+        // the front-end hasn't already sent it.
         roles.push(Role::NewAccount.as_str().to_string());
     }
 
@@ -198,7 +202,7 @@ pub async fn create_user (State(state): State<AppState>, Path(locale): Path<Stri
         StatusCode::INTERNAL_SERVER_ERROR.into_response()
     })?;
 
-    // Put the user in DB after the mail has been sent in case of errors in the mail sending, we don't want to have a user in DB that hasn't received the mail to create their account
+    // Put the user in DB after the mail has been sent in case of errors in the mail sending, we don't want to have a user in DB that hasn't received the mail to create their account, while it's less of a problem if a user as received an email while their account hasn't actually been created. And, they are much less chances of having an error putting a user in DB than when sending an email.
     User::insert(new_user).exec(&db).await.map_err(|e| {
         error!("Error inserting a new user in DB : {}", e);
 
