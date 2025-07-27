@@ -17,7 +17,7 @@ Choose a back-end in the back-ends folder, they have their framework's name in t
 If your app needs a login system, you won't have to do one from scratch, just edit this one to fit your needs, it also can be a way to learn a new framework, by seeing an example.
 
 ## What back-end and front-end should I choose?
-This choice is obviously based on your preferences. For now, there is just one back-end and one front-end, so the choice is fairly easy to do. But more frameworks in other languages will be added later, and I highly recommend you not to use the template for now if the frameworks or languages do not fit your needs, especially with Axum in the back-end, which is a Rust framework. It has a really high learning curve and I do not recommend it to beginners.
+This choice is obviously based on your preferences. For now, there is just one back-end, so the choice for the back-end is fairly easy to do. But more frameworks in other languages will be added later, and I highly recommend you not to use the template for now if the frameworks or languages do not fit your needs, especially with Axum in the back-end, which is a Rust framework. It has a really high learning curve and I do not recommend it to beginners.
 
 Here is a list of the frameworks with their pros and cons to help you choose :
 
