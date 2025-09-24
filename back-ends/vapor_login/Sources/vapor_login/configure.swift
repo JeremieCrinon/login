@@ -19,6 +19,8 @@ public func configure(_ app: Application) async throws {
 
     app.migrations.add(CreateUser())
 
+    app.passwords.use(.bcrypt)
+
     // register routes
     try routes(app)
 }
