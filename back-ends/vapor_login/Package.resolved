@@ -1,5 +1,5 @@
 {
-  "originHash" : "a14ba9bca0db276d165fd66a2af8ba360b3244e6bfd5892fab693e9f162ae8fe",
+  "originHash" : "d0d146b80f4b5c5ad628cb84432ab63b912f1af0749e023b27137ff9d08266f5",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "cd47a7042a529735e401bdfaa070823d151f7f94",
         "version" : "2.11.0"
+      }
+    },
+    {
+      "identity" : "mailgun",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor-community/mailgun.git",
+      "state" : {
+        "revision" : "cb9e4d6d1b760739bf288b07c41bb01bbfe578c5",
+        "version" : "5.0.0"
       }
     },
     {
@@ -159,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "d1c6b70f7c5f19fb0b8750cb8dcdf2ea6e2d8c34",
-        "version" : "3.15.0"
+        "revision" : "95ba0316a9b733e92bb6b071255ff46263bbe7dc",
+        "version" : "3.15.1"
       }
     },
     {
@@ -213,8 +222,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "1c30f0f2053b654e3d1302492124aa6d242cdba7",
-        "version" : "2.86.0"
+        "revision" : "a18bddb0acf7a40d982b2f128ce73ce4ee31f352",
+        "version" : "2.86.2"
       }
     },
     {
@@ -240,8 +249,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-ssl.git",
       "state" : {
-        "revision" : "737e550e607d82bf15bdfddf158ec61652ce836f",
-        "version" : "2.34.0"
+        "revision" : "b2b043a8810ab6d51b3ff4df17f057d87ef1ec7c",
+        "version" : "2.34.1"
       }
     },
     {

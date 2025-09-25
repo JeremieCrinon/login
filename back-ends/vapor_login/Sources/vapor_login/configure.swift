@@ -2,6 +2,11 @@ import NIOSSL
 import Fluent
 import FluentPostgresDriver
 import Vapor
+import Mailgun
+
+extension MailgunDomain {
+    static var domain1: MailgunDomain { .init(Environment.get("MAILGUN_DOMAIN") ?? "mg.example.com", .eu) }
+}
 
 // configures your application
 public func configure(_ app: Application) async throws {
@@ -17,9 +22,13 @@ public func configure(_ app: Application) async throws {
         tls: .prefer(try .init(configuration: .clientDefault)))
     ), as: .psql)
 
-    app.migrations.add(CreateUser())
-
     app.passwords.use(.bcrypt)
+
+    app.mailgun.configuration = .environment
+
+    app.mailgun.defaultDomain = .domain1
+
+    app.migrations.add(CreateUser())
 
     // register routes
     try routes(app)
