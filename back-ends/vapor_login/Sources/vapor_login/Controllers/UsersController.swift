@@ -39,9 +39,12 @@ struct UsersController: RouteCollection {
             let password = generatePassword(length: 12) // Call the generatePassword helper function to generate a random password to the new user
             let password_hash = try req.password.hash(password) // Hash the password for storing in DB
 
-            //TODO: Add the new_user role to the roles list if it's not already in
+            var roles = input.roles
+            if !roles.contains(.new_account) { // If the roles array sent by the user does not contain the new account role
+                roles.append(.new_account) // Add the new account role to the roles array
+            }
 
-            let new_user = User(email: input.email, password: password_hash, roles: input.roles) // Create a new user
+            let new_user = User(email: input.email, password: password_hash, roles: roles) // Create a new user
             try await new_user.save(on: database) // Save in DB
 
             // Send invitation email with the password

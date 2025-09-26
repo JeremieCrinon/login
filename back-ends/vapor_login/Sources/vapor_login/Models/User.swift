@@ -4,11 +4,11 @@ import struct Foundation.UUID
 import Vapor
 
 enum Role: String, Codable, Content {
-    case Admin
-    case User
-    case NewAccount
-    case UnverifiedEmail
-    case EditUsers
+    case admin
+    case user
+    case new_account
+    case unverified_email
+    case edit_users
 }
 
 final class User: Model, @unchecked Sendable {
