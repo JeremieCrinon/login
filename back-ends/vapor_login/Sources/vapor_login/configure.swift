@@ -3,6 +3,8 @@ import Fluent
 import FluentPostgresDriver
 import Vapor
 import Mailgun
+import JWT
+import Crypto
 
 extension MailgunDomain {
     static var domain1: MailgunDomain { .init(Environment.get("MAILGUN_DOMAIN") ?? "mg.example.com", .eu) }
@@ -29,6 +31,9 @@ public func configure(_ app: Application) async throws {
     app.mailgun.defaultDomain = .domain1
 
     app.migrations.add(CreateUser())
+
+    let secret = Environment.get("JWT_SECRET") ?? "secret"
+    await app.jwt.keys.add(hmac: HMACKey(from: Array(secret.utf8)), digestAlgorithm: .sha256)
 
     // register routes
     try routes(app)
