@@ -32,12 +32,14 @@ struct UsersController: RouteCollection {
                 .filter(\.$email, .equal, input.email)
                 .first()
 
-            if let _ = existing_user { // If we found a user in DB with the same email that has been sent, we return an error
+            if existing_user != nil { // If we found a user in DB with the same email that has been sent, we return an error
                 throw Abort(.conflict, reason: "Email is already used by another account.")
             }
 
             let password = generatePassword(length: 12) // Call the generatePassword helper function to generate a random password to the new user
             let password_hash = try req.password.hash(password) // Hash the password for storing in DB
+
+            //TODO: Add the new_user role to the roles list if it's not already in
 
             let new_user = User(email: input.email, password: password_hash, roles: input.roles) // Create a new user
             try await new_user.save(on: database) // Save in DB
