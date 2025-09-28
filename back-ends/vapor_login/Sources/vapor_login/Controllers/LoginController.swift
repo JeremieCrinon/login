@@ -12,24 +12,6 @@ struct LoginController: RouteCollection {
         let password: String
     }
 
-    struct tokenPayload: JWTPayload {
-        enum CodingKeys: String, CodingKey {
-            case subject = "sub"
-            case expiration = "exp"
-            case userId = "user"
-        }
-
-        var subject: SubjectClaim
-
-        var expiration: ExpirationClaim
-
-        var userId: UUID
-
-        func verify(using algorithm: some JWTAlgorithm) async throws {
-            try self.expiration.verifyNotExpired()
-        }
-    }
-
     struct LoginResponse: Content {
         let token: String
     }
@@ -52,14 +34,16 @@ struct LoginController: RouteCollection {
         }
 
         let tokenExpirationTime = Int(Environment.get("JWT_AUTHORIZATION_EXPIRATION_TIME") ?? "3600") ?? 3600
+        let expirationDate = Date().addingTimeInterval(TimeInterval(tokenExpirationTime))
+        let expiration = ExpirationClaim(value: Date(timeIntervalSince1970: floor(expirationDate.timeIntervalSince1970)))
 
-        let payload = tokenPayload(
+        let payload = TokenPayload(
             subject: SubjectClaim("authorization"),
-            expiration: .init(value: Date().addingTimeInterval(TimeInterval(tokenExpirationTime))),
+            expiration: expiration,
             userId: try user!.requireID()
-        )
+        ) // Prepare the payload for the JWT
 
-        let token = try await req.jwt.sign(payload)
+        let token = try await req.jwt.sign(payload) // Sign the JWT
 
         return LoginResponse(token: token)
 
