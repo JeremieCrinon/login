@@ -5,7 +5,7 @@ import Mailgun
 struct UsersController: RouteCollection {
 
     func boot(routes: any RoutesBuilder) throws {
-        let users = routes.grouped("users").grouped(AuthMiddleware(requiredRole: .new_account))
+        let users = routes.grouped("users").grouped(AuthMiddleware(requiredRole: .edit_users))
         
         users.post("new", ":lang", use: create)
     }

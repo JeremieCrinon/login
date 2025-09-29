@@ -2,9 +2,9 @@ import Vapor
 
 struct AuthMiddleware: AsyncMiddleware {
 
-    let requiredRole: Role
+    let requiredRole: Role?
 
-    init(requiredRole: Role) {
+    init(requiredRole: Role?) {
         self.requiredRole = requiredRole
     }
 
@@ -25,7 +25,27 @@ struct AuthMiddleware: AsyncMiddleware {
             throw Abort(.unauthorized, reason: "User does not exists anymore")
         }
 
-        //TODO: Do the checks for the new_account and unverified_email roles
+        // Add the user to the request, so it can be accessed by the controllers if needed
+        request.user = user
+
+        // If the required role is nil, it means that the route should be accessible to any user logged in, even users with a new account
+        if self.requiredRole == nil {
+            return try await next.respond(to: request)
+        }
+
+        // If the required role is new_account or unverified_email, we verify that the user has the required role, even if they are admin, these routes must be accessible to user with these roles and only them
+        if self.requiredRole == .new_account || self.requiredRole == .unverified_email {
+            if !user!.roles.contains(self.requiredRole!) {
+                throw Abort(.unauthorized, reason: "This route is only for new accounts or accounts without a verified email adress")
+            } else {
+                return try await next.respond(to: request)
+            }
+        }
+
+        // If the user has the new_account role or the unverified email role, they are not allowed here yet (if the route was accessible to them, it will either have a nil required role or the required role new_account or unverified_email)
+        if user!.roles.contains(.new_account) || user!.roles.contains(.unverified_email) {
+            throw Abort(.unauthorized, reason: "Your account is a new account or has an unverified email, you need to modify your new account or verify your email to continue")
+        }
 
         // If the user has the role admin, they can continue
         if user!.roles.contains(.admin) {
@@ -38,11 +58,11 @@ struct AuthMiddleware: AsyncMiddleware {
         }
 
         // Verify that the user has the required role
-        if !user!.roles.contains(self.requiredRole) {
+        if !user!.roles.contains(self.requiredRole!) {
             throw Abort(.unauthorized, reason: "You don't have the required role to do that")
         }
 
-        return try await next.respond(to: request) // If we arrive here, it means we have passed the checks
-
+        // If we arrive here, it means we have passed the checks
+        return try await next.respond(to: request) 
     }
 }
