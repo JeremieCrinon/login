@@ -57,12 +57,15 @@ struct UsersController: RouteCollection {
                 text: "Here is your password : \(password)",
             )
 
-            do {
-                let _ = try await req.mailgun().send(message).get()
-            } catch {
-                req.logger.error("An error occured sending the email via mailgun : \(error.localizedDescription)")
-                throw Abort(.internalServerError)
+            if req.application.environment != .testing {
+                do {
+                    let _ = try await req.mailgun().send(message).get()
+                } catch {
+                    req.logger.error("An error occured sending the email via mailgun : \(error.localizedDescription)")
+                    throw Abort(.internalServerError)
+                }
             }
+            
             
             return .ok
         }
