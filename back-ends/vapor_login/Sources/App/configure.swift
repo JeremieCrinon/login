@@ -1,6 +1,7 @@
 import NIOSSL
 import Fluent
 import FluentPostgresDriver
+import FluentSQLiteDriver
 import Vapor
 import Mailgun
 import JWT
@@ -15,15 +16,7 @@ public func configure(_ app: Application) async throws {
     // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     if app.environment == .testing {
-        app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
-            hostname: Environment.get("TESTS_DATABASE_HOST") ?? "localhost",
-            port: Environment.get("TESTS_DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
-            username: Environment.get("TESTS_DATABASE_USERNAME") ?? "vapor_username",
-            password: Environment.get("TESTS_DATABASE_PASSWORD") ?? "vapor_password",
-            database: Environment.get("TESTS_DATABASE_NAME") ?? "vapor_test_database",
-            tls: .prefer(try .init(configuration: .clientDefault)))
-        ), as: .psql)
-
+        app.databases.use(.sqlite(.memory), as: .sqlite)// Use sqlite in memory to prevent conflicts when running tests in paralel
     } else {
         app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
             hostname: Environment.get("DATABASE_HOST") ?? "localhost",
