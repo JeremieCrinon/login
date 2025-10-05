@@ -102,13 +102,17 @@ struct LoginController: RouteCollection {
                 throw Abort(.conflict, reason: "Email is already used by another account.")
             }
 
+            // Hash the password from request
             let password_hash = try req.password.hash(input.new_password)
+
+            // Remove the new_account role for the user roles
             var roles = user.roles
             
             if let roleIndex = roles.firstIndex(of: .new_account) {
                 roles.remove(at: roleIndex)
             }
 
+            // Update the user in DB with the new email, password, and roles
             try await User.query(on: database)
                 .set(\.$email, to: input.new_email)
                 .set(\.$password, to: password_hash)
@@ -116,8 +120,13 @@ struct LoginController: RouteCollection {
                 .filter(\.$id, .equal, user.id!)
                 .update()
 
+            // Fetch the updated user
+            let user = try await User.query(on: database)
+                .filter(\.$id, .equal, user.id!)
+                .first()!
 
-            //TODO: Call helper to send the user a password verification email and get them the unverified_email role
+            // Call the helper function to put the verify_email role to the user and send them an email with a code
+            try await sendEmailVerificationToUser(user: user, req: req, db: database)
 
             return .ok
         }
