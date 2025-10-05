@@ -5,8 +5,10 @@ struct LoginController: RouteCollection {
 
     func boot(routes: any RoutesBuilder) throws {
         let no_role = routes.grouped(AuthMiddleware(requiredRole: nil)) // The group for routes that requires a logged in user and any role
+        let new_account = routes.grouped(AuthMiddleware(requiredRole: .new_account)) // The groupe for the new accounts, used only by the modify_new_account route
 
         no_role.get("user-infos", use: userInfos)
+        new_account.post("modify-new-account", use: modifyNewAccount)
 
         routes.post("login", use: login)
     }
@@ -70,6 +72,55 @@ struct LoginController: RouteCollection {
         let token = try await req.jwt.sign(payload) // Sign the JWT
 
         return LoginResponse(token: token)
+
+    }
+
+    struct ModifyNewAccountRequest: Content, Validatable {
+        let new_email: String
+        let new_password: String
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("new_email", as: String.self, is: .email)
+            validations.add("new_password", as: String.self, is: .password)
+        }
+    }
+
+    func modifyNewAccount(req: Request) async throws -> HTTPStatus {
+        try ModifyNewAccountRequest.validate(content: req)
+        let input = try req.content.decode(ModifyNewAccountRequest.self)
+        let user = req.user!
+
+        // Make a transaction so any DB interaction made here will be undone if there is an error
+        return try await req.db.transaction { database in
+            // If a user with the new email that is not the user that called this route (the user that called this route might not want to change their email) exists, we return a 409 code
+            let email_conflict_user = try await User.query(on: database)
+                .filter(\.$email, .equal, input.new_email)
+                .filter(\.$id, .notEqual, user.id!)
+                .first()
+
+            if email_conflict_user != nil {
+                throw Abort(.conflict, reason: "Email is already used by another account.")
+            }
+
+            let password_hash = try req.password.hash(input.new_password)
+            var roles = user.roles
+            
+            if let roleIndex = roles.firstIndex(of: .new_account) {
+                roles.remove(at: roleIndex)
+            }
+
+            try await User.query(on: database)
+                .set(\.$email, to: input.new_email)
+                .set(\.$password, to: password_hash)
+                .set(\.$roles, to: roles)
+                .filter(\.$id, .equal, user.id!)
+                .update()
+
+
+            //TODO: Call helper to send the user a password verification email and get them the unverified_email role
+
+            return .ok
+        }
 
     }
 
