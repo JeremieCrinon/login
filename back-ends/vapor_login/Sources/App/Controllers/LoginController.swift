@@ -6,9 +6,11 @@ struct LoginController: RouteCollection {
     func boot(routes: any RoutesBuilder) throws {
         let no_role = routes.grouped(AuthMiddleware(requiredRole: nil)) // The group for routes that requires a logged in user and any role
         let new_account = routes.grouped(AuthMiddleware(requiredRole: .new_account)) // The groupe for the new accounts, used only by the modify_new_account route
+        let unverified_email = routes.grouped(AuthMiddleware(requiredRole: .unverified_email))
 
         no_role.get("user-infos", use: userInfos)
         new_account.post("modify-new-account", use: modifyNewAccount)
+        unverified_email.post("verify-email", use: verifyEmail)
 
         routes.post("login", use: login)
     }
@@ -131,6 +133,36 @@ struct LoginController: RouteCollection {
             return .ok
         }
 
+    }
+
+    struct verifyEmailRequest: Content {
+        let code: String
+    }
+
+    func verifyEmail(req: Request) async throws -> HTTPStatus {
+        let input = try req.content.decode(verifyEmailRequest.self)
+
+        let user = req.user!
+
+        // Verify the code sent is the user's one
+        if input.code != user.emailVerificationCode {
+            throw Abort(.badRequest, reason: "The code you sent isn't the right one.")
+        }
+
+        // Remove the unverified_email role from the roles list
+        var roles = user.roles
+        if let roleIndex = roles.firstIndex(of: .unverified_email) {
+            roles.remove(at: roleIndex)
+        }
+
+        // Update the user with the new roles list and remove the email verification code
+        try await User.query(on: req.db)
+            .set(\.$emailVerificationCode, to: nil)
+            .set(\.$roles, to: roles)
+            .filter(\.$id, .equal, user.id!)
+            .update()
+
+        return .ok
     }
 
 }
