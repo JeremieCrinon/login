@@ -15,6 +15,7 @@ struct LoginController: RouteCollection {
 
         routes.post("login", use: login)
         routes.post("forgot-password", use: forgotPassword)
+        routes.post("reset-password", use: resetPassword)
     }
 
     struct UserInfosResponse: Content {
@@ -209,6 +210,42 @@ struct LoginController: RouteCollection {
             return .ok
         }
 
+    }
+
+    struct resetPassowrdRequest: Content, Validatable {
+        let code: String
+        let new_password: String
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("new_password", as: String.self, is: .password)
+        }
+    }
+
+    func resetPassword(req: Request) async throws -> HTTPStatus {
+        try resetPassowrdRequest.validate(content: req)
+        let input = try req.content.decode(resetPassowrdRequest.self)
+
+        // Get the user corresponding to the code if one exists
+        let user = try await User.query(on: req.db)
+            .filter(\.$passwordResetCode, .equal, input.code)
+            .first()
+
+        // Throw an error if no user has the code sent
+        if user == nil {
+            throw Abort(.unauthorized, reason: "The code you sent isn't correct")
+        }
+
+        // Hash the new password
+        let password_hash = try req.password.hash(input.new_password)
+
+        // Modify the user with the new password and remove the password reset code
+        try await User.query(on: req.db)
+            .set(\.$passwordResetCode, to: nil)
+            .set(\.$password, to: password_hash)
+            .filter(\.$id, .equal, user!.id!)
+            .update()
+
+        return .ok
     }
 
 }
