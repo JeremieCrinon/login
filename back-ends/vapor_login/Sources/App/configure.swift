@@ -39,6 +39,19 @@ public func configure(_ app: Application) async throws {
     let secret = Environment.get("JWT_SECRET") ?? "secret"
     await app.jwt.keys.add(hmac: HMACKey(from: Array(secret.utf8)), digestAlgorithm: .sha256)
 
+    let allowedOrigins = Environment.get("ALLOWED_ORIGINS")?
+    .split(separator: ",")
+    .map { String($0).trimmingCharacters(in: .whitespaces) } ?? []
+
+    let corsConfiguration = CORSMiddleware.Configuration(
+        allowedOrigin: .any(allowedOrigins),
+        allowedMethods: [.GET, .POST, .PUT, .OPTIONS, .DELETE, .PATCH],
+        allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith, .userAgent, .accessControlAllowOrigin]
+    )
+
+    let cors = CORSMiddleware(configuration: corsConfiguration)
+    app.middleware.use(cors, at: .beginning)
+
     // register routes
     try routes(app)
 }
