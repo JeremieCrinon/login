@@ -1,5 +1,6 @@
 import Vapor
 import JWT
+import Mailgun
 
 struct LoginController: RouteCollection {
 
@@ -13,6 +14,7 @@ struct LoginController: RouteCollection {
         unverified_email.post("verify-email", use: verifyEmail)
 
         routes.post("login", use: login)
+        routes.post("forgot-password", use: forgotPassword)
     }
 
     struct UserInfosResponse: Content {
@@ -163,6 +165,50 @@ struct LoginController: RouteCollection {
             .update()
 
         return .ok
+    }
+
+    struct forgotPasswordRequest: Content {
+        let email: String
+    }
+
+    func forgotPassword(req: Request) async throws -> HTTPStatus {
+        let input = try req.content.decode(forgotPasswordRequest.self)
+
+        return try await req.db.transaction { database in
+
+            // Get the user with the send email
+            let user = try await User.query(on: database)
+                .filter(\.$email, .equal, input.email)
+                .first()
+
+            // If we didn't find a user, we don't tell the client
+            if user != nil {
+                // Generate a reset password code
+                let code = generatePassword(length: 12)
+                
+                // Update the user with a password reset code
+                try await User.query(on: database)
+                    .set(\.$passwordResetCode, to: code)
+                    .filter(\.$id, .equal, user!.id!)
+                    .update()
+
+                // Send the reset password to the user by email
+                let message = MailgunMessage(
+                    from: Environment.get("MAILGUN_EMAIL") ?? "email@example.com",
+                    to: user!.email,
+                    subject: "Reset your password",
+                    text: "Here is you code : \(code)"
+                )
+
+                if req.application.environment != .testing {
+                    let _ = try await req.mailgun().send(message).get()
+                }
+                
+            }
+
+            return .ok
+        }
+
     }
 
 }
