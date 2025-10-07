@@ -10,7 +10,10 @@ struct LoginController: RouteCollection {
         let unverified_email = routes.grouped(AuthMiddleware(requiredRole: .unverified_email))
 
         no_role.get("user-infos", use: userInfos)
+        no_role.post("edit-email", use: changeEmail)
+
         new_account.post("modify-new-account", use: modifyNewAccount)
+
         unverified_email.post("verify-email", use: verifyEmail)
 
         routes.post("login", use: login)
@@ -246,6 +249,63 @@ struct LoginController: RouteCollection {
             .update()
 
         return .ok
+    }
+
+    struct changeEmailRequest: Content, Validatable {
+        let new_email: String
+        let password: String?
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("new_email", as: String.self, is: .email)
+        }
+    }
+
+    func changeEmail(req: Request) async throws -> HTTPStatus {
+        try changeEmailRequest.validate(content: req)
+        let input = try req.content.decode(changeEmailRequest.self)
+        let user = req.user!
+        
+        return try await req.db.transaction { database in
+            // If the user calls this route while they don't have a verified email, we do not ask for password for convenience
+            if !user.roles.contains(.unverified_email) {
+                if input.password == nil {
+                    throw Abort(.badRequest, reason: "You need to send your current password as you don't have an account with an unverified email")
+                }
+
+                // Verify that the password sent is valid
+                if try await !req.password.async.verify(input.password!, created: user.password) {
+                    throw Abort(.unauthorized, reason: "The password you sent isn't correct")
+                }
+            }
+                    
+            // Check if another user has the new email (the user might send the same email they have already just for having a new email verfication email, so we take that into account)
+            let existing_user = try await User.query(on: database)
+                .filter(\.$email, .equal, input.new_email)
+                .filter(\.$id, .notEqual, user.id!)
+                .first()
+
+            if existing_user != nil {
+                throw Abort(.conflict, reason: "The new email is already used by another account.")
+            }
+
+            // Edit the user now
+            try await User.query(on: database)
+                .set(\.$email, to: input.new_email)
+                .filter(\.$id, .equal, user.id!)
+                .update()
+
+            // Fetch the updated user
+            let user = try await User.query(on: database)
+                .filter(\.$id, .equal, user.id!)
+                .first()!
+
+            // Call the helper function to add the verify_email role to the user if they don't have it already, put them an email verification code and sending them an email with it
+            try await sendEmailVerificationToUser(user: user, req: req, db: database)
+
+            return .ok
+
+        }
+
     }
 
 }
