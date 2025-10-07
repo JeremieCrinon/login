@@ -8,16 +8,19 @@ struct LoginController: RouteCollection {
         let no_role = routes.grouped(AuthMiddleware(requiredRole: nil)) // The group for routes that requires a logged in user and any role
         let new_account = routes.grouped(AuthMiddleware(requiredRole: .new_account)) // The groupe for the new accounts, used only by the modify_new_account route
         let unverified_email = routes.grouped(AuthMiddleware(requiredRole: .unverified_email))
+        let logged_in = routes.grouped(AuthMiddleware(requiredRole: .user)) // The route for the logged in users that requires them to not have a new_account or unverified_email
 
         no_role.get("user-infos", use: userInfos)
-        no_role.post("edit-email", use: changeEmail)
+        no_role.post("edit-email", ":lang", use: changeEmail)
 
-        new_account.post("modify-new-account", use: modifyNewAccount)
+        new_account.post("modify-new-account", ":lang", use: modifyNewAccount)
 
         unverified_email.post("verify-email", use: verifyEmail)
 
+        logged_in.post("edit-password", use: changePassword)
+
         routes.post("login", use: login)
-        routes.post("forgot-password", use: forgotPassword)
+        routes.post("forgot-password", ":lang", use: forgotPassword)
         routes.post("reset-password", use: resetPassword)
     }
 
@@ -306,6 +309,34 @@ struct LoginController: RouteCollection {
 
         }
 
+    }
+
+    struct changePasswordRequest: Content, Validatable {
+        let current_password: String
+        let new_password: String
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("new_password", as: String.self, is: .password)
+        }
+    }
+
+    func changePassword(req: Request) async throws -> HTTPStatus {
+        try changePasswordRequest.validate(content: req)
+        let input = try req.content.decode(changePasswordRequest.self)
+        let user = req.user!
+
+        if try await !req.password.async.verify(input.current_password, created: user.password) {
+            throw Abort(.unauthorized, reason: "The password you sent isn't valid")
+        }
+
+        let password_hash = try req.password.hash(input.new_password)
+
+        try await User.query(on: req.db)
+            .set(\.$password, to: password_hash)
+            .filter(\.$id, .equal, user.id!)
+            .update()
+
+        return .ok
     }
 
 }
