@@ -59,4 +59,101 @@ struct LoginRoutesTests {
             })
         }
     }
+
+    @Test("Test new account route with a bad password")
+    func testNewAccountWithBadPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.new_account])
+
+            let body = LoginController.ModifyNewAccountRequest(new_email: "test@mail.com", new_password: "NotSecureEnough")
+
+            try await app.testing().test(.POST, "modify-new-account/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .badRequest)
+            })
+        }
+    }
+
+    @Test("Test new account route with an already existing email")
+    func testNewAccountWithExistingEmail() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.new_account])
+
+            let body = LoginController.ModifyNewAccountRequest(new_email: "email@mail.com", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "modify-new-account/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .conflict)
+            })
+        }
+    }
+
+    @Test("Test new account route with right values and same email")
+    func testNewAccountWithRightValuesSameEmail() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.new_account])
+
+            let body = LoginController.ModifyNewAccountRequest(new_email: "test@mail.com", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "modify-new-account/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test new account route with right values another email")
+    func testNewAccountWithRightValuesOtherEmail() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.new_account])
+
+            let body = LoginController.ModifyNewAccountRequest(new_email: "newemail@mail.com", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "modify-new-account/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test verify email route with a wrong code")
+    func testVerifyEmailWithWrongCode() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.unverified_email])
+
+            let body = LoginController.verifyEmailRequest(code: "aaaaaa")
+
+            try await app.testing().test(.POST, "verify-email", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .badRequest)
+            })
+        }
+    }
+
+    @Test("Test verify email route with a right code")
+    func testVerifyEmailWithRightCode() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.unverified_email])
+
+            let body = LoginController.verifyEmailRequest(code: "secretcode")
+
+            try await app.testing().test(.POST, "verify-email", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
 }

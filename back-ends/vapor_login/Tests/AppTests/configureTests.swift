@@ -23,7 +23,7 @@ func withAppIncludingDB(_ test: (Application) async throws -> ()) async throws {
 func createTestUser(on db: any Database, roles: [Role]) async throws -> User {
     let password = "Admin12345@"
     let password_hash = try Bcrypt.hash(password)
-    let user = User(email: "test@mail.com", password: password_hash, roles: roles)
+    let user = User(email: "test@mail.com", password: password_hash, emailVerificationCode: "secretcode", passwordResetCode: "secretcode", roles: roles)
     try await user.save(on: db)
     return user
 }
