@@ -156,4 +156,178 @@ struct LoginRoutesTests {
         }
     }
 
+    @Test("Test forgot password route with non existing email")
+    func testForgotPasswordWithNonExistingEmail() async throws {
+        try await withAppIncludingDB { app in
+            let _ = try await createTestUser(on: app.db, roles: [])
+
+            let body = LoginController.forgotPasswordRequest(email: "inexistant@mail.com")
+
+            try await app.testing().test(.POST, "forgot-password/en", beforeRequest: { req in
+                try req.content.encode(body)
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test forgot password route with an existing email")
+    func testForgotPasswordWithExistingEmail() async throws {
+        try await withAppIncludingDB { app in
+            let _ = try await createTestUser(on: app.db, roles: [])
+
+            let body = LoginController.forgotPasswordRequest(email: "test@mail.com")
+
+            try await app.testing().test(.POST, "forgot-password/en", beforeRequest: { req in
+                try req.content.encode(body)
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test reset password route with a wrong code")
+    func testResetPasswordWithWrongCode() async throws {
+        try await withAppIncludingDB { app in
+            let _ = try await createTestUser(on: app.db, roles: [])
+
+            let body = LoginController.resetPassowrdRequest(code: "wrongcode", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "reset-password", beforeRequest: { req in
+                try req.content.encode(body)
+            }, afterResponse: { res async throws in
+                #expect(res.status == .unauthorized)
+            })
+        }
+    }
+
+    @Test("Test reset password route with a right code")
+    func testResetPasswordWithRightCode() async throws {
+        try await withAppIncludingDB { app in
+            let _ = try await createTestUser(on: app.db, roles: [])
+
+            let body = LoginController.resetPassowrdRequest(code: "secretcode", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "reset-password", beforeRequest: { req in
+                try req.content.encode(body)
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test edit email route with an unverfied email account and no password")
+    func testEditEmailUnverifiedEmailNoPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [.unverified_email])
+
+            let body = LoginController.changeEmailRequest(new_email: "test@mail.com", password: nil)
+
+            try await app.testing().test(.POST, "edit-email/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test edit email route with a verified email account and no password")
+    func testEditEmailVerifiedEmailNoPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [])
+
+            let body = LoginController.changeEmailRequest(new_email: "test@mail.com", password: nil)
+
+            try await app.testing().test(.POST, "edit-email/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .badRequest)
+            })
+        }
+    }
+
+    @Test("Test edit email route with a verified email account and wrong password")
+    func testEditEmailVerifiedEmailWrongPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [])
+
+            let body = LoginController.changeEmailRequest(new_email: "test@mail.com", password: "wrongpass")
+
+            try await app.testing().test(.POST, "edit-email/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .unauthorized)
+            })
+        }
+    }
+
+    @Test("Test edit email route with a verified email account and right password")
+    func testEditEmailVerifiedEmailRightPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [])
+
+            let body = LoginController.changeEmailRequest(new_email: "test@mail.com", password: "Admin12345@")
+
+            try await app.testing().test(.POST, "edit-email/en", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+    @Test("Test edit password route with wrong current password")
+    func testEditPasswordWrongPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [])
+
+            let body = LoginController.changePasswordRequest(current_password: "wrongpass", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "edit-password", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .unauthorized)
+            })
+        }
+    }
+
+    @Test("Test edit password route with wrong new password")
+    func testEditPasswordWrongNewPassword() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [])
+
+            let body = LoginController.changePasswordRequest(current_password: "Admin12345@", new_password: "NotSecureEnough")
+
+            try await app.testing().test(.POST, "edit-password", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .badRequest)
+            })
+        }
+    }
+
+    @Test("Test edit password route with right passwords")
+    func testEditPasswordRightPasswords() async throws {
+        try await withAppIncludingDB { app in
+            let token = try await createTestUserAndGetJWT(app: app, roles: [])
+
+            let body = LoginController.changePasswordRequest(current_password: "Admin12345@", new_password: "SecureEnough1")
+
+            try await app.testing().test(.POST, "edit-password", beforeRequest: { req in
+                try req.content.encode(body)
+                req.headers.add(name: "authorization", value: "Bearer \(token)")
+            }, afterResponse: { res async throws in
+                #expect(res.status == .ok)
+            })
+        }
+    }
+
+
+
 }
