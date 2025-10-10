@@ -8,9 +8,37 @@ struct UsersController: RouteCollection {
         let users = routes.grouped("users").grouped(AuthMiddleware(requiredRole: .edit_users))
         
         users.post("new", ":lang", use: create)
+        users.get(use: list)
+        users.get(":id", use: get)
     }
 
-    struct CreateUserRequest: Content, Validatable {
+    struct listResponse: Content {
+        let users: [ShortUserDTO]
+    }
+
+    func list(req: Request) async throws -> listResponse {
+        let users = try await User.query(on: req.db).all()
+        return listResponse(users: users.map { $0.toShortDTO() })
+    }
+
+    func get(req: Request) async throws -> ListUserDTO {
+        guard let idString = req.parameters.get("id"),
+            let id = UUID(uuidString: idString) else {
+                throw Abort(.notFound, reason: "Invalid user ID")
+        }
+
+        let user = try await User.query(on: req.db)
+            .filter(\.$id, .equal, id)
+            .first()
+
+        if user == nil {
+            throw Abort(.notFound, reason: "No user with this id exists")
+        }
+
+        return user!.toListDTO()
+    }
+
+    struct createUserRequest: Content, Validatable {
         let email: String
         let roles: [Role]
 
@@ -22,8 +50,8 @@ struct UsersController: RouteCollection {
     // This is the controller for the /users/new/:lang route, it creates a new user in DB with a temporary passord, and send an invite email to the new user with the temporary password
     func create(req: Request) async throws -> HTTPStatus {
 
-        try CreateUserRequest.validate(content: req) // Validate that the request matches the CreateUserRequest, which means that it is valid
-        let input = try req.content.decode(CreateUserRequest.self)
+        try createUserRequest.validate(content: req) // Validate that the request matches the CreateUserRequest, which means that it is valid
+        let input = try req.content.decode(createUserRequest.self)
         
         // We return a transaction, that will either return an ok status, or an error (if case of an error, everything done in DB in the transaction will be undone)
         return try await req.db.transaction { database in

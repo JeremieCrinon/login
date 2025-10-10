@@ -55,4 +55,12 @@ final class User: Model, @unchecked Sendable {
         self.passwordResetCode = passwordResetCode
         self.roles = roles
     }
+
+    func toShortDTO() -> ShortUserDTO {
+        ShortUserDTO(id: id!, email: email, roles: roles)
+    }
+
+    func toListDTO() -> ListUserDTO {
+        ListUserDTO(id: id!, email: email, roles: roles, created_at: createdAt, updated_at: updatedAt)
+    }
 }

@@ -10,7 +10,7 @@ struct UsersRoutesTests {
         try await withAppIncludingDB { app in
             let token = try await createTestUserAndGetJWT(app: app, roles: [.edit_users])
 
-            let body = UsersController.CreateUserRequest(
+            let body = UsersController.createUserRequest(
                 email: "email",
                 roles: [.admin]
             )
@@ -29,7 +29,7 @@ struct UsersRoutesTests {
         try await withAppIncludingDB { app in
             let token = try await createTestUserAndGetJWT(app: app, roles: [.edit_users])
 
-            let body = UsersController.CreateUserRequest(
+            let body = UsersController.createUserRequest(
                 email: "test@mail.com",
                 roles: [.admin]
             )
@@ -48,7 +48,7 @@ struct UsersRoutesTests {
         try await withAppIncludingDB { app in
             let token = try await createTestUserAndGetJWT(app: app, roles: [.admin])
 
-            let body = UsersController.CreateUserRequest(
+            let body = UsersController.createUserRequest(
                 email: "user@mail.com",
                 roles: [.admin]
             )
