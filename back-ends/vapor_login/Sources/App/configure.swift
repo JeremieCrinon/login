@@ -18,13 +18,15 @@ public func configure(_ app: Application) async throws {
     if app.environment == .testing {
         app.databases.use(.sqlite(.memory), as: .sqlite)// Use sqlite in memory to prevent conflicts when running tests in paralel
     } else {
+        let useTLS = (Environment.get("DATABASE_USE_TLS") ?? "true").lowercased() == "true"
+
         app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
             hostname: Environment.get("DATABASE_HOST") ?? "localhost",
             port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
             username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
             password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
             database: Environment.get("DATABASE_NAME") ?? "vapor_database",
-            tls: .prefer(try .init(configuration: .clientDefault)))
+            tls: useTLS ? .prefer(try .init(configuration: .clientDefault)) : .disable)
         ), as: .psql)
     }
 
