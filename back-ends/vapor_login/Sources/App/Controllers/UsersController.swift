@@ -12,6 +12,8 @@ struct UsersController: RouteCollection {
         users.get(":id", use: get)
         users.delete(":id", use: delete)
         users.get("list-roles", use: listRoles)
+        users.put(":id", "roles", use: editUserRoles)
+        users.put(":id", "email", ":lang", use: editUserEmail)
     }
 
     struct listRolesResponse: Content {
@@ -113,11 +115,13 @@ struct UsersController: RouteCollection {
     }
 
     func delete(req: Request) async throws -> HTTPStatus {
+        // Get the id from request parameters and parse it into UUID
         guard let idString = req.parameters.get("id"),
             let id = UUID(uuidString: idString) else {
                 throw Abort(.notFound, reason: "Invalid user ID")
         }
 
+        // No need for further verifications, we don't have to verify that the id exists, it won't fail after
         do {
             try await User.query(on: req.db)
                 .filter(\.$id, .equal, id)
@@ -128,4 +132,80 @@ struct UsersController: RouteCollection {
 
         return .ok
     }
+
+    struct editUserRolesRequest: Content {
+        let roles: [Role]
+    }
+
+    func editUserRoles(req: Request) async throws -> HTTPStatus {
+        let input = try req.content.decode(editUserRolesRequest.self)
+
+        // Get the id from request parameters and parse it into UUID
+        guard let idString = req.parameters.get("id"),
+            let id = UUID(uuidString: idString) else {
+                throw Abort(.notFound, reason: "Invalid user ID")
+        }
+
+        // No need for further verifications, we don't have to verify that the id exists, it won't fail after
+        do {
+            try await User.query(on: req.db)
+                .set(\.$roles, to: input.roles)
+                .filter(\.$id, .equal, id)
+                .update()
+        } catch {
+            throw Abort(.internalServerError)
+        }
+
+        return .ok
+    }
+
+    struct editUserEmailRequest: Content, Validatable {
+        let email: String
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("email", as: String.self, is: .email)
+        }
+    }
+
+    func editUserEmail(req: Request) async throws -> HTTPStatus {
+        try editUserEmailRequest.validate(content: req)
+        let input = try req.content.decode(editUserEmailRequest.self)
+        
+        return try await req.db.transaction { database in
+            guard let idString = req.parameters.get("id"),
+                let id = UUID(uuidString: idString) else {
+                    throw Abort(.notFound, reason: "Invalid user ID")
+            }
+
+            let existing_user = try await User.query(on: database)
+                .filter(\.$email, .equal, input.email)
+                .filter(\.$id, .notEqual, id)
+                .first()
+
+            if existing_user != nil {
+                throw Abort(.conflict, reason: "The new email is already taken by another account.")
+            }
+
+            try await User.query(on: database)
+                .set(\.$email, to: input.email)
+                .filter(\.$id, .equal, id)
+                .update()
+
+            let user = try await User.query(on: database)
+                .filter(\.$id, .equal, id)
+                .first()!
+
+            try await sendEmailVerificationToUser(user: user, req: req, db: database)
+            
+            return .ok
+        }
+       
+    }
 }
+
+
+
+
+
+
+
