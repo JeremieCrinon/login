@@ -3,7 +3,7 @@ import Fluent
 import struct Foundation.UUID
 import Vapor
 
-enum Role: String, Codable, Content, Equatable {
+enum Role: String, Codable, Content, Equatable, CaseIterable {
     case admin
     case user
     case new_account

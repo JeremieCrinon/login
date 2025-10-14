@@ -11,6 +11,18 @@ struct UsersController: RouteCollection {
         users.get(use: list)
         users.get(":id", use: get)
         users.delete(":id", use: delete)
+        users.get("list-roles", use: listRoles)
+    }
+
+    struct listRolesResponse: Content {
+        let roles: [Role]
+    }
+
+    func listRoles(req: Request) async throws -> listRolesResponse {
+        let filteredRoles = Role.allCases.filter { role in
+            role != .new_account && role != .unverified_email
+        }
+        return listRolesResponse(roles: filteredRoles)       
     }
 
     struct listResponse: Content {
