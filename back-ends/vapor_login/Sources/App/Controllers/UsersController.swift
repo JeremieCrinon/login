@@ -10,6 +10,7 @@ struct UsersController: RouteCollection {
         users.post("new", ":lang", use: create)
         users.get(use: list)
         users.get(":id", use: get)
+        users.delete(":id", use: delete)
     }
 
     struct listResponse: Content {
@@ -97,5 +98,22 @@ struct UsersController: RouteCollection {
             
             return .ok
         }
+    }
+
+    func delete(req: Request) async throws -> HTTPStatus {
+        guard let idString = req.parameters.get("id"),
+            let id = UUID(uuidString: idString) else {
+                throw Abort(.notFound, reason: "Invalid user ID")
+        }
+
+        do {
+            try await User.query(on: req.db)
+                .filter(\.$id, .equal, id)
+                .delete()
+        } catch {
+            throw Abort(.internalServerError)
+        }
+
+        return .ok
     }
 }
