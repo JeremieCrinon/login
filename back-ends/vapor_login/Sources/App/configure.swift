@@ -6,6 +6,7 @@ import Vapor
 import Mailgun
 import JWT
 import Crypto
+import Leaf
 
 extension MailgunDomain {
     static var domain1: MailgunDomain { .init(Environment.get("MAILGUN_DOMAIN") ?? "mg.example.com", .eu) }

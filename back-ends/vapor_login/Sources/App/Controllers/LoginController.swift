@@ -192,6 +192,10 @@ struct LoginController: RouteCollection {
             if user != nil {
                 // Generate a reset password code
                 let code = generatePassword(length: 12)
+
+                let front_end_url = Environment.get("FRONT_END_URL") ?? ""
+
+                let link: String = "\(front_end_url)/forgot-password/\(code)"
                 
                 // Update the user with a password reset code
                 try await User.query(on: database)
@@ -200,11 +204,12 @@ struct LoginController: RouteCollection {
                     .update()
 
                 // Send the reset password to the user by email
-                let message = MailgunMessage(
+                let message = MailgunTemplateMessage(
                     from: Environment.get("MAILGUN_EMAIL") ?? "email@example.com",
                     to: user!.email,
                     subject: "Reset your password",
-                    text: "Here is you code : \(code)"
+                    template: "forgot-password",
+                    templateData: ["logo_url": Environment.get("LOGO_URL") ?? "", "link": link]
                 )
 
                 if req.application.environment != .testing {

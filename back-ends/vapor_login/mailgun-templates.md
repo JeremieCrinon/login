@@ -1,0 +1,71 @@
+# Mailgun templates
+This file contains example email templates to add in mailgun
+
+## forgot-password
+```html
+
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html{
+            font-size: 62.5%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+        }
+
+        #email-container {
+            width: 500px;
+            /* background-color: red; */
+        }
+
+        .logo {
+            width: 25%;
+            /* margin-left: 5%; */
+        }
+
+        .email-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .email-body, .email-list li {
+            font-size: 1.6rem;
+        }
+
+        .email-list {
+            list-style-type: none;
+        }
+
+        #footer {
+            margin-top: 50px;
+        }
+    </style>
+  <title>Reset your password</title>
+</head>
+<body>
+    <div id="email-container">
+        <div id="content">
+          <img class="logo" src={{logo_url}} />
+          <h1 class="email-title">Have you forgot your password</h1>
+          <p class="email-body">Here is the link to reset your password : <a href={{link}}>{{ link }}</a> if this is not you, please ignore and delete this email. Do not give this link to anyone.</p>
+      	</div>
+        <div id="footer">
+          <p>This email has been sent here because an account with this email adress exists on our website. If this is an error, please send an email to this adress : email@mail.com</p>
+        </div>
+    </div>
+</body>
+</html>
+
+```
