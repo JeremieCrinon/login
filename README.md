@@ -27,6 +27,7 @@ Here is a list of the frameworks with their pros and cons to help you choose :
 
 ### Back-ends : 
 - Axum (Rust) : Really good performances, steep learning curve, not recommended to beginners.
+- Vapor (Swift) : Excellent compromise between PHP frameworks and lower level languages, with a not to steep leaning curve, ease of use and speed of development, but with good performances.
 - More will be coming
 
 
@@ -80,7 +81,6 @@ These routes are intended to be used by users with the role `admin` or `edit_use
 ### Back-ends
 - Symfony (PHP)
 - Laravel (PHP)
-- Vapor (Swift)
 
 ### Front-ends
 - React (JavaScript)
