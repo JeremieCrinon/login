@@ -201,7 +201,7 @@ pub async fn modify_new_account (State(state): State<AppState>, Extension(user):
     new_user.update(db).await.map_err(|e| {
         error!("Database error while updating a new user : {}", e);
 
-        return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+        StatusCode::INTERNAL_SERVER_ERROR.into_response()
     })?;
 
     // Get the user again to send him to the send_email_verification function that will add him the unverified_email role, assign him a verification code, and send him an email with this verification code
@@ -222,7 +222,7 @@ pub async fn modify_new_account (State(state): State<AppState>, Extension(user):
     send_email_verification(user, db.clone(), state, locale).await.map_err(|e| {
         error!("Error sending the user's email verification code : {}", e);
 
-        return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+        StatusCode::INTERNAL_SERVER_ERROR.into_response()
     })?;
     
     Ok(("User updated successfully, you might want to force the user to login again, but this is not required by the back-end.").into_response())
@@ -269,7 +269,7 @@ pub async fn verify_email (State(state): State<AppState>, Extension(user): Exten
     new_user.update(&db).await.map_err(|e| {
         error!("Database error while updating a user with unverified email : {}", e);
 
-        return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+        StatusCode::INTERNAL_SERVER_ERROR.into_response()
     })?;
 
     Ok(("Email verified successfully.").into_response())

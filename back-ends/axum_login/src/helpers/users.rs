@@ -27,12 +27,12 @@ pub async fn hash_passwd(password: String) -> Result<String, StatusCode> {
 
     let password_worker = PasswordWorker::new_bcrypt(max_threads).map_err(|e| {
         error!("Error creating the password worker to hash a password : {}", e);
-        return StatusCode::INTERNAL_SERVER_ERROR;
+        StatusCode::INTERNAL_SERVER_ERROR
     })?;
 
     let hashed_password = password_worker.hash(password, BcryptConfig { cost }).await.map_err(|e| {
         error!("Error hashing the password : {}", e);
-        return StatusCode::INTERNAL_SERVER_ERROR;
+        StatusCode::INTERNAL_SERVER_ERROR
     })?;
 
     Ok(hashed_password)
@@ -136,6 +136,12 @@ pub fn validate_password(pw: &str) -> Result<(), ValidationError> {
         return Err(
             ValidationError::new("Password must be at least 8 characters long"));
     }
+
+    if pw.len() > 63 {
+        return Err(
+            ValidationError::new("Password must be 63 characters long maximum"));
+    }
+
     if !pw.chars().any(|c| c.is_ascii_uppercase()) {
         return Err(ValidationError::new("Password must contain at least one uppercase letter"));
     }

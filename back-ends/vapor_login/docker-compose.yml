@@ -1,0 +1,23 @@
+services:
+  run:
+    image: swift:latest
+    working_dir: /code
+    volumes:
+      - .:/code
+    network_mode: host
+    command: bash -c "swift run"
+
+  test:
+    image: swift:latest
+    working_dir: /code
+    volumes:
+      - .:/code
+    network_mode: host
+    command: bash -c "swift test"
+  migrate:
+    image: swift:latest
+    working_dir: /code
+    volumes:
+      - .:/code
+    network_mode: host
+    command: bash -c "swift run App migrate --yes"

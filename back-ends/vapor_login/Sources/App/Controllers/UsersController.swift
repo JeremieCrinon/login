@@ -1,0 +1,210 @@
+import Vapor
+import Mailgun
+
+
+struct UsersController: RouteCollection {
+
+    func boot(routes: any RoutesBuilder) throws {
+        let users = routes.grouped("users").grouped(AuthMiddleware(requiredRole: .edit_users))
+        
+        users.post("new", ":lang", use: create)
+        users.get(use: list)
+        users.get(":id", use: get)
+        users.delete(":id", use: delete)
+        users.get("list-roles", use: listRoles)
+        users.put(":id", "roles", use: editUserRoles)
+        users.put(":id", "email", ":lang", use: editUserEmail)
+    }
+
+    struct listRolesResponse: Content {
+        let roles: [Role]
+    }
+
+    func listRoles(req: Request) async throws -> listRolesResponse {
+        let filteredRoles = Role.allCases.filter { role in
+            role != .new_account && role != .unverified_email
+        }
+        return listRolesResponse(roles: filteredRoles)       
+    }
+
+    struct listResponse: Content {
+        let users: [ShortUserDTO]
+    }
+
+    func list(req: Request) async throws -> listResponse {
+        let users = try await User.query(on: req.db).all()
+        return listResponse(users: users.map { $0.toShortDTO() })
+    }
+
+    func get(req: Request) async throws -> ListUserDTO {
+        guard let idString = req.parameters.get("id"),
+            let id = UUID(uuidString: idString) else {
+                throw Abort(.notFound, reason: "Invalid user ID")
+        }
+
+        let user = try await User.query(on: req.db)
+            .filter(\.$id, .equal, id)
+            .first()
+
+        if user == nil {
+            throw Abort(.notFound, reason: "No user with this id exists")
+        }
+
+        return user!.toListDTO()
+    }
+
+    struct createUserRequest: Content, Validatable {
+        let email: String
+        let roles: [Role]
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("email", as: String.self, is: .email)
+        }
+    }
+
+    // This is the controller for the /users/new/:lang route, it creates a new user in DB with a temporary passord, and send an invite email to the new user with the temporary password
+    func create(req: Request) async throws -> HTTPStatus {
+
+        try createUserRequest.validate(content: req) // Validate that the request matches the CreateUserRequest, which means that it is valid
+        let input = try req.content.decode(createUserRequest.self)
+        
+        // We return a transaction, that will either return an ok status, or an error (if case of an error, everything done in DB in the transaction will be undone)
+        return try await req.db.transaction { database in
+            // We make a request in DB for a user with the same email that has been sent
+            let existing_user = try await User.query(on: database)
+                .filter(\.$email, .equal, input.email)
+                .first()
+
+            if existing_user != nil { // If we found a user in DB with the same email that has been sent, we return an error
+                throw Abort(.conflict, reason: "Email is already used by another account.")
+            }
+
+            let password = generatePassword(length: 12) // Call the generatePassword helper function to generate a random password to the new user
+            let password_hash = try req.password.hash(password) // Hash the password for storing in DB
+
+            var roles = input.roles
+            if !roles.contains(.new_account) { // If the roles array sent by the user does not contain the new account role
+                roles.append(.new_account) // Add the new account role to the roles array
+            }
+
+            let new_user = User(email: input.email, password: password_hash, roles: roles) // Create a new user
+            try await new_user.save(on: database) // Save in DB
+
+            // Send invitation email with the password
+            let message = MailgunTemplateMessage(
+                from: Environment.get("MAILGUN_EMAIL") ?? "email@example.com",
+                to: new_user.email,
+                subject: "Create you new account",
+                template: "new-account",
+                templateData: ["logo_url": Environment.get("LOGO_URL") ?? "", "front_end_url": Environment.get("FRONT_END_URL") ?? "", "email": input.email, "password": password]
+            )
+
+            if req.application.environment != .testing {
+                do {
+                    let _ = try await req.mailgun().send(message).get()
+                } catch {
+                    req.logger.error("An error occured sending the email via mailgun : \(error.localizedDescription)")
+                    throw Abort(.internalServerError)
+                }
+            }
+            
+            
+            return .ok
+        }
+    }
+
+    func delete(req: Request) async throws -> HTTPStatus {
+        // Get the id from request parameters and parse it into UUID
+        guard let idString = req.parameters.get("id"),
+            let id = UUID(uuidString: idString) else {
+                throw Abort(.notFound, reason: "Invalid user ID")
+        }
+
+        // No need for further verifications, we don't have to verify that the id exists, it won't fail after
+        do {
+            try await User.query(on: req.db)
+                .filter(\.$id, .equal, id)
+                .delete()
+        } catch {
+            throw Abort(.internalServerError)
+        }
+
+        return .ok
+    }
+
+    struct editUserRolesRequest: Content {
+        let roles: [Role]
+    }
+
+    func editUserRoles(req: Request) async throws -> HTTPStatus {
+        let input = try req.content.decode(editUserRolesRequest.self)
+
+        // Get the id from request parameters and parse it into UUID
+        guard let idString = req.parameters.get("id"),
+            let id = UUID(uuidString: idString) else {
+                throw Abort(.notFound, reason: "Invalid user ID")
+        }
+
+        // No need for further verifications, we don't have to verify that the id exists, it won't fail after
+        do {
+            try await User.query(on: req.db)
+                .set(\.$roles, to: input.roles)
+                .filter(\.$id, .equal, id)
+                .update()
+        } catch {
+            throw Abort(.internalServerError)
+        }
+
+        return .ok
+    }
+
+    struct editUserEmailRequest: Content, Validatable {
+        let email: String
+
+        static func validations(_ validations: inout Validations) {
+            validations.add("email", as: String.self, is: .email)
+        }
+    }
+
+    func editUserEmail(req: Request) async throws -> HTTPStatus {
+        try editUserEmailRequest.validate(content: req)
+        let input = try req.content.decode(editUserEmailRequest.self)
+        
+        return try await req.db.transaction { database in
+            guard let idString = req.parameters.get("id"),
+                let id = UUID(uuidString: idString) else {
+                    throw Abort(.notFound, reason: "Invalid user ID")
+            }
+
+            let existing_user = try await User.query(on: database)
+                .filter(\.$email, .equal, input.email)
+                .filter(\.$id, .notEqual, id)
+                .first()
+
+            if existing_user != nil {
+                throw Abort(.conflict, reason: "The new email is already taken by another account.")
+            }
+
+            try await User.query(on: database)
+                .set(\.$email, to: input.email)
+                .filter(\.$id, .equal, id)
+                .update()
+
+            let user = try await User.query(on: database)
+                .filter(\.$id, .equal, id)
+                .first()!
+
+            try await sendEmailVerificationToUser(user: user, req: req, db: database)
+            
+            return .ok
+        }
+       
+    }
+}
+
+
+
+
+
+
+

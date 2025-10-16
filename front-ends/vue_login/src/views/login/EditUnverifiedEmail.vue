@@ -47,8 +47,7 @@ const change_email = ref(false);
 const onSubmit = handleSubmit((values) => {
     const token = sessionStorage.getItem("token");
 
-    // axios.post(API_URL + '/edit-email' + t('locale'), {
-    axios.post(API_URL + '/edit-email', {
+    axios.post(API_URL + '/edit-email/' + t('locale'), {
         new_email: values.email,
         password: "" // The API requires the password field, even in the case where the user hasn't a verified email (which is the case here). But just sending an empty string is enough.
     }, {
