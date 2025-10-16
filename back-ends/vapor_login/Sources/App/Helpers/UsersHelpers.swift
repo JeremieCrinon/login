@@ -36,11 +36,12 @@ func sendEmailVerificationToUser(user: User, req: Request, db: any Database) asy
         .update()
 
     // Send an email with the verification code
-    let message = MailgunMessage(
+    let message = MailgunTemplateMessage(
         from: Environment.get("MAILGUN_EMAIL") ?? "email@example.com",
         to: user.email,
         subject: "Verify your email",
-        text: "Here is your code : \(code)"
+        template: "verify-email",
+        templateData: ["logo_url": Environment.get("LOGO_URL") ?? "", "code": code]
     )
 
     if req.application.environment != .testing {

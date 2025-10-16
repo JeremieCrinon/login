@@ -91,13 +91,12 @@ struct UsersController: RouteCollection {
             try await new_user.save(on: database) // Save in DB
 
             // Send invitation email with the password
-            //TODO: Make a clean email with internationalization
-
-            let message = MailgunMessage(
+            let message = MailgunTemplateMessage(
                 from: Environment.get("MAILGUN_EMAIL") ?? "email@example.com",
                 to: new_user.email,
                 subject: "Create you new account",
-                text: "Here is your password : \(password)",
+                template: "new-account",
+                templateData: ["logo_url": Environment.get("LOGO_URL") ?? "", "front_end_url": Environment.get("FRONT_END_URL") ?? "", "email": input.email, "password": password]
             )
 
             if req.application.environment != .testing {
