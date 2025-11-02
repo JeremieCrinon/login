@@ -8,7 +8,7 @@ struct LoginRoutesTests {
     @Test("Test login route with a wrong email")
     func testLoginWrongEmail() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [.admin])
+            let _ = try await createTestUser(on: app.db, roles: [.admin], email: nil)
 
             let body = LoginController.LoginRequest(email: "test@mail.co", password: "Admin12345@")
 
@@ -23,7 +23,7 @@ struct LoginRoutesTests {
     @Test("Test login route with a wrong password")
     func testLoginWrongPassword() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [.admin])
+            let _ = try await createTestUser(on: app.db, roles: [.admin], email: nil)
 
             let body = LoginController.LoginRequest(email: "test@mail.com", password: "Admin12345")
 
@@ -38,7 +38,7 @@ struct LoginRoutesTests {
     @Test("Test login route with right credentials")
     func testLoginWithRightCredentials() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [.admin])
+            let _ = try await createTestUser(on: app.db, roles: [.admin], email: nil)
 
             let body = LoginController.LoginRequest(email: "test@mail.com", password: "Admin12345@")
 
@@ -159,7 +159,7 @@ struct LoginRoutesTests {
     @Test("Test forgot password route with non existing email")
     func testForgotPasswordWithNonExistingEmail() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [])
+            let _ = try await createTestUser(on: app.db, roles: [], email: nil)
 
             let body = LoginController.forgotPasswordRequest(email: "inexistant@mail.com")
 
@@ -174,7 +174,7 @@ struct LoginRoutesTests {
     @Test("Test forgot password route with an existing email")
     func testForgotPasswordWithExistingEmail() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [])
+            let _ = try await createTestUser(on: app.db, roles: [], email: nil)
 
             let body = LoginController.forgotPasswordRequest(email: "test@mail.com")
 
@@ -189,7 +189,7 @@ struct LoginRoutesTests {
     @Test("Test reset password route with a wrong code")
     func testResetPasswordWithWrongCode() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [])
+            let _ = try await createTestUser(on: app.db, roles: [], email: nil)
 
             let body = LoginController.resetPassowrdRequest(code: "wrongcode", new_password: "SecureEnough1")
 
@@ -204,7 +204,7 @@ struct LoginRoutesTests {
     @Test("Test reset password route with a right code")
     func testResetPasswordWithRightCode() async throws {
         try await withAppIncludingDB { app in
-            let _ = try await createTestUser(on: app.db, roles: [])
+            let _ = try await createTestUser(on: app.db, roles: [], email: nil)
 
             let body = LoginController.resetPassowrdRequest(code: "secretcode", new_password: "SecureEnough1")
 

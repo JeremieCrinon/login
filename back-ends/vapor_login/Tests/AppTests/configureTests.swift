@@ -20,10 +20,11 @@ func withAppIncludingDB(_ test: (Application) async throws -> ()) async throws {
 }
 
 // This function creates a user in DB with the roles it has been given. This is usefull for tests that requires a user.
-func createTestUser(on db: any Database, roles: [Role]) async throws -> User {
+func createTestUser(on db: any Database, roles: [Role], email: String?) async throws -> User {
+    let email = email ?? "test@mail.com"
     let password = "Admin12345@"
     let password_hash = try Bcrypt.hash(password)
-    let user = User(email: "test@mail.com", password: password_hash, emailVerificationCode: "secretcode", passwordResetCode: "secretcode", roles: roles)
+    let user = User(email: email, password: password_hash, emailVerificationCode: "secretcode", passwordResetCode: "secretcode", roles: roles)
     try await user.save(on: db)
     return user
 }
@@ -48,7 +49,7 @@ func getJWT(user: User, app: Application) async throws -> String {
 
 // This function creates a user with the given roles, and returns a JWT for the new user
 func createTestUserAndGetJWT(app: Application, roles: [Role]) async throws -> String {
-    let user = try await createTestUser(on: app.db, roles: roles)
+    let user = try await createTestUser(on: app.db, roles: roles, email: nil)
 
     return try await getJWT(user: user, app: app)
 }
