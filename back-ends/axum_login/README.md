@@ -1,5 +1,5 @@
 # Axum login
-**This is the documentation of the back-end with Axum of my [login systems suite](https://github.com/JeremieCrinon/login).**
+**This is the documentation of the back-end with Axum of my [login systems suite](https://github.com/JeremieCrinon/login). Please read the [main README.md](../../README.md) and the [back-ends general README.md](../README.md) first.**
 
 ## Getting started
 Start by ensuring you have the [requirements](#requirements), and then, follow the [quick start guide](#quick-start-guide). Then, you will be able to test the app with an HTTP client, like [Postman](https://www.postman.com) or [Insomnia](https://insomnia.rest). You will then be able to connect a front-end to it and edit them.
@@ -16,7 +16,7 @@ Start by ensuring you have the [requirements](#requirements), and then, follow t
 - Create an empty database in Postgres.
 - Configure your .env by copying the .env.example, and enter the values you need, there are comments on each line explaining what you should enter.
 - Execute the command `cargo run`, it should start without errors.
-- Test the routes with [Postman](https://www.postman.com) or [Insomnia](https://insomnia.rest), you have the list of the routes and what they expect on the .env of the [full login systems suite](https://github.com/JeremieCrinon/login).
+- Test the routes with [Postman](https://www.postman.com) or [Insomnia](https://insomnia.rest), you have the list of the routes and what they expect on the .env of the [back-ends](../README.md).
 
 ## Commands
 - Refresh DB via sea-orm (reset DB and execute migrations)
@@ -72,8 +72,11 @@ You can find the migrations in the src folder. For more details, you can go to t
 All the email templates are found here. The `base_email.html.tera` file contains the base structure of the mails. The `style.css` file is the CSS file for all the templates. Then, there is a folder per email. In these folders, you can find an `email.html.tera` file and an `email.txt.tera` file. The `email.html.tera` extends the `base_email.html.tera`. It is the HTML template. The `email.txt.tera` just contains the plain text backup.   
 *Please note that, if you have never done any email templates, the HTML and CSS are really limited, and you cannot do the same things as in the browser.*
 
-- #### Translations folder
+- ### Translations folder
 You can find one JSON file per language in this folder. If you only want English or another language, just delete the languages JSON file you do not want and delete/add the reference to the language in the files in the [translator folder](#translator-folder).
 
 - ### Target Folder
 You can find all the compiled apps here. Please refer to the [Rust documentation](https://doc.rust-lang.org/book) for more details.
+
+## TODO
+- Add unit tests
