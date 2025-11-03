@@ -13,8 +13,8 @@ import { User } from './user/entities/user.entity';
       password: 'root',
       database: 'nest_login',
       entities: [User],
-      migrations: ['src/migrations/*.ts'],
-      synchronize: false,
+      // migrations: ['src/migrations/*.ts'],
+      synchronize: false
     }),
     UserModule
   ],

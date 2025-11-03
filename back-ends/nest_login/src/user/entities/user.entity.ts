@@ -22,6 +22,7 @@ export class User {
   @Column({
     type: "enum",
     enum: Role,
+    array: true,
     nullable: false
   })
   role: Role[];
