@@ -5,18 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { User, Role } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private dataSource: DataSource
+    private dataSource: DataSource,
+    private readonly emailService: EmailService
   ) { }
-
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action creates a new user';
-  // }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     return await this.dataSource.transaction(async manager => {
@@ -40,10 +38,21 @@ export class UserService {
       const passwordHash = await bcrypt.hash(password, 10);
       user.password = passwordHash;
 
+      // Save the user
       await manager.save(user);
 
-      //TODO: Send an invite email with the password
+      // Send the invite email
+      await this.emailService.sendEmail({
+        subject: "Create your new account",
+        template: "emails/create-account",
+        recipient: user.email,
+        context: {
+          email: user.email,
+          password: password
+        }
+      })
 
+      user.password = "secret";
       return user;
     })
   }
