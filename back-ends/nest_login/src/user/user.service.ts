@@ -33,7 +33,7 @@ export class UserService {
       if (!roles.includes(Role.NEW_ACCOUNT)) roles.push(Role.NEW_ACCOUNT);
       user.role = roles;
 
-      // Generate a random password and hash it, but keep the non-hashed verfion for sending it by email
+      // Generate a random password and hash it, but keep the non-hashed version for sending it by email
       const password = Math.random().toString(36).slice(-12);
       const passwordHash = await bcrypt.hash(password, 10);
       user.password = passwordHash;

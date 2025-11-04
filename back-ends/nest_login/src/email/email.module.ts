@@ -3,21 +3,22 @@ import { EmailService } from './email.service';
 import { EmailController } from './email.controller';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { env } from 'src/env';
 
 @Module({
   imports: [
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
-          host: process.env.SMTP_HOST,
-          port: +(process.env.SMTP_PORT ?? 1025),
+          host: env("SMTP_HOST"),
+          port: +env("SMTP_PORT"),
           secure: false,
           tls: {
             rejectUnauthorized: false,
           },
         },
         defaults: {
-          from: process.env.SMTP_FROM,
+          from: env("SMTP_FROM"),
         },
         template: {
           dir: __dirname + '/../../templates',
