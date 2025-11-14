@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { EmailModule } from './email/email.module';
 import { LoginModule } from './login/login.module';
+import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared.module';
 import { JwtModule } from '@nestjs/jwt';
 import { env } from './env';
@@ -28,6 +29,7 @@ import { env } from './env';
     EmailModule,
     LoginModule,
     JwtModule,
+    AuthModule,
   ],
 })
 export class AppModule { }
