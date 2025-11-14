@@ -3,9 +3,12 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RequiredRole } from 'src/auth/decorators/roles.decorator';
+import { Role } from './entities/user.entity';
 
 @Controller('users')
 @UseGuards(AuthGuard)
+@RequiredRole(Role.EDIT_USERS)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
