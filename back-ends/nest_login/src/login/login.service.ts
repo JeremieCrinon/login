@@ -6,6 +6,7 @@ import { Repository, Not, DataSource } from 'typeorm';
 import { Role, User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { EmailVerificationHelper } from './helpers/email-verification.helper';
 
 @Injectable()
 export class LoginService {
@@ -13,7 +14,8 @@ export class LoginService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    private dataSource: DataSource
+    private dataSource: DataSource,
+    private emailVerificationHelper: EmailVerificationHelper
   ) { }
 
 
@@ -58,6 +60,8 @@ export class LoginService {
       user.role = roles;
 
       await manager.save(user);
+
+      await this.emailVerificationHelper.sendEmailVerification(manager, user);
 
     })
   }
