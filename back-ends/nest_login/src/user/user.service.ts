@@ -52,7 +52,7 @@ export class UserService {
         }
       })
 
-      user.password = "secret";
+      user.password = "secret"; // Change the password of the user so we don't return it, even hashed
       return user;
     })
   }

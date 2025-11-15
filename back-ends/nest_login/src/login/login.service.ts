@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
+import { ModifyNewAccountDto } from './dto/modify-new-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from 'src/user/entities/user.entity';
+import { Repository, Not, DataSource } from 'typeorm';
+import { Role, User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -11,7 +12,8 @@ export class LoginService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private dataSource: DataSource
   ) { }
 
 
@@ -36,5 +38,27 @@ export class LoginService {
     // Generate and return the JWT with the payload
     return { token: await this.jwtService.signAsync(payload) };
 
+  }
+
+  async modifyNewAccount(modifyNewAccountDto: ModifyNewAccountDto, user: User) {
+    return await this.dataSource.transaction(async manager => {
+      const emailConflictUser = await this.usersRepository.findOneBy({ email: modifyNewAccountDto.new_email, id: Not(user.id) })
+
+      if (emailConflictUser) {
+        throw new ConflictException("Email is already used by another account.");
+      }
+
+      const passwordHash = await bcrypt.hash(modifyNewAccountDto.new_password, 10);
+
+      let roles = user.role;
+      roles = roles.filter((role) => role !== Role.NEW_ACCOUNT);
+
+      user.email = modifyNewAccountDto.new_email;
+      user.password = passwordHash;
+      user.role = roles;
+
+      await manager.save(user);
+
+    })
   }
 }
