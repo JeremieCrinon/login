@@ -1,6 +1,7 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { ModifyNewAccountDto } from './dto/modify-new-account.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not, DataSource } from 'typeorm';
 import { Role, User } from 'src/user/entities/user.entity';
@@ -64,5 +65,19 @@ export class LoginService {
       await this.emailVerificationHelper.sendEmailVerification(manager, user);
 
     })
+  }
+
+  async verifyEmail(verifyEmailDto: VerifyEmailDto, user: User) {
+    if (verifyEmailDto.code !== user.emailVerificationCode) {
+      throw new BadRequestException("The code you sent isn't the right one");
+    }
+
+    let roles = user.role;
+    roles = roles.filter((role) => role !== Role.UNVERIFIED_EMAIL);
+
+    user.role = roles;
+    user.emailVerificationCode = null;
+
+    await this.usersRepository.save(user);
   }
 }

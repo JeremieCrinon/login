@@ -27,11 +27,11 @@ export class User {
   })
   role: Role[];
 
-  @Column({ nullable: true })
-  emailVerificationCode: String;
+  @Column({ type: 'varchar', nullable: true })
+  emailVerificationCode: string | null;
 
-  @Column({ nullable: true })
-  passwordResetCode: String;
+  @Column({ type: 'varchar', nullable: true })
+  passwordResetCode: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

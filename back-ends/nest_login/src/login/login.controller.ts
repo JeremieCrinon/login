@@ -2,6 +2,7 @@ import { Controller, Post, Body, HttpCode, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginDto } from './dto/login.dto';
 import { ModifyNewAccountDto } from './dto/modify-new-account.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 import { RequestUser } from 'src/auth/decorators/request-user.decorator';
 import { Role, User } from 'src/user/entities/user.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
@@ -26,5 +27,16 @@ export class LoginController {
     @RequestUser() user: User
   ) {
     return this.loginService.modifyNewAccount(modifyNewAccountDto, user);
+  }
+
+  @Post('verify-email')
+  @UseGuards(AuthGuard)
+  @RequiredRole(Role.UNVERIFIED_EMAIL)
+  @HttpCode(200)
+  verifyEmail(
+    @Body() verifyEmailDto: VerifyEmailDto,
+    @RequestUser() user: User
+  ) {
+    return this.loginService.verifyEmail(verifyEmailDto, user);
   }
 }
