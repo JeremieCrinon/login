@@ -128,7 +128,12 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.gradient-bg {
+  background: linear-gradient(162deg, rgba(252, 137, 71, 1) 0%, rgba(242, 39, 178, 1) 100%);
 }

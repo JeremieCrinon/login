@@ -77,7 +77,7 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full sm:max-w-md">
+    <Card className="w-full sm:max-w-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <CardHeader className="text-center">
         <CardTitle>Login</CardTitle>
         <CardDescription>Please login to use the app.</CardDescription>

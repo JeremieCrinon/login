@@ -1,5 +1,6 @@
 import { LoginForm } from "./login-form"
 import { redirect } from "react-router";
+import { useEffect } from "react";
 
 export function clientLoader() {
   if (sessionStorage.getItem("token") || localStorage.getItem("token")) {
@@ -9,7 +10,11 @@ export function clientLoader() {
 }
 
 export default function Login() {
+
   return (
-    <LoginForm />
+    <div className="gradient-bg h-screen">
+      <LoginForm />
+    </div>
   )
+
 }
