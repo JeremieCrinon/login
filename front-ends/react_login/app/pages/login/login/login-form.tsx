@@ -1,9 +1,10 @@
-import * as React from "react";
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
-
+import axios from "axios"
+import { useNavigate } from "react-router"
 
 import { Button } from "~/components/ui/button"
 import {
@@ -21,7 +22,8 @@ import {
   FieldLabel,
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
-
+import { Checkbox } from "~/components/ui/checkbox"
+import { Label } from "~/components/ui/label"
 
 const formSchema = z.object({
   email: z
@@ -32,6 +34,9 @@ const formSchema = z.object({
 })
 
 export function LoginForm() {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,31 +46,48 @@ export function LoginForm() {
   })
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
+
+    axios.post('http://localhost:3000/login', {
+      email: data.email,
+      password: data.password
     })
+      .then((response) => {
+        setError("");
+
+        sessionStorage.setItem("token", response.data.token)
+
+        const rememberMe = document.getElementById("login-form-remeber-me")?.ariaChecked;
+
+        if (rememberMe === "true") localStorage.setItem("token", response.data.token);
+
+        toast("Log in successfull", {
+          description: "You can now use the app."
+        })
+
+        navigate("/");
+      })
+      .catch((error) => {
+        if (error.status == 401) {
+          setError("The credentials you provided are not valid.");
+        } else {
+          console.error(error);
+          setError("An unexpected error occured");
+        }
+      });
   }
 
   return (
     <Card className="w-full sm:max-w-md">
-      <CardHeader>
+      <CardHeader className="text-center">
         <CardTitle>Login</CardTitle>
         <CardDescription>Please login to use the app.</CardDescription>
       </CardHeader>
 
       <CardContent>
         <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
+          {error && (
+            <p className="text-sm font-medium text-destructive">{error}</p>
+          )}
           <FieldGroup>
             <Controller
               name="email"
@@ -98,6 +120,7 @@ export function LoginForm() {
                   <Input
                     {...field}
                     id="login-form-password"
+                    type="password"
                     data-invalid={fieldState.invalid}
                   />
                   {fieldState.invalid && (
@@ -105,7 +128,14 @@ export function LoginForm() {
                   )}
                 </Field>
               )}
+
             />
+
+            <div className="flex items-start gap-3">
+              <Checkbox id="login-form-remeber-me" />
+              <Label htmlFor="login-form-remeber-me">Remeber me</Label>
+            </div>
+
           </FieldGroup>
         </form>
       </CardContent>
