@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
+import * as bcrypt from 'bcrypt';
 
 export class CreateUserTable1762174982631 implements MigrationInterface {
     name = 'CreateUserTable1762174982631'
@@ -26,6 +27,16 @@ export class CreateUserTable1762174982631 implements MigrationInterface {
                 CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )
         `);
+
+        const firstUserEmail = "email@mail.com";
+        const firstUserPassword = "Admin12345@";
+        const firstUserHashedPassword = await bcrypt.hash(firstUserPassword, 10);
+        const firstUserRoles = ['admin', 'new_account'];
+
+        await queryRunner.query(`
+            INSERT INTO "user" ("email", "password", "role")
+            VALUES ($1, $2, $3)
+        `, [firstUserEmail, firstUserHashedPassword, firstUserRoles]);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
