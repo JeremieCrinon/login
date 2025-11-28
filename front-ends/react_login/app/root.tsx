@@ -6,10 +6,32 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
+import { useEffect } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Toaster } from "~/components/ui/sonner";
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
+import fr from "~/translations/fr.json";
+import en from "~/translations/en.json";
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: {
+        translation: en
+      },
+      fr: {
+        translation: fr
+      }
+    },
+    lng: typeof navigator !== "undefined" ? navigator.language : "en",
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false
+    }
+  });
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,6 +66,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    i18n.changeLanguage(navigator.language);
+    document.documentElement.lang = t('locale');
+  }, []);
+
   return <Outlet />;
 }
 

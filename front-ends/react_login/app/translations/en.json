@@ -1,0 +1,16 @@
+{
+  "locale": "en",
+  "zod": {
+    "email": "Email adress invalid",
+    "min": "Must be at least {{min}} caracters long",
+    "max": "Must be at most {{max}} caracters long"
+  },
+  "email": "email",
+  "password": "password",
+  "remember_me": "Remember me",
+  "submit": "Submit",
+  "login": {
+    "title": "Log in",
+    "desc": "Please log in to use the app"
+  }
+}

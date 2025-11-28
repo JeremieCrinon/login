@@ -1,0 +1,17 @@
+{
+  "locale": "fr",
+  "zod": {
+    "email": "Adresse email invalide",
+    "min": "Doit faire au moins {{min}} charactères",
+    "max": "Doit faire au maximum {{max}} charactères"
+  },
+  "email": "email",
+  "password": "mot de passe",
+  "remember_me": "Se souvenir de moi",
+  "submit": "Envoyer",
+  "login": {
+    "title": "Se connecter",
+    "desc": "Vous devez vous connecter pour utiliser l'application"
+  }
+}
+
