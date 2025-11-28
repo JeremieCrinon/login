@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginDto } from './dto/login.dto';
 import { ModifyNewAccountDto } from './dto/modify-new-account.dto';
@@ -16,6 +16,15 @@ export class LoginController {
   @HttpCode(200)
   login(@Body() loginDto: LoginDto) {
     return this.loginService.login(loginDto);
+  }
+
+  @Get('user-infos')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  userInfos(
+    @RequestUser() user: User
+  ) {
+    return this.loginService.userInfos(user);
   }
 
   @Post('modify-new-account/:lang')

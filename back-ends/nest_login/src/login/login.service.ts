@@ -43,6 +43,10 @@ export class LoginService {
 
   }
 
+  async userInfos(user: User) {
+    return { roles: user.role, user_mail: user.email }
+  }
+
   async modifyNewAccount(modifyNewAccountDto: ModifyNewAccountDto, user: User) {
     return await this.dataSource.transaction(async manager => {
       const emailConflictUser = await this.usersRepository.findOneBy({ email: modifyNewAccountDto.new_email, id: Not(user.id) })
