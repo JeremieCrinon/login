@@ -1,0 +1,57 @@
+import { redirect } from "react-router";
+import axios from "axios";
+
+async function checkToken(): Promise<boolean> {
+  let token = sessionStorage.getItem("token") ?? localStorage.getItem("token")!
+  let result = false;
+
+  await axios.get("http://localhost:3000/user-infos", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+    .then((response) => {
+      sessionStorage.setItem("user_email", response.data.user_mail);
+      sessionStorage.setItem("user_roles", response.data.roles);
+      result = true;
+    })
+    .catch((error) => {
+      if (error.status !== 401) {
+        console.error(error);
+      }
+
+      result = false;
+    })
+
+  return result;
+}
+
+export async function clientLoader() {
+
+
+  if (sessionStorage.getItem("token") || localStorage.getItem("token")) {
+
+    const result = await checkToken();
+
+    if (!result) {
+      return redirect("/logout");
+    }
+
+    let roles = sessionStorage.getItem("user_roles");
+
+    if (roles!.includes("new_account")) {
+      return redirect("/new-account");
+    } else if (roles!.includes("unverified_email")) {
+      return redirect("/verify-email");
+    } else {
+      return redirect("/home");
+    }
+
+  }
+
+  return redirect("/login")
+}
+
+export default function Origin() {
+  return null;
+}

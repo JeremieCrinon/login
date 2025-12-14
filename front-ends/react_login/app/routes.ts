@@ -4,6 +4,8 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  route("/", "./pages/welcome/welcome.tsx"),
+  route("/", "./pages/origin/origin.ts"),
   route("/login", "./pages/login/login/login.tsx"),
+  route("/logout", "./pages/login/logout/logout.ts"),
+  route("/home", "./pages/welcome/welcome.tsx"),
 ] satisfies RouteConfig;
