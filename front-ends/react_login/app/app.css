@@ -132,6 +132,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  [data-sonner-toast][data-styled='true'] [data-description] {
+    color: var(--muted-foreground) !important;
+  }
 }
 
 .gradient-bg {

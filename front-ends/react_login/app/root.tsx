@@ -9,6 +9,7 @@ import {
 import { useEffect } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
+import "sonner/dist/styles.css";
 import { Toaster } from "~/components/ui/sonner";
 import i18n from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";

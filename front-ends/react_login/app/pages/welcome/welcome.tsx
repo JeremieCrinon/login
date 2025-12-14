@@ -1,6 +1,7 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { Button } from "~/components/ui/button";
+import { toast } from "sonner";
 
 export default function Welcome() {
   return (
@@ -41,7 +42,7 @@ export default function Welcome() {
               ))}
             </ul>
           </nav>
-          <Button>This is a ShadCn button component</Button>
+          <Button onClick={() => toast("Test", { description: "This is a toast test" })}>This is a ShadCn button component</Button>
         </div>
       </div>
     </main>
