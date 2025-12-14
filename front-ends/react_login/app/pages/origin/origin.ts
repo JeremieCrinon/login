@@ -1,11 +1,13 @@
 import { redirect } from "react-router";
 import axios from "axios";
 
+import { API_URL } from "~/customConfig";
+
 async function checkToken(): Promise<boolean> {
-  let token = sessionStorage.getItem("token") ?? localStorage.getItem("token")!
+  const token = sessionStorage.getItem("token") ?? localStorage.getItem("token")!
   let result = false;
 
-  await axios.get("http://localhost:3000/user-infos", {
+  await axios.get(`${API_URL}/user-infos`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }

@@ -22,59 +22,67 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Checkbox } from "~/components/ui/checkbox";
-import { Label } from "~/components/ui/label";
 import { useTranslation } from "react-i18next";
 
 import { API_URL } from "~/customConfig";
 
-export function LoginForm() {
+export function NewAccountForm() {
   const { t } = useTranslation();
-
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const [error, setError] = useState("");
+  const token = sessionStorage.getItem("token");
+
   const formSchema = z.object({
-    email: z
+    newEmail: z
       .email({ error: t("zod.email") }),
-    password: z
+    newPassword: z
       .string()
-      .min(3, { error: t("zod.min", { min: 3 }) }),
-  });
+      .min(8, { error: t("zod.min", { min: 8 }) })
+      .regex(/[a-z]/, { error: t("zod.lowercase") })
+      .regex(/[A-Z]/, { error: t("zod.uppercase") })
+      .regex(/[0-9]/, { error: t("zod.number") })
+      .regex(/[^a-zA-Z0-9]/, { error: t("zod.special") }),
+    confirmPassword: z.string(),
+  })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      error: t("zod.password_confirm"),
+      path: ["confirmPassword"],
+    })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: ""
+      newEmail: sessionStorage.getItem("user_email") ?? "",
+      newPassword: "",
+      confirmPassword: ""
     },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-
-    axios.post(`${API_URL}/login`, {
-      email: data.email,
-      password: data.password
+    axios.post(`${API_URL}/modify-new-account/${t("locale")}`, {
+      new_email: data.newEmail,
+      new_password: data.newPassword
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     })
-      .then((response) => {
+      .then(() => {
         setError("");
 
-        sessionStorage.setItem("token", response.data.token)
+        toast("Informations successfully changed", {
+          description: "Please log in again."
+        })
 
-        const rememberMe = document.getElementById("login-form-remeber-me")?.ariaChecked;
-
-        if (rememberMe === "true") localStorage.setItem("token", response.data.token);
-
-        toast(t("login.success.title"))
-
-        navigate("/");
+        navigate("/logout");
       })
       .catch((error) => {
         if (error.status == 401) {
-          setError(t("login.error.credentials"));
+          navigate("/");
         } else {
           console.error(error);
-          setError(t("error.unknow"));
+          setError(t("error.unknown"));
         }
       });
   }
@@ -82,22 +90,22 @@ export function LoginForm() {
   return (
     <Card className="w-full sm:max-w-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <CardHeader className="text-center">
-        <CardTitle>{t('login.title')}</CardTitle>
-        <CardDescription>{t('login.desc')}</CardDescription>
+        <CardTitle>{t('new_account.title')}</CardTitle>
+        <CardDescription>{t('new_account.desc')}</CardDescription>
       </CardHeader>
 
       <CardContent>
-        <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="new-account-form" onSubmit={form.handleSubmit(onSubmit)}>
           {error && (
             <p className="text-sm font-medium text-destructive">{error}</p>
           )}
           <FieldGroup>
             <Controller
-              name="email"
+              name="newEmail"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="login-form-email">
+                  <FieldLabel htmlFor="new-account-form-new-email">
                     {t('email')}
                   </FieldLabel>
                   <Input
@@ -113,12 +121,12 @@ export function LoginForm() {
             />
 
             <Controller
-              name="password"
+              name="newPassword"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="login-form-password">
-                    {t('password')}
+                  <FieldLabel htmlFor="new-account-form-new-password">
+                    {t('new_account.new_password')}
                   </FieldLabel>
                   <Input
                     {...field}
@@ -131,22 +139,38 @@ export function LoginForm() {
                   )}
                 </Field>
               )}
-
             />
 
-            <div className="flex items-start gap-3">
-              <Checkbox id="login-form-remeber-me" />
-              <Label htmlFor="login-form-remeber-me">{t('remember_me')}</Label>
-            </div>
+            <Controller
+              name="confirmPassword"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="new-account-form-confirm-password">
+                    {t('new_account.confirm_password')}
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="new-account-form-confirm-password"
+                    type="password"
+                    data-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
 
           </FieldGroup>
         </form>
       </CardContent>
       <CardFooter>
-        <Button type="submit" form="login-form">
+        <Button type="submit" form="new-account-form">
           {t('submit')}
         </Button>
       </CardFooter>
     </Card>
   )
 }
+

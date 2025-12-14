@@ -1,9 +1,17 @@
 {
   "locale": "en",
+  "error": {
+    "unknown": "An unexpected error occured"
+  },
   "zod": {
     "email": "Email adress invalid",
     "min": "Must be at least {{min}} caracters long",
-    "max": "Must be at most {{max}} caracters long"
+    "max": "Must be at most {{max}} caracters long",
+    "lowercase": "Must contain at least one lowercase character",
+    "uppercase": "Must contain at least one uppercase character",
+    "number": "Must contain a number",
+    "special": "Must contain a special character",
+    "password_confirm": "The password confirmation does not match the password"
   },
   "email": "email",
   "password": "password",
@@ -11,6 +19,18 @@
   "submit": "Submit",
   "login": {
     "title": "Log in",
-    "desc": "Please log in to use the app"
+    "desc": "Please log in to use the app",
+    "success": {
+      "title": "Login successfull"
+    },
+    "error": {
+      "credentials": "The credentials you provided are not valid"
+    }
+  },
+  "new_account": {
+    "title": "Verify your informations",
+    "desc": "Create a new password. You can also change your email if you wish.",
+    "new_password": "New password",
+    "confirm_password": "Confirm password"
   }
 }

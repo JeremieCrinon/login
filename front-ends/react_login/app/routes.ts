@@ -8,5 +8,5 @@ export default [
   route("/login", "./pages/login/login/login.tsx"),
   route("/logout", "./pages/login/logout/logout.ts"),
   // route("/home", "./pages/welcome/welcome.tsx"),
-  route("/new-account", "./pages/welcome/welcome.tsx"),
+  route("/new-account", "./pages/login/new-account/new-account.tsx"),
 ] satisfies RouteConfig;

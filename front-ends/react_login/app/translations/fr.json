@@ -1,9 +1,18 @@
 {
   "locale": "fr",
+  "error": {
+    "unknown": "Une erreur inatendue est survenue"
+  },
   "zod": {
     "email": "Adresse email invalide",
     "min": "Doit faire au moins {{min}} charactères",
-    "max": "Doit faire au maximum {{max}} charactères"
+    "max": "Doit faire au maximum {{max}} charactères",
+    "lowercase": "Doit contenir au moins une minuscule",
+    "uppercase": "Doit contenir au moins une majuscule",
+    "number": "Doit contenir au moins un nombre",
+    "special": "Doit contenir au moins un caractère spécial",
+    "password_confirm": "La confirmation du mot de passe est différente du mot de passe"
+
   },
   "email": "email",
   "password": "mot de passe",
@@ -11,7 +20,20 @@
   "submit": "Envoyer",
   "login": {
     "title": "Se connecter",
-    "desc": "Vous devez vous connecter pour utiliser l'application"
+    "desc": "Vous devez vous connecter pour utiliser l'application",
+    "success": {
+      "title": "Connexion réussite"
+    },
+    "error": {
+      "credentials": "Les identifiants ne sont pas valides"
+    }
+  },
+  "new_account": {
+    "title": "Vérifiez vos informations",
+    "desc": "Veuillez créer un nouveau mot de passe. Vous pouvez aussi changer votre email si vous le souhaitez.",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmez votre mot de passe"
+
   }
 }
 
