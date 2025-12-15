@@ -16,6 +16,7 @@
   },
   "email": "email",
   "password": "mot de passe",
+  "code": "code",
   "remember_me": "Se souvenir de moi",
   "submit": "Envoyer",
   "login": {
@@ -32,7 +33,19 @@
     "title": "Vérifiez vos informations",
     "desc": "Veuillez créer un nouveau mot de passe. Vous pouvez aussi changer votre email si vous le souhaitez.",
     "new_password": "Nouveau mot de passe",
-    "confirm_password": "Confirmez votre mot de passe"
+    "confirm_password": "Confirmez votre mot de passe",
+    "success": {
+      "title": "Information mises à jour",
+      "desc": "Veuillez vous reconnecter avec vos nouvelles informations"
+    }
+  },
+  "verify_email": {
+    "title": "Verifiez votre adresse e-mail",
+    "desc": "Veuillez entrer le code que vous avez reçu par email",
+    "success": {
+      "title": "Adresse email confirmée",
+      "desc": "Vous pouvez maintenant utiliser l'application"
+    }
 
   }
 }

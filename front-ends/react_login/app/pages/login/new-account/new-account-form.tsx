@@ -71,8 +71,8 @@ export function NewAccountForm() {
       .then(() => {
         setError("");
 
-        toast("Informations successfully changed", {
-          description: "Please log in again."
+        toast(t("new_account.success.title"), {
+          description: t("new_account.success.desc")
         })
 
         navigate("/logout");
@@ -110,7 +110,7 @@ export function NewAccountForm() {
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="login-form-email"
+                    id="new-account-form-new-email"
                     data-invalid={fieldState.invalid}
                   />
                   {fieldState.invalid && (
@@ -130,7 +130,7 @@ export function NewAccountForm() {
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="login-form-password"
+                    id="new-account-form-new-password"
                     type="password"
                     data-invalid={fieldState.invalid}
                   />
