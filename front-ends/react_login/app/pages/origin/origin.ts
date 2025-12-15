@@ -13,8 +13,9 @@ async function checkToken(): Promise<boolean> {
     }
   })
     .then((response) => {
+      sessionStorage.setItem("token", token); // Set the token in the sessionStorage in case it just is in the localStorage
       sessionStorage.setItem("user_email", response.data.user_mail);
-      sessionStorage.setItem("user_roles", response.data.roles);
+      sessionStorage.setItem("user_roles", JSON.stringify(response.data.roles));
       result = true;
     })
     .catch((error) => {
