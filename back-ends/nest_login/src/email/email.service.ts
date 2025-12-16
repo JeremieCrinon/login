@@ -1,5 +1,6 @@
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
+import { env } from 'src/env';
 
 @Injectable()
 export class EmailService {
@@ -16,13 +17,13 @@ export class EmailService {
     try {
       const context = {
         ...params.context,
-        logo_url: process.env.LOGO_URL,
-        front_end_url: process.env.FRONT_END_URL,
-        admin_email: process.env.ADMIN_EMAIL
+        logo_url: env("LOGO_URL"),
+        front_end_url: env("FRONT_END_URL"),
+        admin_email: env("ADMIN_EMAIL")
       }
       const sendMailParams = {
         to: params.recipient,
-        from: process.env.SMTP_FROM,
+        from: env("SMTP_FROM"),
         subject: params.subject,
         template: params.template,
         context: context,

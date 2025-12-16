@@ -8,6 +8,10 @@ import { Role, User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EmailVerificationHelper } from './helpers/email-verification.helper';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { randomBytes } from "crypto";
+import { EmailService } from 'src/email/email.service';
+import { env } from 'src/env';
 
 @Injectable()
 export class LoginService {
@@ -16,7 +20,8 @@ export class LoginService {
     private usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private dataSource: DataSource,
-    private emailVerificationHelper: EmailVerificationHelper
+    private emailVerificationHelper: EmailVerificationHelper,
+    private readonly emailService: EmailService
   ) { }
 
 
@@ -83,5 +88,34 @@ export class LoginService {
     user.emailVerificationCode = null;
 
     await this.usersRepository.save(user);
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    return await this.dataSource.transaction(async manager => {
+      // Get the user with the email
+      const user = await this.usersRepository.findOneBy({ email: forgotPasswordDto.email })
+
+      // Verify a user with the email exists
+      if (!user) {
+        return; // We do not return an error for security reasons
+      }
+
+      const code = randomBytes(32).toString('base64url').slice(0, 32);
+      const link = `${env("FRONT_END_URL")}/forgot-password/${code}`;
+
+      user.passwordResetCode = code;
+
+      await manager.save(user);
+
+      await this.emailService.sendEmail({
+        subject: "Reset your password",
+        template: "emails/forgot-password",
+        recipient: user.email,
+        context: {
+          link: link
+        }
+      })
+    })
+
   }
 }
