@@ -12,6 +12,7 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { randomBytes } from "crypto";
 import { EmailService } from 'src/email/email.service';
 import { env } from 'src/env';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class LoginService {
@@ -116,6 +117,20 @@ export class LoginService {
         }
       })
     })
+  }
 
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    // Get the user by the code, if we get one it means the code is valid and we can continue with the user we got, else it means the code isn't valid
+    const user = await this.usersRepository.findOneBy({ passwordResetCode: resetPasswordDto.code })
+
+    if (!user) {
+      throw new UnauthorizedException("The code you sent isn't valid");
+    }
+
+    const passwordHash = await bcrypt.hash(resetPasswordDto.new_password, 10);
+
+    user.password = passwordHash;
+
+    await this.usersRepository.save(user);
   }
 }

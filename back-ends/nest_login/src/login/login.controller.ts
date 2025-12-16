@@ -8,6 +8,7 @@ import { RequestUser } from 'src/auth/decorators/request-user.decorator';
 import { Role, User } from 'src/user/entities/user.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RequiredRole } from 'src/auth/decorators/roles.decorator';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('/')
 export class LoginController {
@@ -56,5 +57,13 @@ export class LoginController {
     @Body() forgotPasswordDto: ForgotPasswordDto
   ) {
     return this.loginService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto
+  ) {
+    return this.loginService.resetPassword(resetPasswordDto);
   }
 }
