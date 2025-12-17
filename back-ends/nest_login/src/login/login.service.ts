@@ -13,6 +13,7 @@ import { randomBytes } from "crypto";
 import { EmailService } from 'src/email/email.service';
 import { env } from 'src/env';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { EditEmailDto } from './dto/edit-email.dto';
 
 @Injectable()
 export class LoginService {
@@ -130,7 +131,38 @@ export class LoginService {
     const passwordHash = await bcrypt.hash(resetPasswordDto.new_password, 10);
 
     user.password = passwordHash;
+    user.passwordResetCode = null;
 
     await this.usersRepository.save(user);
   }
+
+  async editEmail(editEmailDto: EditEmailDto, user: User) {
+    return await this.dataSource.transaction(async manager => {
+      // If the user roles does not includes the UNVERIFIED_EMAIL role, we verify the password, else, the password sin't necessary
+      if (!user.role.includes(Role.UNVERIFIED_EMAIL) && !await bcrypt.compare(editEmailDto.password, user.password)) {
+        throw new UnauthorizedException();
+      }
+
+      // Check if another user has the new email
+      const emailConflictUser = await this.usersRepository.findOneBy({ email: editEmailDto.new_email, id: Not(user.id) })
+
+      if (emailConflictUser) {
+        throw new ConflictException("Email is already used by another account.");
+      }
+
+      // Edit the user now that we have made the checks
+      user.email = editEmailDto.new_email;
+
+      await manager.save(user);
+
+      // Call the sendEmailVerification function now, that will take care of adding the unverified_email role to the user if they don't have it already, set them an emailVerification code and send them an email with that code
+      await this.emailVerificationHelper.sendEmailVerification(manager, user);
+    })
+  }
 }
+
+
+
+
+
+

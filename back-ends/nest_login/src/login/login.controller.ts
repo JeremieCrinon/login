@@ -9,6 +9,7 @@ import { Role, User } from 'src/user/entities/user.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RequiredRole } from 'src/auth/decorators/roles.decorator';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { EditEmailDto } from './dto/edit-email.dto';
 
 @Controller('/')
 export class LoginController {
@@ -51,7 +52,7 @@ export class LoginController {
     return this.loginService.verifyEmail(verifyEmailDto, user);
   }
 
-  @Post('forgot-password')
+  @Post('forgot-password/:lang')
   @HttpCode(200)
   forgotPassword(
     @Body() forgotPasswordDto: ForgotPasswordDto
@@ -65,5 +66,15 @@ export class LoginController {
     @Body() resetPasswordDto: ResetPasswordDto
   ) {
     return this.loginService.resetPassword(resetPasswordDto);
+  }
+
+  @Post('edit-email/:lang')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  editEmail(
+    @Body() editEmailDto: EditEmailDto,
+    @RequestUser() user: User
+  ) {
+    return this.loginService.editEmail(editEmailDto, user);
   }
 }
