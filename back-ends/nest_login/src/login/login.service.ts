@@ -14,6 +14,7 @@ import { EmailService } from 'src/email/email.service';
 import { env } from 'src/env';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { EditEmailDto } from './dto/edit-email.dto';
+import { EditPasswordDto } from './dto/edit-password.dto';
 
 @Injectable()
 export class LoginService {
@@ -158,6 +159,18 @@ export class LoginService {
       // Call the sendEmailVerification function now, that will take care of adding the unverified_email role to the user if they don't have it already, set them an emailVerification code and send them an email with that code
       await this.emailVerificationHelper.sendEmailVerification(manager, user);
     })
+  }
+
+  async editPassword(editPasswordDto: EditPasswordDto, user: User) {
+    if (!await bcrypt.compare(editPasswordDto.current_password, user.password)) {
+      throw new UnauthorizedException();
+    }
+
+    const passwordHash = await bcrypt.hash(editPasswordDto.new_password, 10);
+
+    user.password = passwordHash;
+
+    await this.usersRepository.save(user);
   }
 }
 
