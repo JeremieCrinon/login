@@ -61,8 +61,10 @@ export class UserService {
     return { roles: Object.values(Role) };
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(): Promise<{ users: User[] }> {
+    const users: User[] = await this.usersRepository.find({ select: ['id', 'email', 'role'] });
+
+    return { users: users };
   }
 
   findOne(id: number) {
