@@ -17,6 +17,11 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Get('list-roles')
+  listRoles() {
+    return this.userService.listRoles();
+  }
+
   @Get()
   findAll() {
     return this.userService.findAll();

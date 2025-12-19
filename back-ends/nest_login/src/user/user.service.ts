@@ -57,6 +57,10 @@ export class UserService {
     })
   }
 
+  async listRoles(): Promise<{ roles: Role[] }> {
+    return { roles: Object.values(Role) };
+  }
+
   findAll() {
     return `This action returns all user`;
   }
