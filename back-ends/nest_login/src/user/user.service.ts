@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { EditUserRoleDto } from './dto/edit-user-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { User, Role } from './entities/user.entity';
@@ -77,8 +77,16 @@ export class UserService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updateRole(id: number, editUserRoleDto: EditUserRoleDto) {
+    const user = await this.usersRepository.findOneBy({ id: id });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    user.role = editUserRoleDto.roles;
+
+    await this.usersRepository.save(user);
   }
 
   remove(id: number) {
