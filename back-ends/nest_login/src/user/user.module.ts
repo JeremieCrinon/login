@@ -6,13 +6,15 @@ import { User } from './entities/user.entity';
 import { EmailModule } from 'src/email/email.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { SharedModule } from 'src/shared.module';
+import { LoginModule } from 'src/login/login.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     EmailModule,
     AuthModule,
-    SharedModule
+    SharedModule,
+    LoginModule
   ],
   controllers: [UserController],
   providers: [UserService],

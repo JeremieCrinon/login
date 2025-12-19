@@ -1,11 +1,14 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditUserRoleDto } from './dto/edit-user-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, Not } from 'typeorm';
 import { User, Role } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/email/email.service';
+import { EditUserEmailDto } from './dto/edit-user-email.dto';
+import { EmailVerificationHelper } from 'src/login/helpers/email-verification.helper';
+
 
 @Injectable()
 export class UserService {
@@ -13,6 +16,7 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private dataSource: DataSource,
+    private emailVerificationHelper: EmailVerificationHelper,
     private readonly emailService: EmailService
   ) { }
 
@@ -87,6 +91,28 @@ export class UserService {
     user.role = editUserRoleDto.roles;
 
     await this.usersRepository.save(user);
+  }
+
+  async updateEmail(id: number, editUserEmailDto: EditUserEmailDto) {
+    return await this.dataSource.transaction(async manager => {
+
+      const emailConflictUser = await this.usersRepository.findOneBy({ email: editUserEmailDto.email, id: Not(id) });
+      if (emailConflictUser) {
+        throw new ConflictException("Email is already taken by another account.");
+      }
+
+      const user = await this.usersRepository.findOneBy({ id: id });
+
+      if (!user) {
+        throw new NotFoundException();
+      }
+
+      user.email = editUserEmailDto.email;
+
+      await manager.save(user);
+
+      await this.emailVerificationHelper.sendEmailVerification(manager, user);
+    })
   }
 
   remove(id: number) {

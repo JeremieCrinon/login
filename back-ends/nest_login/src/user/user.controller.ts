@@ -5,6 +5,7 @@ import { EditUserRoleDto } from './dto/edit-user-role.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RequiredRole } from 'src/auth/decorators/roles.decorator';
 import { Role } from './entities/user.entity';
+import { EditUserEmailDto } from './dto/edit-user-email.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -33,8 +34,13 @@ export class UserController {
   }
 
   @Put(':id/roles')
-  update(@Param('id') id: string, @Body() editUserRoleDto: EditUserRoleDto) {
+  updateRole(@Param('id') id: string, @Body() editUserRoleDto: EditUserRoleDto) {
     return this.userService.updateRole(+id, editUserRoleDto);
+  }
+
+  @Put(':id/email')
+  updateEmail(@Param('id') id: string, @Body() editUserEmailDto: EditUserEmailDto) {
+    return this.userService.updateEmail(+id, editUserEmailDto);
   }
 
   @Delete(':id')

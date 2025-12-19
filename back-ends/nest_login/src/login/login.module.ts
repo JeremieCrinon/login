@@ -15,5 +15,6 @@ import { EmailVerificationHelper } from './helpers/email-verification.helper';
   ],
   controllers: [LoginController],
   providers: [LoginService, EmailVerificationHelper],
+  exports: [EmailVerificationHelper],
 })
 export class LoginModule { }
