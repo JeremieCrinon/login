@@ -65,10 +65,15 @@ export class UserService {
     return { roles: Object.values(Role) };
   }
 
-  async findAll(): Promise<{ users: User[] }> {
+  async findAll(): Promise<{ users: any[] }> {
     const users: User[] = await this.usersRepository.find({ select: ['id', 'email', 'role'] });
-
-    return { users: users };
+    return {
+      users: users.map(user => ({
+        id: user.id,
+        email: user.email,
+        roles: user.role  // Rename role to roles
+      }))
+    };
   }
 
   async findOne(id: number): Promise<User> {

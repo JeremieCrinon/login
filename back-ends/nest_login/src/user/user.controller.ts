@@ -38,7 +38,7 @@ export class UserController {
     return this.userService.updateRole(+id, editUserRoleDto);
   }
 
-  @Put(':id/email')
+  @Put(':id/email/:lang')
   updateEmail(@Param('id') id: string, @Body() editUserEmailDto: EditUserEmailDto) {
     return this.userService.updateEmail(+id, editUserEmailDto);
   }

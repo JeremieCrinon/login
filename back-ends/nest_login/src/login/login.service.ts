@@ -35,12 +35,12 @@ export class LoginService {
 
     // Verify a user with the email exists
     if (!user) {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
 
     // Verify the password we got from the user is valid
     if (!await bcrypt.compare(loginDto.password, user.password)) {
-      throw new UnauthorizedException(); // We return the same error as if the email is invalid for security reasons
+      throw new BadRequestException(); // We return the same error as if the email is invalid for security reasons
     }
 
     // Generate the JWT payload
