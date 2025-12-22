@@ -2,6 +2,11 @@ import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
+import { requireRole } from "~/lib/auth";
+
+export function clientLoader() {
+  return requireRole("user");
+}
 
 export default function Welcome() {
   return (

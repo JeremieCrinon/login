@@ -70,7 +70,7 @@ export function LoginForm() {
         navigate("/");
       })
       .catch((error) => {
-        if (error.status == 401) {
+        if (error.status == 400) {
           setError(t("login.error.credentials"));
         } else {
           console.error(error);
