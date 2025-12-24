@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { SidebarProvider } from "~/components/ui/sidebar";
 import { useEffect } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -57,9 +58,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
-        <Toaster />
-        <ScrollRestoration />
+        <SidebarProvider>
+          {children}
+          <Toaster />
+          <ScrollRestoration />
+        </SidebarProvider>
         <Scripts />
       </body>
     </html>

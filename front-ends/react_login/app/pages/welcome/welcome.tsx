@@ -3,6 +3,7 @@ import logoLight from "./logo-light.svg";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 import { requireRole } from "~/lib/auth";
+import { AppSidebar } from "~/components/sidebar";
 
 export function clientLoader() {
   return requireRole("user");
@@ -10,7 +11,7 @@ export function clientLoader() {
 
 export default function Welcome() {
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
+    <AppSidebar>
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
         <header className="flex flex-col items-center gap-9">
           <div className="w-[500px] max-w-[100vw] p-4">
@@ -50,7 +51,7 @@ export default function Welcome() {
           <Button onClick={() => toast("Test", { description: "This is a toast test" })}>This is a ShadCn button component</Button>
         </div>
       </div>
-    </main>
+    </AppSidebar>
   );
 }
 
