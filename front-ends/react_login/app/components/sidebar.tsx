@@ -22,20 +22,8 @@ import {
 } from "~/components/ui/dropdown-menu";
  
 import { useTranslation } from "react-i18next";
+import { routes } from "~/lib/routes";
 
-// TODO: Use a centralized system between the router and menu
-const items = [
-  {
-    title: "Home",
-    url: "/home",
-    icon: Home,
-  },
-  {
-    title: "Users",
-    url: "/users",
-    icon: User,
-  },
-]
  
 export function AppSidebar({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
@@ -56,10 +44,10 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
 
               <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem>
-                  <Link to="/account">Account</Link>
+                  <Link to="/account">{t('menu.account')}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/logout">Logout</Link>
+                  <Link to="/logout">{t('menu.logout')}</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -71,16 +59,18 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {Object.values(routes).map((r) => (
+                r.titleKey && (
+                  <SidebarMenuItem key={r.titleKey}>
+                    <SidebarMenuButton asChild>
+                      <Link to={r.path}>
+                        <r.icon />
+                        <span>{t(r.titleKey)}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+             ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

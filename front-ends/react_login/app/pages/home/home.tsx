@@ -9,7 +9,7 @@ export function clientLoader() {
   return requireRole("user");
 }
 
-export default function Welcome() {
+export default function Home() {
   return (
     <AppSidebar>
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">

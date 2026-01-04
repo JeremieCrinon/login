@@ -1,0 +1,46 @@
+import {Home, User, type LucideIcon} from "lucide-react";
+
+export interface RouteDefinition {
+  path: string;
+  titleKey?: string; // Keep empty if the route should not be displayed in the sidebar
+  icon?: LucideIcon; // Keep empty if the route should not be displayed in the sidebar
+  requiredRole?: string; // Keep empty if the route should not be displayed in the sidebar, this is just to not display the routes the user doesn't have the role to go to in the sidebar
+  component: string; 
+}
+
+export const routes: Record<string, RouteDefinition> = {
+  origin: {
+    path: "/",
+    component: "./pages/origin/origin.ts" // Follow the path from ../routes.ts, not from this file
+  },
+  login: {
+    path: "/login",
+    component: "./pages/login/login/login.tsx"
+  },
+  logout: {
+    path: "/logout",
+    component: "./pages/login/logout/logout.ts"
+  },
+  newAccount: {
+    path: "/new-account",
+    component: "./pages/login/new-account/new-account.tsx"
+  },
+  verifyEmail: {
+    path: "/verify-email",
+    component: "./pages/login/verify-email/verify-email.tsx"
+  },
+  home: {
+    path: "/home",
+    titleKey: "menu.home",
+    icon: Home,
+    requiredRole: "user",
+    component: "./pages/home/home.tsx"  
+  },
+  users: {
+    path: "/users",
+    titleKey: "menu.users",
+    icon: User,
+    requiredRole: "edit-users",
+    component: "./pages/users/users.tsx"
+  }
+}

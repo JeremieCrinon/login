@@ -10,7 +10,7 @@ export function clientLoader() {
 export default function Login() {
 
   return (
-    <div className="gradient-bg h-screen">
+    <div className="gradient-bg w-screen h-screen">
       <LoginForm />
     </div>
   )

@@ -2,12 +2,10 @@ import {
   type RouteConfig,
   route
 } from "@react-router/dev/routes";
+import { routes } from "./lib/routes";
 
-export default [
-  route("/", "./pages/origin/origin.ts"),
-  route("/login", "./pages/login/login/login.tsx"),
-  route("/logout", "./pages/login/logout/logout.ts"),
-  route("/new-account", "./pages/login/new-account/new-account.tsx"),
-  route("/verify-email", "./pages/login/verify-email/verify-email.tsx"),
-  route("/home", "./pages/welcome/welcome.tsx"),
-] satisfies RouteConfig;
+// WARNING: Do not define routes here, they should be defined in lib/routes.ts
+
+export default Object.values(routes).map((r) => 
+  route(r.path, r.component)                                        
+) satisfies RouteConfig;

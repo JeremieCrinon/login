@@ -7,7 +7,7 @@ export function clientLoader() {
 
 export default function VerifyEmail() {
   return (
-    <div className="gradient-bg h-screen">
+    <div className="gradient-bg w-screen h-screen">
       <VerifyEmailForm />
     </div>
   )

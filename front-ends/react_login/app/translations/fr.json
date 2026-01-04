@@ -47,6 +47,13 @@
       "desc": "Vous pouvez maintenant utiliser l'application"
     }
 
+  },
+  "menu": {
+    "account": "Compte utilisateur",
+    "logout": "Se déconnecter",
+    "home": "Accueil",
+    "users": "Utilisateurs"
   }
+
 }
 

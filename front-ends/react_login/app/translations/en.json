@@ -45,6 +45,11 @@
       "title": "Email adress confirmed",
       "desc": "You can now use the app"
     }
+  },
+  "menu": {
+    "account": "Account",
+    "logout": "Log out",
+    "home": "Home",
+    "users": "Users"
   }
-
 }
