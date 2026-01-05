@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next"
-import type { User } from "~/types/user";
 
 // ShadCn/UI imports
 import {
@@ -9,9 +8,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
+} from "~/components/ui/table";
+import { Skeleton } from "~/components/ui/skeleton";
 
-export default function UsersTable({users}: {users: User[]}) {
+export default function UsersTableSkeleton() {
 
   const { t } = useTranslation();
 
@@ -29,11 +29,13 @@ export default function UsersTable({users}: {users: User[]}) {
       </TableHeader>
       <TableBody>
 
-      {users.map((user) => (
-        <TableRow key={user.id}>
-          <TableCell>{user.id}</TableCell>
-          <TableCell>{user.email}</TableCell>
-          <TableCell>{user.roles}</TableCell>
+      {Array.from({ length: 10 }).map((_, index) => (
+        <TableRow key={index}>
+          <TableCell><Skeleton className="w-5 h-5" /></TableCell>
+          <TableCell><Skeleton className="w-30 h-5" /></TableCell>
+          <TableCell><Skeleton className="w-20 h-5" /></TableCell>
+          <TableCell><Skeleton className="w-10 h-10" /></TableCell>
+          <TableCell><Skeleton className="w-10 h-10" /></TableCell>
         </TableRow>
       ))}
 

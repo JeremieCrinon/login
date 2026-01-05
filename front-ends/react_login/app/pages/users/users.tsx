@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 import UsersTable from "./usersTable";
+import UsersTableSkeleton from "./usersTableSkeleton";
 import type {User} from "~/types/user"
 
 export function clientLoader() {
@@ -33,7 +34,6 @@ export default function Users() {
     .then((r) => {
       setUsers(r.data.users);
       setLoading(false);
-      console.log(r.data.users);
     })
     .catch((e) => {
       console.error(e);
@@ -50,7 +50,9 @@ export default function Users() {
 
   return (
     <AppSidebar>
-      {!loading && (
+      {loading ? (
+        <UsersTableSkeleton/>
+      ) : (
         <UsersTable users={users}/>
       )}
     </AppSidebar>
