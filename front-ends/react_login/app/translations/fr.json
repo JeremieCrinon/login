@@ -14,8 +14,13 @@
     "password_confirm": "La confirmation du mot de passe est différente du mot de passe"
 
   },
+  "id": "Identifiant unique",
   "email": "email",
   "password": "mot de passe",
+  "role": "role",
+  "roles": "roles",
+  "edit": "modifier",
+  "delete": "supprimer",
   "code": "code",
   "remember_me": "Se souvenir de moi",
   "submit": "Envoyer",

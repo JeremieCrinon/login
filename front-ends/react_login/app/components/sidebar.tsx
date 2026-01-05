@@ -1,5 +1,5 @@
 import { Home, User, ChevronDown } from "lucide-react"
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
  
 import {
   Sidebar,
@@ -27,6 +27,8 @@ import { routes } from "~/lib/routes";
  
 export function AppSidebar({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
+  const location = useLocation();
+
   return (
     <>
     <Sidebar>
@@ -65,7 +67,7 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
                     <SidebarMenuButton asChild>
                       <Link to={r.path}>
                         <r.icon />
-                        <span>{t(r.titleKey)}</span>
+                        <span className={r.path == location.pathname ? "font-bold" : ""}>{t(r.titleKey)}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

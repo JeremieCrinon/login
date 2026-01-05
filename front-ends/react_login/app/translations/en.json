@@ -13,8 +13,13 @@
     "special": "Must contain a special character",
     "password_confirm": "The password confirmation does not match the password"
   },
+  "id": "Unique identifier",
   "email": "email",
   "password": "password",
+  "role": "role",
+  "roles": "roles",
+  "edit": "edit",
+  "delete": "delete",
   "code": "code",
   "remember_me": "Remember me",
   "submit": "Submit",
@@ -51,5 +56,13 @@
     "logout": "Log out",
     "home": "Home",
     "users": "Users"
+  },
+  "users": {
+    "fetch": {
+      "error": {
+        "title": "An error occured getting the users list",
+        "description": "Redirecting you to another page, please try again later and contact the app admin...."
+      }
+    }
   }
 }
