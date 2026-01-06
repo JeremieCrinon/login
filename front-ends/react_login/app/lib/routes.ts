@@ -40,7 +40,11 @@ export const routes: Record<string, RouteDefinition> = {
     path: "/users",
     titleKey: "menu.users",
     icon: User,
-    requiredRole: "edit-users",
-    component: "./pages/users/users.tsx"
+    requiredRole: "edit_users",
+    component: "./pages/users/list/users.tsx"
+  },
+  createUser: {
+    path: "/users/create",
+    component: "./pages/users/create/createUser.tsx"
   }
 }

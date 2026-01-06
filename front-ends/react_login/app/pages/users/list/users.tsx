@@ -11,8 +11,10 @@ import UsersTable from "./usersTable";
 import UsersTableSkeleton from "./usersTableSkeleton";
 import type {User} from "~/types/user"
 
+import { Button } from "~/components/ui/button";
+
 export function clientLoader() {
-  return requireRole("user");
+  return requireRole("edit_users");
 }
 
 export default function Users() {
@@ -37,8 +39,8 @@ export default function Users() {
     })
     .catch((e) => {
       console.error(e);
-      toast(t("users.fetch.error.title"), {
-        description: t("users.fetch.error.description")
+      toast(t("users.list.error.title"), {
+        description: t("users.list.error.description")
       })
       navigate("/");
     })
@@ -50,6 +52,7 @@ export default function Users() {
 
   return (
     <AppSidebar>
+      <Button className="m-5" onClick={() => navigate("/users/create")}>{t("users.list.create_button")}</Button>
       {loading ? (
         <UsersTableSkeleton/>
       ) : (
