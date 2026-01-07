@@ -72,10 +72,15 @@
           "title": "An error occured getting the list of avaible roles",
           "description": "Please try again later and contact the app admin."
         },
-        "email_taken": "An account with this email adress already exists."
+        "email_taken": "An account with this email adress already exists.",
+        "no_lang": "You need to choose a language for the user."
       },
       "title": "Create a new user",
       "desc": "Please fill the form bellow to create a new user. An invite email will be sent to them with a temporary password and a link to the app.",
+      "lang": {
+        "title": "Language of the user",
+        "desc": "The language in which the email will be sent. The app's language will be set based on the browser's lang, therefore, this setting only affects the invite email."
+      },
       "success": {
         "title": "User successfully created",
         "desc": "An invite email has been sent to them with a temporary password and a link to the app."

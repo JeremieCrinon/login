@@ -17,13 +17,22 @@ import {
 } from "~/components/ui/card";
 import {
   Field,
+  FieldContent,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
+  FieldTitle
 } from "~/components/ui/field";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
+import {
+  RadioGroup,
+  RadioGroupItem
+} from "~/components/ui/radio-group";
 import { useTranslation } from "react-i18next";
 
 import { API_URL } from "~/customConfig";
@@ -38,12 +47,16 @@ export function CreateUserForm({roles}: {roles: String[]}) {
   const formSchema = z.object({
     email: z
       .email({ error: t("zod.email") }),
+    lang: z
+      .string()
+      .min(1, t("users.create.error.no_lang"))
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
+      lang: "",
     },
   });
 
@@ -64,8 +77,7 @@ export function CreateUserForm({roles}: {roles: String[]}) {
       if (checked) chosenRoles.push(role); 
     })
 
-    //TODO: Change the locale by on chosen in the form
-    axios.post(`${API_URL}/users/new/${t("locale")}`, {
+    axios.post(`${API_URL}/users/new/${data.lang}`, {
       email: data.email,
       roles: chosenRoles
     }, {
@@ -139,6 +151,47 @@ export function CreateUserForm({roles}: {roles: String[]}) {
             ))}
 
           </div>
+
+          <FieldGroup className="mt-5">
+            <Controller
+              name="lang"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <FieldSet data-invalid={fieldState.invalid}>
+                  <FieldLegend>{t("users.create.lang.title")}</FieldLegend>
+                  <FieldDescription>{t("users.create.lang.desc")}</FieldDescription>
+                  <RadioGroup
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    aria-invalid={fieldState.invalid}
+                  > 
+                  <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                        value="en"
+                        id="create-user-form-lang-en"
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <Label htmlFor="create-user-form-lang-en">en</Label>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                        value="fr"
+                        id="create-user-form-lang-fr"
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <Label htmlFor="create-user-form-lang-fr">fr</Label>
+                    </div>
+                  </RadioGroup>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </FieldSet>
+              )}
+            />
+          </FieldGroup>
+
         </form>
       </CardContent>
       <CardFooter>

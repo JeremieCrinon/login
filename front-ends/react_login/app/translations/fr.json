@@ -73,10 +73,20 @@
         "roles": {
           "title": "Une erreur est survenue lors de la récupération de la liste de roles",
           "description": "Please try again later and contact the app admin."
-        }
+        },
+        "email_taken": "Un compte avec cet email éxiste déjà.",
+        "no_lang": "Veuillez choisir un language pour l'utilisateur."
       },
       "title": "Créer un nouvel utilisateur",
-      "desc": "Veuillez remplir le formulaire ci-dessous pour créer un nouvel utilisateur. Un email d'invitation lui sera ensuite envoyé contenant son mot de passe temporaire et un lien vers l'application."
+      "desc": "Veuillez remplir le formulaire ci-dessous pour créer un nouvel utilisateur. Un email d'invitation contenant son mot de passe temporaire et un lien vers l'application lui sera ensuite envoyé.",
+      "lang": {
+        "title": "Language de l'utilisateur",
+        "desc": "La langue dans laquel l'email d'invitation sera envoyé. La langue de l'application est sélectionnée par la langue du navigateur, cette option n'affecte donc que l'email d'invitation."
+      },
+      "success": {
+        "title": "Utilisateur créé",
+        "desc": "Un email d'invitation lui à été envoyé avec un mot de passe temporaire et un lien vers l'application."
+      }
     }
   }
 }
