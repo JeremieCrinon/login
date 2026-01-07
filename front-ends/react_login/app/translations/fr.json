@@ -24,6 +24,7 @@
   "code": "code",
   "remember_me": "Se souvenir de moi",
   "submit": "Envoyer",
+  "cancel": "Annuler",
   "login": {
     "title": "Se connecter",
     "desc": "Vous devez vous connecter pour utiliser l'application",
@@ -58,7 +59,25 @@
     "logout": "Se déconnecter",
     "home": "Accueil",
     "users": "Utilisateurs"
+  },
+  "users": {
+    "list": {
+      "error": {
+        "title": "Une erreur est survenue lors de la récupération de la liste des utilisateurs",
+        "description": "Redirection vers une autre page, veuillez réessayer plus tard et contactez l'administrateur de l'application."
+      },
+      "create_button": "Créer un nouvel utilisateur"
+    },
+    "create": {
+      "error": {
+        "roles": {
+          "title": "Une erreur est survenue lors de la récupération de la liste de roles",
+          "description": "Please try again later and contact the app admin."
+        }
+      },
+      "title": "Créer un nouvel utilisateur",
+      "desc": "Veuillez remplir le formulaire ci-dessous pour créer un nouvel utilisateur. Un email d'invitation lui sera ensuite envoyé contenant son mot de passe temporaire et un lien vers l'application."
+    }
   }
-
 }
 

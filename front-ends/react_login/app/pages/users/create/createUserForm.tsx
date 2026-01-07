@@ -21,6 +21,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from "~/components/ui/field";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { useTranslation } from "react-i18next";
 
@@ -46,31 +48,50 @@ export function CreateUserForm({roles}: {roles: String[]}) {
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    // axios.post(`${API_URL}/modify-new-account/${t("locale")}`, {
-    //   new_email: data.newEmail,
-    //   new_password: data.newPassword
-    // }, {
-    //   headers: {
-    //     "Authorization": `Bearer ${token}`
-    //   }
-    // })
-    //   .then(() => {
-    //     setError("");
-    //
-    //     toast(t("new_account.success.title"), {
-    //       description: t("new_account.success.desc")
-    //     })
-    //
-    //     navigate("/logout");
-    //   })
-    //   .catch((error) => {
-    //     if (error.status == 401) {
-    //       navigate("/");
-    //     } else {
-    //       console.error(error);
-    //       setError(t("error.unknown"));
-    //     }
-    //   });
+
+    // Get the list of the chosen roles as they are not in the zod form
+    const htmlRoles = document.getElementById("create-user-form-roles")!.childNodes;
+    const htmlRolesArray = Array.from(htmlRoles!);
+    let chosenRoles: String[] = [];
+
+    htmlRolesArray.forEach((htmlRole) => {
+      const checkbox = htmlRole!.firstChild;
+      //@ts-ignore // For some reason TS displays an error as it thinks dataset does not exist
+      const checked = checkbox!.dataset.state == "checked";
+      //@ts-ignore
+      const role = checkbox!.dataset.role;
+
+      if (checked) chosenRoles.push(role); 
+    })
+
+    //TODO: Change the locale by on chosen in the form
+    axios.post(`${API_URL}/users/new/${t("locale")}`, {
+      email: data.email,
+      roles: chosenRoles
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(() => {
+        setError("");
+
+        toast(t("users.create.success.title"), {
+          description: t("users.create.success.desc")
+        })
+
+        navigate("/users");
+      })
+      .catch((error) => {
+        if (error.status == 401) {
+          navigate("/");
+        } else if (error.status === 409) {
+          setError(t("users.create.error.email_taken"))
+        } else {
+          console.error(error);
+          setError(t("error.unknown"));
+        }
+      });
   }
 
  
@@ -107,6 +128,17 @@ export function CreateUserForm({roles}: {roles: String[]}) {
               )}
             />
           </FieldGroup>
+
+          <div id="create-user-form-roles" className="space-y-1 mt-5">
+
+            {roles.map((role, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <Checkbox id={`create-user-form-role-${role}`} data-role={role} />
+                <Label htmlFor={`create-user-form-role-${role}`}>{role}</Label>
+              </div>
+            ))}
+
+          </div>
         </form>
       </CardContent>
       <CardFooter>

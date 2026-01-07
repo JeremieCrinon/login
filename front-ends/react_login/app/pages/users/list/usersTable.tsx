@@ -33,7 +33,7 @@ export default function UsersTable({users}: {users: User[]}) {
         <TableRow key={user.id}>
           <TableCell>{user.id}</TableCell>
           <TableCell>{user.email}</TableCell>
-          <TableCell>{user.roles}</TableCell>
+          <TableCell>{user.roles.join(" | ")}</TableCell>
         </TableRow>
       ))}
 
