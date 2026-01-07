@@ -23,6 +23,7 @@
   "code": "code",
   "remember_me": "Remember me",
   "submit": "Submit",
+  "confirm": "Confirm",
   "cancel": "Cancel",
   "login": {
     "title": "Log in",
@@ -85,6 +86,18 @@
         "title": "User successfully created",
         "desc": "An invite email has been sent to them with a temporary password and a link to the app."
       }
+    },
+    "delete": {
+      "error": {
+        "title": "An error occured",
+        "desc": "The user might not have been deleted. Please try again later and contact the app admin."
+      },
+      "success": {
+        "title": "The user has successfully been deleted",
+        "desc": "The user no longer has access to the app."
+      },
+      "title": "Are you sure to delete the user with the email adress",
+      "desc": "They will lose access to the app and the user will be permanently and immediatly deleted."
     }
   }
 }

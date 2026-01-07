@@ -24,6 +24,7 @@
   "code": "code",
   "remember_me": "Se souvenir de moi",
   "submit": "Envoyer",
+  "confirm": "Confirmer",
   "cancel": "Annuler",
   "login": {
     "title": "Se connecter",
@@ -87,6 +88,18 @@
         "title": "Utilisateur créé",
         "desc": "Un email d'invitation lui à été envoyé avec un mot de passe temporaire et un lien vers l'application."
       }
+    },
+    "delete": {
+      "error": {
+        "title": "Une erreur est survenue",
+        "desc": "L'utilisateur n'a peut être pas été supprimé.e"
+      },
+      "success": {
+        "title": "L'utilisateur à bien été supprimé",
+        "desc": "L'accès leur à été révoqué."
+      },
+      "title": "Etes-vous sûr.e de vouloir supprimer l'utiliteur avec l'adresse email",
+      "desc": "Leur accès à l'application sera révoqué et supprimé définitivement et immédiatement."
     }
   }
 }
