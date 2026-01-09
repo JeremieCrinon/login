@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 
-export default function UsersTable({users}: {users: User[]}) {
+export default function UsersTable({users, usersChange}: {users: User[], usersChange: () => void}) {
 
   const { t } = useTranslation();
 
@@ -37,7 +37,7 @@ export default function UsersTable({users}: {users: User[]}) {
           <TableCell>{user.email}</TableCell>
           <TableCell>{user.roles.join(" | ")}</TableCell>
           <TableCell></TableCell>
-          <TableCell>{user.id !== 1 && (<DeleteUser id={user.id} email={user.email} />)}</TableCell>
+          <TableCell>{user.id !== 1 && (<DeleteUser id={user.id} email={user.email} usersChange={usersChange} />)}</TableCell>
         </TableRow>
       ))}
 

@@ -56,7 +56,7 @@ export default function Users() {
       {loading ? (
         <UsersTableSkeleton/>
       ) : (
-        <UsersTable users={users}/>
+        <UsersTable users={users} usersChange={getUsers}/>
       )}
     </AppSidebar>
   );

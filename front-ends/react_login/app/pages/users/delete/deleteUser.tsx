@@ -19,7 +19,7 @@ import { Trash2 } from "lucide-react";
 
 import { API_URL} from "~/customConfig";
 
-export function DeleteUser({id, email}: {id: number; email: string}) {
+export function DeleteUser({id, email, usersChange}: {id: number; email: string; usersChange: () => void }) {
   const navigate = useNavigate();
   const { t } = useTranslation(); 
 
@@ -36,7 +36,7 @@ export function DeleteUser({id, email}: {id: number; email: string}) {
         description: t("users.delete.success.desc")
       })
 
-      //TODO: Send a message to the parent components to re-load the users list.
+      usersChange();
     })
     .catch((error) => {
       // Display a toast whatever the error is to inform the user there has been an error and the user isn't deleted
