@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 import { API_URL } from "~/customConfig";
+import { BackButton } from "~/components/backButton";
 
 export function clientLoader() {
   return requireRole("edit_users");
@@ -49,6 +50,7 @@ export default function createUser() {
 
   return(
     <AppSidebar>
+      <BackButton link="/users">{t("menu.users")}</BackButton>
       { !loading && (
         <CreateUserForm roles={roles} />
       )}

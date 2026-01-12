@@ -78,7 +78,7 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-    <main>
+    <main className="w-full">
       <SidebarTrigger />
       {children}
     </main>

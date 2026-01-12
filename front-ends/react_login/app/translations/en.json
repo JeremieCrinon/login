@@ -107,14 +107,21 @@
         },
         "email_taken": "Another account with this email adress already exists."
       },
-      "title": "Edit the user",
       "email": {
         "success": {
-          "title": "User successfully deleted",
+          "title": "User successfully edited",
           "desc": "They received an email verification code."
         },
         "title": "Edit the email",
         "desc": "If you edit the email of the user, an email containing a code will be sent to them. On their next login, they will need to enter this code to regain access to the app."
+      },
+      "roles": {
+        "success": {
+          "title": "User successfully edited",
+          "desc": "The new roles have been aplied"
+        },
+        "title": "Edit the roles",
+        "desc": "The changes will take effect immediatly"
       }
     }
   }

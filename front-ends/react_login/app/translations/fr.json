@@ -100,7 +100,33 @@
       },
       "title": "Etes-vous sûr.e de vouloir supprimer l'utiliteur avec l'adresse email",
       "desc": "Leur accès à l'application sera révoqué et supprimé définitivement et immédiatement."
+    },
+    "edit": {
+      "error": {
+        "user": {
+          "title": "Une erreur est survenue lors de la récupération de l'utilisateur",
+          "description": "Redirection vers une autre page, veuillez réessayer plus tard et contactez l'administrateur de l'application."
+        },
+        "email_taken": "Une autre compte avec cet email éxiste déjà."
+      },
+      "email": {
+        "success": {
+          "title": "L'utilisateur a bien été modifié",
+          "desc": "Un code de vérification leur a bien été envoyé."
+        },
+        "title": "Modifier l'adresse email",
+        "desc": "Si vous modifiez l'adresse email de l'utilisateur, un code de vérification leur sera envoyé par email. Lors de leur prochaine connexion, ils / elles devront entrer ce code afin de regagner l'accès à l'application."
+      },
+      "roles": {
+        "success": {
+          "title": "L'utilisateur a bien été modifié",
+          "desc": "Les nouveaux roles ont été appliqués."
+        },
+        "title": "Modifier les roles",
+        "desc": "Les modifications prendront effet immédiatement."
+      }
     }
+
   }
 }
 

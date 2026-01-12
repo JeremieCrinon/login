@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { requireRole } from "~/lib/auth";
-import { EditUserForm } from "./editUserForm";
 import { AppSidebar } from "~/components/sidebar";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,9 @@ import { toast } from "sonner";
 
 import { API_URL } from "~/customConfig";
 import type { User } from "~/types/user";
+import { BackButton } from "~/components/backButton";
+import { EditUserEmailCard } from "./editUserEmailCard";
+import { EditUserRolesCard } from "./editUserRolesCard";
 
 export function clientLoader() {
   return requireRole("edit_users");
@@ -73,8 +75,12 @@ export default function editUser() {
 
   return(
     <AppSidebar>
+      <BackButton link="/users">{t("menu.users")}</BackButton>
       { !loading && (
-        <EditUserForm user={user!} roles={roles} />
+        <div className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full">
+          <EditUserEmailCard user={user!} />
+          <EditUserRolesCard roles={roles} user={user!} />
+        </div>
       )}
     </AppSidebar>
   )

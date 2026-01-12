@@ -24,7 +24,6 @@ import {
   FieldLegend,
   FieldSet,
 } from "~/components/ui/field";
-import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import {
@@ -36,14 +35,14 @@ import type { User } from "~/types/user";
 
 import { API_URL } from "~/customConfig";
 
-export function EditUserForm({user, roles}: {user: User; roles: string[]}) {
+export function EditUserEmailCard({user}: {user: User}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
   const token = sessionStorage.getItem("token");
 
-  const emailFormSchema = z.object({
+  const formSchema = z.object({
     email: z
       .email({ error: t("zod.email") }),
     lang: z
@@ -51,14 +50,14 @@ export function EditUserForm({user, roles}: {user: User; roles: string[]}) {
       .min(1, t("users.create.error.no_lang"))
   })
 
-  const emailForm = useForm<z.infer<typeof emailFormSchema>>({
-    resolver: zodResolver(emailFormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       email: user.email,
     },
   });
 
-  function onEmailSubmit(data: z.infer<typeof emailFormSchema>) {
+  function onSubmit(data: z.infer<typeof formSchema>) {
     axios.put(`${API_URL}/users/${user.id}/email/${data.lang}`, {
       email: data.email,
     }, {
@@ -89,21 +88,21 @@ export function EditUserForm({user, roles}: {user: User; roles: string[]}) {
 
  
   return (
-    <Card className="w-full sm:max-w-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <Card className="w-full sm:max-w-md">
       <CardHeader className="text-center">
         <CardTitle>{t('users.edit.email.title')}</CardTitle>
         <CardDescription>{t('users.edit.email.desc')}</CardDescription>
       </CardHeader>
 
       <CardContent>
-        <form id="edit-user-email-form" onSubmit={emailForm.handleSubmit(onEmailSubmit)}>
+        <form id="edit-user-email-form" onSubmit={form.handleSubmit(onSubmit)}>
           {error && (
             <p className="text-sm font-medium text-destructive">{error}</p>
           )}
           <FieldGroup className="mt-5">
             <Controller
               name="email"
-              control={emailForm.control}
+              control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="edit-user-form-email">
@@ -125,7 +124,7 @@ export function EditUserForm({user, roles}: {user: User; roles: string[]}) {
           <FieldGroup className="mt-5">
             <Controller
               name="lang"
-              control={emailForm.control}
+              control={form.control}
               render={({ field, fieldState }) => (
                 <FieldSet data-invalid={fieldState.invalid}>
                   <FieldLegend>{t("users.create.lang.title")}</FieldLegend>
@@ -165,8 +164,7 @@ export function EditUserForm({user, roles}: {user: User; roles: string[]}) {
         </form>
       </CardContent>
       <CardFooter>
-        <Button variant="secondary" onClick={() => navigate("/users")}>{t("cancel")}</Button>
-        <Button className="ml-5" type="submit" form="edit-user-email-form">
+        <Button type="submit" form="edit-user-email-form">
           {t('submit')}
         </Button>
       </CardFooter>
