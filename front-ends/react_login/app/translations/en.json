@@ -136,6 +136,16 @@
         "desc": "Please login with your new email and the same password as before."
       },
       "title": "Modify your email adress"
+    },
+    "password": {
+      "success": {
+        "title": "Password successfully updated",
+        "desc": "Please log in with your new password."
+      },
+      "title": "Modify your password",
+      "current_password": "Current password",
+      "new_password": "New password",
+      "confirm_password": "Confirm password"
     }
   }
 }

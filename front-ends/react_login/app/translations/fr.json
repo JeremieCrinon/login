@@ -139,6 +139,16 @@
         "desc": "Veuillez vous re-connecter avec votre nouvelle adresse email et le même mot de passe qu'avant."
       },
       "title": "Modifier votre adresse email"
+    },
+    "password": {
+      "success": {
+        "title": "Le mot de passe a bien été modifié",
+        "desc": "Veuillez vous re-connecter avec votre nouveau mot de passe."
+      },
+      "title": "Modifier votre mot de passe",
+      "current_password": "Mot de passe actuel",
+      "new_password": "Nouveau mot de passe",
+      "confirm_password": "Confirmez votre mot de passe"
     }
   }
 

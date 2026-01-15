@@ -10,7 +10,6 @@ import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -81,7 +80,7 @@ export function EditAccountEmailCard() {
 
  
   return (
-    <Card className="w-full sm:max-w-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <Card className="w-full sm:max-w-md">
       <CardHeader className="text-center">
         <CardTitle>{t('account.email.title')}</CardTitle>
       </CardHeader>
