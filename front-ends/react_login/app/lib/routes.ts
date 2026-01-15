@@ -50,5 +50,9 @@ export const routes: Record<string, RouteDefinition> = {
   editUser: {
     path: "/users/:id",
     component: "./pages/users/edit/editUser.tsx"
+  },
+  account: {
+    path: "/account",
+    component: "./pages/account/account.tsx"
   }
 }

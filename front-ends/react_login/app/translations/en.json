@@ -124,6 +124,19 @@
         "desc": "The changes will take effect immediatly"
       }
     }
+  },
+  "account": {
+    "error": {
+      "bad_password": "The password you entered is not valid.",
+      "email_taken": "Another account with this email adress already exists."
+    },
+    "email": {
+      "success": {
+        "title": "Email successfully modified",
+        "desc": "Please login with your new email and the same password as before."
+      },
+      "title": "Modify your email adress"
+    }
   }
 }
 

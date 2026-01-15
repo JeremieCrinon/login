@@ -127,6 +127,20 @@
       }
     }
 
+  },
+  "account": {
+    "error": {
+      "bad_password": "Le mot de passe que vous avez entré n'est pas valide.",
+      "email_taken": "Un compte avec cet email éxiste déjà."
+    },
+    "email": {
+      "success": {
+        "title": "L'email a bien été modifié",
+        "desc": "Veuillez vous re-connecter avec votre nouvelle adresse email et le même mot de passe qu'avant."
+      },
+      "title": "Modifier votre adresse email"
+    }
   }
+
 }
 
