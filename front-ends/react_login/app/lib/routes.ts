@@ -23,11 +23,11 @@ export const routes: Record<string, RouteDefinition> = {
   },
   newAccount: {
     path: "/new-account",
-    component: "./pages/login/new-account/new-account.tsx"
+    component: "./pages/login/new-account/newAccount.tsx"
   },
   verifyEmail: {
     path: "/verify-email",
-    component: "./pages/login/verify-email/verify-email.tsx"
+    component: "./pages/login/verify-email/verifyEmail.tsx"
   },
   home: {
     path: "/home",

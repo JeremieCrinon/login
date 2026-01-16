@@ -1,4 +1,4 @@
-import { LoginForm } from "./login-form"
+import { LoginForm } from "./loginForm"
 import { redirect } from "react-router";
 
 export function clientLoader() {

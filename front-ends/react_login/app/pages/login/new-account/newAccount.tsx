@@ -1,5 +1,5 @@
 import { requireRole } from "~/lib/auth";
-import { NewAccountForm } from "./new-account-form";
+import { NewAccountForm } from "./newAccountForm";
 
 export function clientLoader() {
   return requireRole("new_account");

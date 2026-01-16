@@ -1,5 +1,5 @@
 import { requireRole } from "~/lib/auth";
-import { VerifyEmailForm } from "./verify-email-form";
+import { VerifyEmailForm } from "./verifyEmailForm";
 
 export function clientLoader() {
   return requireRole("unverified_email");
