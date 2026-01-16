@@ -34,6 +34,15 @@
     },
     "error": {
       "credentials": "Les identifiants ne sont pas valides"
+    },
+    "forgot_password": {
+      "success": {
+        "title": "Validé",
+        "desc": "Un email a été envoyé à l'adresse que vous avez envoyé si un utilisateur avec cet adresse existe."
+      },
+      "trigger": "Mot de passe oublié",
+      "title": "Mot de passe oublié",
+      "desc": "Veuillez entrer votre adresse email si dessous, un email vous sera envoyé avec un lien pour réinitialiser votre mot de passe."
     }
   },
   "new_account": {

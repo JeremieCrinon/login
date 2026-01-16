@@ -27,6 +27,7 @@ import { Label } from "~/components/ui/label";
 import { useTranslation } from "react-i18next";
 
 import { API_URL } from "~/customConfig";
+import { ForgotPassword } from "./forgotPassword";
 
 export function LoginForm() {
   const { t } = useTranslation();
@@ -143,9 +144,10 @@ export function LoginForm() {
         </form>
       </CardContent>
       <CardFooter>
-        <Button type="submit" form="login-form">
+        <Button className="mr-5" type="submit" form="login-form">
           {t('submit')}
         </Button>
+        <ForgotPassword />
       </CardFooter>
     </Card>
   )

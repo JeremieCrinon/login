@@ -33,6 +33,15 @@
     },
     "error": {
       "credentials": "The credentials you provided are not valid"
+    },
+    "forgot_password": {
+      "success": {
+        "title": "Success",
+        "desc": "An email as been sent to the email adress you provided if a user with this adress exists."
+      },
+      "trigger": "I forgot my password",
+      "title": "I forgot my password",
+      "desc": "Please enter your email bellow, an email with a link to reset your password will then be sent to you."
     }
   },
   "new_account": {
