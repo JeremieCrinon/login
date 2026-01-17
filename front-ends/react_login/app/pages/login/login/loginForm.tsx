@@ -75,7 +75,7 @@ export function LoginForm() {
           setError(t("login.error.credentials"));
         } else {
           console.error(error);
-          setError(t("error.unknow"));
+          setError(t("error.unknown"));
         }
       });
   }

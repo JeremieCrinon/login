@@ -1,87 +1,37 @@
-# Welcome to React Router!
+# React login
+**This is the documentation of the front-end with React of my [login systems suite](https://github.com/JeremieCrinon/login). Please read the [main README.md](../../README.md) first.**
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## Getting started
+Start by ensuring you have the [requirements](#requirements) and then, follow the [quick start guide](#quick-start-guide). Then edit the files as you like, test, break and explore.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Requirements
+- A working [back-end](../../back-ends).
+- [npm](https://https://www.npmjs.com/) or [pnpm](https://pnpm.io)
 
-## Features
+## Quick start guide
+- Clone or download the react_login directory.
+- Configure ./app/customConfig.ts.
+- Install the package with `npm i` or `pnpm i`.
+- Start the app with `npm run dev` or `pnpm run dev`.
+- Open http://localhost:5173 in your browser and test everything is working.
+- Explore the files, edit and do whatever you want with it.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Main libraries used
+- [React](https://react.dev)
+- [React router](https://reactrouter.com/) in framework mode
+- [Shadcn/ui](https://ui.shadcn.com/)
 
-## Getting Started
+## Structure of the app
+Most of the code is inside of the app folder.
 
-### Installation
+- ### components folder
+This folder contains reusable components that are means to be used in multiple parts of the app, like a backButton or the sidebar. It also contains the ui folder, which contains shadcn/ui components.
+- ### pages folder
+This folder contains subfolders that contains components that composes the app pages.
+- ### types folder
+This folder contains some ts interfaces.
+- ### translations folder
+This folder contains some json files containing internationalization.
 
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+## Defining new routes
+In a standard react-router app, routes should be defined in the app/routes.ts file. However, for simplifying things, I made the file app/lib/routes.ts that contains all the app routes, and automatically display them in the sidebar if they need to be in. I recommend you adding all your routes in it, even those that are not meant to go to the sidebar, so all routes are in the same file.
