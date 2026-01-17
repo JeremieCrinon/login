@@ -1,0 +1,177 @@
+{
+  "locale": "fr",
+  "error": {
+    "unknown": "Une erreur inatendue est survenue"
+  },
+  "zod": {
+    "email": "Adresse email invalide",
+    "min": "Doit faire au moins {{min}} charactères",
+    "max": "Doit faire au maximum {{max}} charactères",
+    "lowercase": "Doit contenir au moins une minuscule",
+    "uppercase": "Doit contenir au moins une majuscule",
+    "number": "Doit contenir au moins un nombre",
+    "special": "Doit contenir au moins un caractère spécial",
+    "password_confirm": "La confirmation du mot de passe est différente du mot de passe"
+
+  },
+  "id": "Identifiant unique",
+  "email": "email",
+  "password": "mot de passe",
+  "role": "role",
+  "roles": "roles",
+  "edit": "modifier",
+  "delete": "supprimer",
+  "code": "code",
+  "remember_me": "Se souvenir de moi",
+  "submit": "Envoyer",
+  "confirm": "Confirmer",
+  "cancel": "Annuler",
+  "login": {
+    "title": "Se connecter",
+    "desc": "Vous devez vous connecter pour utiliser l'application",
+    "success": {
+      "title": "Connexion réussite"
+    },
+    "error": {
+      "credentials": "Les identifiants ne sont pas valides"
+    },
+    "forgot_password": {
+      "success": {
+        "title": "Validé",
+        "desc": "Un email a été envoyé à l'adresse que vous avez envoyé si un utilisateur avec cet adresse existe."
+      },
+      "trigger": "Mot de passe oublié",
+      "title": "Mot de passe oublié",
+      "desc": "Veuillez entrer votre adresse email si dessous, un email vous sera envoyé avec un lien pour réinitialiser votre mot de passe."
+    }
+  },
+  "new_account": {
+    "title": "Vérifiez vos informations",
+    "desc": "Veuillez créer un nouveau mot de passe. Vous pouvez aussi changer votre email si vous le souhaitez.",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmez votre mot de passe",
+    "success": {
+      "title": "Information mises à jour",
+      "desc": "Veuillez vous reconnecter avec vos nouvelles informations"
+    }
+  },
+  "verify_email": {
+    "title": "Verifiez votre adresse e-mail",
+    "desc": "Veuillez entrer le code que vous avez reçu par email",
+    "success": {
+      "title": "Adresse email confirmée",
+      "desc": "Vous pouvez maintenant utiliser l'application"
+    }
+
+  },
+  "reset_password": {
+    "success": {
+      "title": "Le mot de passe a bien été modifié",
+      "desc": "Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
+    },
+    "error": {
+      "code": "Le lien semble ne pas être correcte, veuillez vérifier qu'il s'agit bien de celui que nous vous avons envoyé et réessayez."
+    },
+    "title": "Réinitialiser votre mot de passe",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmez votre mot de passe"
+  },
+  "menu": {
+    "account": "Compte utilisateur",
+    "logout": "Se déconnecter",
+    "home": "Accueil",
+    "users": "Utilisateurs"
+  },
+  "users": {
+    "list": {
+      "error": {
+        "title": "Une erreur est survenue lors de la récupération de la liste des utilisateurs",
+        "description": "Redirection vers une autre page, veuillez réessayer plus tard et contactez l'administrateur de l'application."
+      },
+      "create_button": "Créer un nouvel utilisateur"
+    },
+    "create": {
+      "error": {
+        "roles": {
+          "title": "Une erreur est survenue lors de la récupération de la liste de roles",
+          "description": "Please try again later and contact the app admin."
+        },
+        "email_taken": "Un compte avec cet email éxiste déjà.",
+        "no_lang": "Veuillez choisir un language pour l'utilisateur."
+      },
+      "title": "Créer un nouvel utilisateur",
+      "desc": "Veuillez remplir le formulaire ci-dessous pour créer un nouvel utilisateur. Un email d'invitation contenant son mot de passe temporaire et un lien vers l'application lui sera ensuite envoyé.",
+      "lang": {
+        "title": "Language de l'utilisateur",
+        "desc": "La langue dans laquel l'email d'invitation sera envoyé. La langue de l'application est sélectionnée par la langue du navigateur, cette option n'affecte donc que l'email d'invitation."
+      },
+      "success": {
+        "title": "Utilisateur créé",
+        "desc": "Un email d'invitation lui à été envoyé avec un mot de passe temporaire et un lien vers l'application."
+      }
+    },
+    "delete": {
+      "error": {
+        "title": "Une erreur est survenue",
+        "desc": "L'utilisateur n'a peut être pas été supprimé.e"
+      },
+      "success": {
+        "title": "L'utilisateur à bien été supprimé",
+        "desc": "L'accès leur à été révoqué."
+      },
+      "title": "Etes-vous sûr.e de vouloir supprimer l'utiliteur avec l'adresse email",
+      "desc": "Leur accès à l'application sera révoqué et supprimé définitivement et immédiatement."
+    },
+    "edit": {
+      "error": {
+        "user": {
+          "title": "Une erreur est survenue lors de la récupération de l'utilisateur",
+          "description": "Redirection vers une autre page, veuillez réessayer plus tard et contactez l'administrateur de l'application."
+        },
+        "email_taken": "Une autre compte avec cet email éxiste déjà."
+      },
+      "email": {
+        "success": {
+          "title": "L'utilisateur a bien été modifié",
+          "desc": "Un code de vérification leur a bien été envoyé."
+        },
+        "title": "Modifier l'adresse email",
+        "desc": "Si vous modifiez l'adresse email de l'utilisateur, un code de vérification leur sera envoyé par email. Lors de leur prochaine connexion, ils / elles devront entrer ce code afin de regagner l'accès à l'application."
+      },
+      "roles": {
+        "success": {
+          "title": "L'utilisateur a bien été modifié",
+          "desc": "Les nouveaux roles ont été appliqués."
+        },
+        "title": "Modifier les roles",
+        "desc": "Les modifications prendront effet immédiatement."
+      }
+    }
+
+  },
+  "account": {
+    "error": {
+      "bad_password": "Le mot de passe que vous avez entré n'est pas valide.",
+      "email_taken": "Un compte avec cet email éxiste déjà."
+    },
+    "email": {
+      "success": {
+        "title": "L'email a bien été modifié",
+        "desc": "Veuillez vous re-connecter avec votre nouvelle adresse email et le même mot de passe qu'avant."
+      },
+      "title": "Modifier votre adresse email"
+    },
+    "password": {
+      "success": {
+        "title": "Le mot de passe a bien été modifié",
+        "desc": "Veuillez vous re-connecter avec votre nouveau mot de passe."
+      },
+      "title": "Modifier votre mot de passe",
+      "current_password": "Mot de passe actuel",
+      "new_password": "Nouveau mot de passe",
+      "confirm_password": "Confirmez votre mot de passe"
+    }
+  }
+
+}
+

@@ -1,0 +1,177 @@
+{
+  "locale": "en",
+  "error": {
+    "unknown": "An unexpected error occured"
+  },
+  "zod": {
+    "email": "Email adress invalid",
+    "min": "Must be at least {{min}} caracters long",
+    "max": "Must be at most {{max}} caracters long",
+    "lowercase": "Must contain at least one lowercase character",
+    "uppercase": "Must contain at least one uppercase character",
+    "number": "Must contain a number",
+    "special": "Must contain a special character",
+    "password_confirm": "The password confirmation does not match the password"
+  },
+  "id": "Unique identifier",
+  "email": "email",
+  "password": "password",
+  "role": "role",
+  "roles": "roles",
+  "edit": "edit",
+  "delete": "delete",
+  "code": "code",
+  "remember_me": "Remember me",
+  "submit": "Submit",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "login": {
+    "title": "Log in",
+    "desc": "Please log in to use the app",
+    "success": {
+      "title": "Login successfull"
+    },
+    "error": {
+      "credentials": "The credentials you provided are not valid"
+    },
+    "forgot_password": {
+      "success": {
+        "title": "Success",
+        "desc": "An email as been sent to the email adress you provided if a user with this adress exists."
+      },
+      "trigger": "I forgot my password",
+      "title": "I forgot my password",
+      "desc": "Please enter your email bellow, an email with a link to reset your password will then be sent to you."
+    }
+  },
+  "new_account": {
+    "title": "Verify your informations",
+    "desc": "Create a new password. You can also change your email if you wish.",
+    "new_password": "New password",
+    "confirm_password": "Confirm password",
+    "success": {
+      "title": "Informations successfully updated",
+      "desc": "Please log in again with your new credentials"
+    }
+  },
+  "verify_email": {
+    "title": "Verify your email adress",
+    "desc": "Please enter the code you received by email.",
+    "success": {
+      "title": "Email adress confirmed",
+      "desc": "You can now use the app"
+    }
+  },
+  "reset_password": {
+    "success": {
+      "title": "Password changed successfully",
+      "desc": "You can now log in with the new password."
+    },
+    "error": {
+      "code": "The link seems to not be right, please check the link is the one sent by email and try again."
+    },
+    "title": "Reset your password",
+    "new_password": "New password",
+    "confirm_password": "Confirm password"
+  },
+  "menu": {
+    "account": "Account",
+    "logout": "Log out",
+    "home": "Home",
+    "users": "Users"
+  },
+  "users": {
+    "list": {
+      "error": {
+        "title": "An error occured getting the users list",
+        "description": "Redirecting you to another page, please try again later and contact the app admin...."
+      },
+      "create_button": "Create a new user"
+    },
+    "create": {
+      "error": {
+        "roles": {
+          "title": "An error occured getting the list of avaible roles",
+          "description": "Please try again later and contact the app admin."
+        },
+        "email_taken": "An account with this email adress already exists.",
+        "no_lang": "You need to choose a language for the user."
+      },
+      "title": "Create a new user",
+      "desc": "Please fill the form bellow to create a new user. An invite email will be sent to them with a temporary password and a link to the app.",
+      "lang": {
+        "title": "Language of the user",
+        "desc": "The language in which the email will be sent. The app's language will be set based on the browser's lang, therefore, this setting only affects the invite email."
+      },
+      "success": {
+        "title": "User successfully created",
+        "desc": "An invite email has been sent to them with a temporary password and a link to the app."
+      }
+    },
+    "delete": {
+      "error": {
+        "title": "An error occured",
+        "desc": "The user might not have been deleted. Please try again later and contact the app admin."
+      },
+      "success": {
+        "title": "The user has successfully been deleted",
+        "desc": "The user no longer has access to the app."
+      },
+      "title": "Are you sure to delete the user with the email adress",
+      "desc": "They will lose access to the app and the user will be permanently and immediatly deleted."
+    },
+    "edit": {
+      "error": {
+        "user": {
+          "title": "Error getting the user",
+          "description": "Please try again later and contact the app admin."
+        },
+        "email_taken": "Another account with this email adress already exists."
+      },
+      "email": {
+        "success": {
+          "title": "User successfully edited",
+          "desc": "They received an email verification code."
+        },
+        "title": "Edit the email",
+        "desc": "If you edit the email of the user, an email containing a code will be sent to them. On their next login, they will need to enter this code to regain access to the app."
+      },
+      "roles": {
+        "success": {
+          "title": "User successfully edited",
+          "desc": "The new roles have been aplied"
+        },
+        "title": "Edit the roles",
+        "desc": "The changes will take effect immediatly"
+      }
+    }
+  },
+  "account": {
+    "error": {
+      "bad_password": "The password you entered is not valid.",
+      "email_taken": "Another account with this email adress already exists."
+    },
+    "email": {
+      "success": {
+        "title": "Email successfully modified",
+        "desc": "Please login with your new email and the same password as before."
+      },
+      "title": "Modify your email adress"
+    },
+    "password": {
+      "success": {
+        "title": "Password successfully updated",
+        "desc": "Please log in with your new password."
+      },
+      "title": "Modify your password",
+      "current_password": "Current password",
+      "new_password": "New password",
+      "confirm_password": "Confirm password"
+    }
+  }
+}
+
+
+
+
+
