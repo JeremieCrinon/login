@@ -68,7 +68,7 @@ export function ForgotPassword() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-       {t("login.forgot_password.trigger")}
+       <a href="#">{t("login.forgot_password.trigger")}</a>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

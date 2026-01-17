@@ -29,6 +29,10 @@ export const routes: Record<string, RouteDefinition> = {
     path: "/verify-email",
     component: "./pages/login/verify-email/verifyEmail.tsx"
   },
+  resetPassword: {
+    path: "/forgot-password/:code",
+    component: "./pages/login/reset-password/resetPassword.tsx"
+  },
   home: {
     path: "/home",
     titleKey: "menu.home",

@@ -64,6 +64,18 @@
     }
 
   },
+  "reset_password": {
+    "success": {
+      "title": "Le mot de passe a bien été modifié",
+      "desc": "Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
+    },
+    "error": {
+      "code": "Le lien semble ne pas être correcte, veuillez vérifier qu'il s'agit bien de celui que nous vous avons envoyé et réessayez."
+    },
+    "title": "Réinitialiser votre mot de passe",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmez votre mot de passe"
+  },
   "menu": {
     "account": "Compte utilisateur",
     "logout": "Se déconnecter",
