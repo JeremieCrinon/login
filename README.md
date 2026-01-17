@@ -22,12 +22,14 @@ This choice is obviously based on your preferences. For now, there is just one b
 Here is a list of the frameworks with their pros and cons to help you choose :
 
 ### Front-ends :
-- Vue.js (JavaScript) : A pretty popular JavaScript framework, not really hard to learn for beginners. The code is a bit cleaner than React in my opinion, but it also is less popular.
+- React (TypeScript) : The most popular TypeScript framework. Pretty easy to learn.
+- Vue.js (JavaScript) : I need to update it, but I don't really know if I will. I let it here because it still can be a good starting point, but you will need to update it. It also is the first front-end I made in this repository, and it's really not the cleanest. I recommend you using the React front-end if you don't care about it.
 - SwiftUI (Swift, IOS) : The intended way by Apple to create apps for it's platforms. It is still work in progress, documentation, code commenting, small features and support for other platforms are still missing.
 
 ### Back-ends : 
 - Axum (Rust) : Really good performances, steep learning curve, not recommended to beginners.
 - Vapor (Swift) : Excellent compromise between PHP frameworks and lower level languages, with a not to steep leaning curve, ease of use and speed of development, but with good performances.
+- NestJS (Node) : Pretty easy to use, performances plenty good enough for the extreme majority of apps, even bigger ones, what I will recommend for almost any web app.
 - More will be coming
 
 
@@ -58,11 +60,11 @@ The front-ends are "just" displaying an interface with forms and calling the bac
 ### Back-ends
 - Symfony (PHP)
 - Laravel (PHP)
-- NestJS (NodeJS)
 
 ### Front-ends
-- React (JavaScript)
 - An Android version (don't know which language or framework I will use)
+- React native
+- Native rust app with ui
 
 ## Contributing
-I am all open to contributions, but I will not accept PRs in other frameworks/languages than the one already in the project or in the [Planned frameworks to add section](#planned-frameworks-to-add).
+I am all open to contributions, but I will not accept PRs in other frameworks/languages than the ones already in the project or in the [Planned frameworks to add section](#planned-frameworks-to-add).
