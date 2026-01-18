@@ -21,3 +21,9 @@ services:
       - .:/code
     network_mode: host
     command: bash -c "swift run App migrate --yes"
+  build:
+    image: swift:latest
+    working_dir: /code
+    volumes:
+      - .:/code
+    command: bash -c "swift build -c release"
