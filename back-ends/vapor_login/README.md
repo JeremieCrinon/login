@@ -12,14 +12,15 @@ You can run the app, tests, migrations and build without Docker, I will however 
 - A [mailgun](https://mailgun.com) account ready to use
 
 ## Quick start guide
-Even tough Docker is used in this guide, it is only for dev environments, for production environments, please build the app and then create your own Docker configs or host it another way.
+**Even tough Docker is used in this guide, it is only for dev environments and building the app, for production environments, please build the app and then create your own Docker configs or host it another way.**
+**I recommend you directly running the swift commands if you can, but on some configs / OSs it would be a bit complicated having everything working right (which was my case on my linux machine), that's why I made the docker-compose.yml file, to execute the commands in a container that should always work on any machine with docker installed.**
 - Clone or download the vapor_login directory.
 - Create an empty database in Postgres
 - Configure your .env by copying the .env.example, and enter the values you need, there are comments on each line explaining what you should enter.
 - Create the templates in your mailgun account. Example templates are provided in [mailgun-templates.md](./mailgun-templates.md).
-- Execute the command `docker compose up test` it should run the test without errors. (It will display that some routes returned a 4.. error, this is normal as some tests expects clients errors to be returned, what is important is that all the test suites have runned successfully at the end).
-- Execute the command `docker compose up migrate`, it should migrate without errors. Verifty then that the database schema as successfully been created.
-- Execute the command `docker compose up run`, it should start without errors.
+- Execute the command `swift test` or `docker compose up test` it should run the test without errors. (It will display that some routes returned a 4.. error, this is normal as some tests expects clients errors to be returned, what is important is that all the test suites have runned successfully at the end).
+- Execute the command `swift run App migrate` or `docker compose up migrate`, it should migrate without errors. Verifty then that the database schema as successfully been created.
+- Execute the command `swift run` or `docker compose up run`, it should start without errors.
 - Test the routes with [Postman](https://www.postman.com) or [Insomnia](https://insomnia.rest), you have the list of the routes and what they expect on the .env of the [back-ends](../README.md).
 
 ## Structure of the app
@@ -37,5 +38,6 @@ This folder contains the AuthMiddleware that verifies user's authentication and 
 ### Tests folder
 This folder contains all the unit tests.
 
-## TODO
-Add the build command in the docker-compose.yml and check the app in a production environment.
+## Production
+To build the app, you can execute the command : `swift build -c release` or `docker compose run --rm build`.
+You will then find the output binary in `.build/release/App`.
