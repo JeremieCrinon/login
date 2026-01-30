@@ -6,13 +6,13 @@ use log::error;
 /// This function takes a lettre message, and sends it using the mailer specified in .env
 pub async fn send_mail(email: Message) -> Result<(), StatusCode> {
 
-    // In dev only, if the MAILHOG env var is true
     #[cfg(debug_assertions)]
     {
         let use_mailhog = env::var("MAILHOG")
             .unwrap_or_else(|_| "false".to_string())
             .to_lowercase() == "true";
 
+        // In dev only, if the MAILHOG env var is true
         if use_mailhog {
             let mailer = SmtpTransport::relay("localhost")
                 .unwrap()
@@ -28,6 +28,15 @@ pub async fn send_mail(email: Message) -> Result<(), StatusCode> {
                     Err(StatusCode::INTERNAL_SERVER_ERROR)
                 }
             };
+        }
+
+        // In mail only, if TEST_MAIL var is true, not send any email at all
+        let not_send_email = env::var("TEST_MAIl")
+            .unwrap_or_else(|_| "false".to_string())
+            .to_lowercase() == "true";
+
+        if not_send_email {
+            return Ok(());
         }
     }
 
