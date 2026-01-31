@@ -77,6 +77,3 @@ You can find one JSON file per language in this folder. If you only want English
 
 - ### Target Folder
 You can find all the compiled apps here. Please refer to the [Rust documentation](https://doc.rust-lang.org/book) for more details.
-
-## TODO
-- Add unit tests

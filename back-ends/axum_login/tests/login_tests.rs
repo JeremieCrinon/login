@@ -1,12 +1,15 @@
 mod common;
 use axum::{
-    Router, body::Body, http::{Request, StatusCode}
+    body::Body, http::{Request, StatusCode}
 };
+use axum_login::middlewares::auth::Role;
 use tower::ServiceExt;
+use common::{setup_app, create_test_user};
 
 #[tokio::test]
 async fn test_login_with_right_credentials() {
-    let app: Router = common::setup_app().await;
+    let (app, db) = setup_app().await;
+    let _ = create_test_user(db, vec![Role::User], None).await;
 
     let response = app
         .oneshot(
@@ -16,7 +19,7 @@ async fn test_login_with_right_credentials() {
                 .header("content-type", "application/json")
                 .body(Body::from(
                     r#"{
-                        "email": "email@mail.com",
+                        "email": "test@mail.com",
                         "password": "Admin12345@"
                     }"#
                 ))
