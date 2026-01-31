@@ -1,14 +1,12 @@
+mod common;
 use axum::{
-    body::Body,
-    http::{Request, StatusCode},
+    Router, body::Body, http::{Request, StatusCode}
 };
 use tower::ServiceExt;
-use axum_login::routes;
 
 #[tokio::test]
 async fn test_login_with_right_credentials() {
-    dotenvy::from_filename(".env.test").ok();
-    let app = routes::create_router().await;
+    let app: Router = common::setup_app().await;
 
     let response = app
         .oneshot(
