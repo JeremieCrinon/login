@@ -1,11 +1,14 @@
 use axum_login::routes;
-use axum::Router;
+use axum::{Json, Router};
+use jwt_simple::claims::Claims;
+use jwt_simple::prelude::{Duration, MACLike};
 use sea_orm::{ActiveValue, Database, DatabaseConnection, EntityTrait};
 use sea_orm_migration::MigratorTrait;
 use axum_login::db::Migrator;
 use axum_login::middlewares::auth::Role;
 use axum_login::entities::{user, prelude::User};
-use axum_login::helpers::users::hash_passwd;
+use axum_login::helpers::users::{create_jwt_key, hash_passwd};
+use axum_login::handlers::login::UserClaims;
 
 pub async fn setup_app() -> (Router, DatabaseConnection) {
     dotenvy::from_filename(".env.test").ok();
@@ -36,4 +39,32 @@ pub async fn create_test_user(db: DatabaseConnection, roles: Vec<Role>, email: O
     };
 
     User::insert(new_user).exec_with_returning(&db).await.expect("Error inserting the user into db.")
+}
+
+pub async fn get_user_jwt(user: user::Model) -> String {
+    let key = create_jwt_key();
+    let app_name = std::env::var("APP_NAME").expect("APP_NAME env variable is missing").to_string();
+
+    let mut claims = Claims::with_custom_claims(
+        UserClaims {
+            id: user.id
+        }, 
+        Duration::from_hours(1)
+    );
+
+    claims.issuer = Some(app_name);
+
+    let token = key
+        .authenticate(claims)
+        .map(Json)
+        .expect("Cannot make a JWT for user");
+
+    token.to_string()
+}
+
+pub async fn create_user_and_get_jwt(db: DatabaseConnection, roles: Vec<Role>, email: Option<String>) -> (user::Model, String) {
+    let user = create_test_user(db, roles, email).await;
+    let token = get_user_jwt(user.clone()).await;
+
+    (user, token)
 }
