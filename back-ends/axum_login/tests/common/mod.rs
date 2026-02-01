@@ -35,6 +35,8 @@ pub async fn create_test_user(db: DatabaseConnection, roles: Vec<Role>, email: O
         email: ActiveValue::set(email),
         password: ActiveValue::set(hashed_passwd),
         roles: ActiveValue::set(json_roles),
+        email_verification_code: ActiveValue::set(Some("code".to_string())),
+        password_reset_code: ActiveValue::set(Some("code".to_string())),
         ..Default::default()
     };
 

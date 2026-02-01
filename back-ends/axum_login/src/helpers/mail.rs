@@ -31,7 +31,7 @@ pub async fn send_mail(email: Message) -> Result<(), StatusCode> {
         }
 
         // In mail only, if TEST_MAIL var is true, not send any email at all
-        let not_send_email = env::var("TEST_MAIl")
+        let not_send_email = env::var("TEST_MAIL")
             .unwrap_or_else(|_| "false".to_string())
             .to_lowercase() == "true";
 
