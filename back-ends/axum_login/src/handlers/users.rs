@@ -18,6 +18,12 @@ use crate::middlewares::auth::Role;
 use std::env;
 use lettre::{message::{header::{self, ContentType}, MultiPart, SinglePart}, Message};
 
+#[cfg(debug_assertions)]
+pub async fn edit_users_test_route() -> Result<impl IntoResponse, Response> {
+    Ok(())
+}
+
+
 #[derive(Serialize)]
 struct ListRolesResponse {
     roles: Vec<&'static str>,
