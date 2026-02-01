@@ -11,8 +11,8 @@ Start by ensuring you have the [requirements](#requirements), and then, follow t
 - Mailhog is recommended to test the email sending without actually sending emails.
 
 ## Quick start guide
-*Please note that I am on macOS, I have tested it on an empty macOS VM to know every dependency needed. You might need more dependencies on other OS, if you have any problem, please let me know so I can fix the documentation and help you if you need to.*
 - Clone or download the axum_login directory.
+- Execute the command `cargo test`, all test should run fine.
 - Create an empty database in Postgres.
 - Configure your .env by copying the .env.example, and enter the values you need, there are comments on each line explaining what you should enter.
 - Execute the command `cargo run`, it should start without errors.
@@ -32,6 +32,8 @@ Start by ensuring you have the [requirements](#requirements), and then, follow t
 `cargo build`
 - Build the app in release mode
 `cargo build --release`
+- Execute the integration tests
+`cargo test`
 
 
 ## Main libraries / frameworks used
@@ -77,3 +79,6 @@ You can find one JSON file per language in this folder. If you only want English
 
 - ### Target Folder
 You can find all the compiled apps here. Please refer to the [Rust documentation](https://doc.rust-lang.org/book) for more details.
+
+- ### Tests Folder
+This folder contains the common subfolder that contains some helpers for the tests, and the tests.
