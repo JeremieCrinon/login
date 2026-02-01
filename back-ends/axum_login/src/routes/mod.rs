@@ -20,13 +20,29 @@ pub struct AppState {
     pub translator: Translator,
 }
 
-pub async fn create_router() -> Router {
+pub async fn create_router(db_arg: Option<DatabaseConnection>) -> Router {
     // Prepare the app_state, that will contain objects that will be needed in handlers.
-    let db = connect().await.expect("Failed to connect to DB"); // Get the database connection to put it in the app_state (you pass this when executing a DB query)
     let key = create_jwt_key(); // Get the JWT key to put it in the app_state, it is needed to create JWT tokens
     let tera = Tera::new("templates/**/*").expect("Failed to load tera templates"); // Instantiate a tera instance to use the email templates (it isn't really optimized to instantiate it each time you wanna send an email) to put it in the app_state
     let tera = Arc::new(tera);
     let translator = Translator::new(); // Create a translator instance that will read and parse the JSON translations files (we instantiate it at app startup to read the translation files just once and not each time we need it)
+    let db: DatabaseConnection; // Declare db here so it's available outside the block bellow
+
+    #[cfg(debug_assertions)]
+    {
+        db = match db_arg {
+            Some(db_arg) => db_arg, // If the DB has been passed by the caller of this function, we use it instead of getting a new one (it's used by intergration tests)
+            None => connect().await.expect("Failed to connect to DB") // If the DB hasn't been passed by the caller of this function, we just get one as usual
+        };
+    }
+    #[cfg(not(debug_assertions))]
+    {
+        db = match db_arg {
+            Some(_db_arg) => panic!("db_arg as been passed to the create_router function, this should not append except during integration tests"),
+            None => connect().await.expect("Failed to connect to DB") // When not in dev mode, we don't give the option of getting the DB from this function call
+        };
+    }
+    
     let state = AppState { db, key, tera, translator };
 
     // Get the allowed origins from the .env

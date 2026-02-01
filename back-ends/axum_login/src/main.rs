@@ -20,7 +20,7 @@ async fn main() -> anyhow::Result<()> {
 
     info!("Creating router...");
 
-    let app = routes::create_router().await; // Getting the Axum router using the function in the routes mod.rs file
+    let app = routes::create_router(None).await; // Getting the Axum router using the function in the routes mod.rs file
 
     info!("Starting server...");
 
