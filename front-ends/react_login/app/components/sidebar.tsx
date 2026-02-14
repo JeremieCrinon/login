@@ -28,6 +28,7 @@ import { routes } from "~/lib/routes";
 export function AppSidebar({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const location = useLocation();
+  const userRoles: string[] = JSON.parse(sessionStorage.getItem("user_roles") || "[]"); // Get the roles from the sessionStorage
 
   return (
     <>
@@ -62,7 +63,7 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
           <SidebarGroupContent>
             <SidebarMenu>
               {Object.values(routes).map((r) => (
-                r.titleKey && (
+                r.titleKey && (userRoles.includes(r.requiredRole!) || userRoles.includes("admin") || r.requiredRole == "user") && (
                   <SidebarMenuItem key={r.titleKey}>
                     <SidebarMenuButton asChild>
                       <Link to={r.path}>
