@@ -16,6 +16,10 @@ import { env } from 'src/env';
           tls: {
             rejectUnauthorized: false,
           },
+          auth: {
+            user: env("SMTP_USER"),
+            pass: env("SMTP_PASS")
+          }
         },
         defaults: {
           from: env("SMTP_FROM"),
