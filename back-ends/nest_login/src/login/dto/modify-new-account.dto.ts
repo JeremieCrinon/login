@@ -1,9 +1,9 @@
-import { IsEmail, IsStrongPassword } from "class-validator";
+import { IsEmail, IsString } from "class-validator";
 
 export class ModifyNewAccountDto {
   @IsEmail()
   new_email: string;
 
-  @IsStrongPassword()
+  @IsString()
   new_password: string;
 }
