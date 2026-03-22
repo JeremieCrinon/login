@@ -1,9 +1,9 @@
-import { IsString, IsStrongPassword } from "class-validator";
+import { IsString } from "class-validator";
 
 export class ResetPasswordDto {
   @IsString()
   code: string;
 
-  @IsStrongPassword()
+  @IsString()
   new_password: string;
 }
