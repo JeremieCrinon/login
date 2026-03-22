@@ -4,6 +4,7 @@ use iced::{
     }
 };
 
+#[derive(Debug, Clone)]
 pub struct Login {}
 
 #[derive(Debug, Clone)]
