@@ -4,6 +4,8 @@ use iced::{
     }
 };
 
+use crate::{Page, pages::test::Test};
+
 #[derive(Debug, Clone)]
 pub struct Login {}
 
@@ -11,7 +13,8 @@ pub struct Login {}
 pub enum LoginMessage {
     TestMsg {
         msg: String
-    }
+    },
+    Navigate(Page)
 }
 
 impl Login {
@@ -25,17 +28,20 @@ impl Login {
     pub fn update(&mut self, message: LoginMessage) -> Task<LoginMessage> {
         match message {
             LoginMessage::TestMsg { msg } => {
-                println!("Message: {}", msg)
+                println!("Message: {}", msg);
+                Task::done(LoginMessage::Navigate(Page::Test(Test::new().0)))
             }
+            LoginMessage::Navigate(_) => Task::none(),
         }
-        Task::none()
     }
 
     pub fn view(&self) -> Element<'_, LoginMessage> {
         let msg_button: Container<LoginMessage> = container(
-            button("Send msg")
+            button("Send msg and navigate to test")
                 .on_press(LoginMessage::TestMsg { msg: "Hello, World !".to_string() })   
         );
+
+
 
         column![
             text("Login"),

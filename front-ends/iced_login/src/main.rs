@@ -1,5 +1,4 @@
 mod pages;
-mod translator;
 
 use iced::{
     Element, Task, widget::{
@@ -35,24 +34,36 @@ impl UI {
             Task::none(),
         )
     }
-
+    
     pub fn update(&mut self, message: Message) -> Task<Message> {
         match message {
             Message::Navigate(page) => {
                 self.page = page;
+                Task::none()
             }
             Message::Login(msg) => {
-                if let Page::Login(login) = &mut self.page {
-                    login.update(msg);
+                match msg {
+                    LoginMessage::Navigate(page) => {
+                        self.page = page;
+                        Task::none()
+                    }
+                    _ => {
+                        if let Page::Login(login) = &mut self.page {
+                            login.update(msg).map(Message::Login)
+                        } else {
+                            Task::none()
+                        }
+                    }
                 }
             }
             Message::Test(msg) => {
                 if let Page::Test(test) = &mut self.page {
-                    test.update(msg);
+                    test.update(msg).map(Message::Test)
+                } else {
+                    Task::none()
                 }
             }
         }
-        Task::none()
     }
 
     pub fn view(&self) -> Element<'_, Message> {
