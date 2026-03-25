@@ -1,9 +1,7 @@
 mod pages;
 
 use iced::{
-    Element, Task, widget::{
-        text, column, button, container, Container, row
-    }
+    Element, Task
 };
 use pages::login::{Login, LoginMessage};
 use pages::test::{Test, TestMessage};
@@ -36,61 +34,29 @@ impl UI {
     }
     
     pub fn update(&mut self, message: Message) -> Task<Message> {
-        match message {
-            Message::Navigate(page) => {
+        match (&mut self.page, message) {
+            (_, Message::Navigate(page)) => {
                 self.page = page;
                 Task::none()
             }
-            Message::Login(msg) => {
-                match msg {
-                    LoginMessage::Navigate(page) => {
-                        self.page = page;
-                        Task::none()
-                    }
-                    _ => {
-                        if let Page::Login(login) = &mut self.page {
-                            login.update(msg).map(Message::Login)
-                        } else {
-                            Task::none()
-                        }
-                    }
-                }
+            (Page::Login(page), Message::Login(msg)) => {
+                page.update(msg)
             }
-            Message::Test(msg) => {
-                if let Page::Test(test) = &mut self.page {
-                    test.update(msg).map(Message::Test)
-                } else {
-                    Task::none()
-                }
+            (Page::Test(page), Message::Test(msg)) => {
+                page.update(msg)
+            }
+            (page, message) => {
+                panic!("Incorrect message routing:\npage {:?}\nreceived message {:?}", page, message)
             }
         }
     }
 
     pub fn view(&self) -> Element<'_, Message> {
-        let test_button: Container<Message> = container(
-            button("Test")
-                .on_press(Message::Navigate(Page::Test(Test::new().0)))
-        );
+        match &self.page {
+            Page::Login(login) => login.view(),
+            Page::Test(test) => test.view(),
+        }
 
-        let login_button: Container<Message> = container(
-            button("Login")
-                .on_press(Message::Navigate(Page::Login(Login::new().0)))
-        );
-
-        let buttons = row![
-            test_button,
-            login_button
-        ];
-
-        let page = match &self.page {
-            Page::Login(login) => login.view().map(Message::Login),
-            Page::Test(test) => test.view().map(Message::Test),
-        };
-
-        column![
-            buttons,
-            page
-        ].into()
     }
 }
 

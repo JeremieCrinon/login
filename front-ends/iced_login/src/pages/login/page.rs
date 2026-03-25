@@ -1,10 +1,10 @@
 use iced::{
     Element, Task, widget::{
-        Container, button, column, container, text
+        button, column, text
     }
 };
 
-use crate::{Page, pages::test::Test};
+use crate::{Page, pages::test::Test, Message};
 
 #[derive(Debug, Clone)]
 pub struct Login {}
@@ -14,7 +14,6 @@ pub enum LoginMessage {
     TestMsg {
         msg: String
     },
-    Navigate(Page)
 }
 
 impl Login {
@@ -25,27 +24,33 @@ impl Login {
         )
     }
 
-    pub fn update(&mut self, message: LoginMessage) -> Task<LoginMessage> {
+    pub(crate) fn update(&mut self, message: LoginMessage) -> Task<Message> {
         match message {
             LoginMessage::TestMsg { msg } => {
                 println!("Message: {}", msg);
-                Task::done(LoginMessage::Navigate(Page::Test(Test::new().0)))
+                Task::done(Message::Navigate(Page::Test(Test::new().0)))
             }
-            LoginMessage::Navigate(_) => Task::none(),
         }
     }
 
-    pub fn view(&self) -> Element<'_, LoginMessage> {
-        let msg_button: Container<LoginMessage> = container(
-            button("Send msg and navigate to test")
-                .on_press(LoginMessage::TestMsg { msg: "Hello, World !".to_string() })   
-        );
+    pub fn view(&self) -> Element<'_, Message> {
+        let msg_button = button("Send msg and navigate to test")
+                .on_press(LoginMessage::TestMsg { msg: "Hello, World !".to_string() }.into());
 
-
+        let switch_button = button("Switch to test page")
+                .on_press(Message::Navigate(Page::Test(Test::new().0)));
+        
 
         column![
             text("Login"),
-            msg_button
+            msg_button,
+            switch_button
         ].into()
+    }
+}
+
+impl From<LoginMessage> for Message {
+    fn from(message: LoginMessage) -> Self {
+        Self::Login(message)
     }
 }

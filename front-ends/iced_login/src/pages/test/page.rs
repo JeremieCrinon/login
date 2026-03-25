@@ -1,8 +1,9 @@
 use iced::{
     Element, Task, widget::{
-        Container, button, column, container, text
+        button, column, text
     }
 };
+use crate::Message;
 
 #[derive(Debug, Clone)]
 pub struct Test {}
@@ -22,7 +23,7 @@ impl Test {
         )
     }
 
-    pub fn update(&mut self, message: TestMessage) -> Task<TestMessage> {
+    pub(crate) fn update(&mut self, message: TestMessage) -> Task<Message> {
         match message {
             TestMessage::TestMsg { msg } => {
                 println!("Message: {}", msg)
@@ -31,15 +32,19 @@ impl Test {
         Task::none()
     }
 
-    pub fn view(&self) -> Element<'_, TestMessage> {
-        let msg_button: Container<TestMessage> = container(
-            button("Send msg")
-                .on_press(TestMessage::TestMsg { msg: "Hello, World !".to_string() })   
-        );
+    pub fn view(&self) -> Element<'_, Message> {
+        let msg_button = button("Send msg")
+                .on_press(TestMessage::TestMsg { msg: "Hello, World !".to_string() }.into());
 
         column![
             text("Test"),
             msg_button
         ].into()
+    }
+}
+
+impl From<TestMessage> for Message {
+    fn from(message: TestMessage) -> Self {
+        Self::Test(message)
     }
 }
