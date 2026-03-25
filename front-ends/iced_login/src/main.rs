@@ -1,10 +1,14 @@
 mod pages;
+mod translator;
+
+use std::collections::HashMap;
 
 use iced::{
     Element, Task
 };
 use pages::login::{Login, LoginMessage};
 use pages::test::{Test, TestMessage};
+use translator::translator::Translator;
 
 #[derive(Debug, Clone)]
 pub enum Page {
@@ -14,6 +18,7 @@ pub enum Page {
 
 pub struct UI {
     page: Page,
+    translations: HashMap<String, String>,
 }
 
 #[derive(Debug, Clone)]
@@ -28,6 +33,7 @@ impl UI {
         (
             UI {
                 page: Page::Login(Login::new().0),
+                translations: Translator::new().get_translation("en"),
             },
             Task::none(),
         )
@@ -53,10 +59,9 @@ impl UI {
 
     pub fn view(&self) -> Element<'_, Message> {
         match &self.page {
-            Page::Login(login) => login.view(),
-            Page::Test(test) => test.view(),
+            Page::Login(login) => login.view(&self.translations),
+            Page::Test(test) => test.view(&self.translations),
         }
-
     }
 }
 

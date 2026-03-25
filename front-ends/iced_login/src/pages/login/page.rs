@@ -3,6 +3,7 @@ use iced::{
         button, column, text
     }
 };
+use std::collections::HashMap;
 
 use crate::{Page, pages::test::Test, Message};
 
@@ -33,16 +34,14 @@ impl Login {
         }
     }
 
-    pub fn view(&self) -> Element<'_, Message> {
-        let msg_button = button("Send msg and navigate to test")
-                .on_press(LoginMessage::TestMsg { msg: "Hello, World !".to_string() }.into());
-
+    pub fn view<'a>(&'a self, translations: &'a HashMap<String, String>) -> Element<'a, Message> {
+        let msg_button = button("send message")
+                .on_press(LoginMessage::TestMsg { msg: "Hello, World!".to_string() }.into());
         let switch_button = button("Switch to test page")
                 .on_press(Message::Navigate(Page::Test(Test::new().0)));
         
-
         column![
-            text("Login"),
+            text(translations["login_title"].as_str()),
             msg_button,
             switch_button
         ].into()
