@@ -2,10 +2,10 @@ mod pages;
 mod translator;
 
 use std::collections::HashMap;
-
 use iced::{
     Element, Task
 };
+
 use pages::login::{Login, LoginMessage};
 use pages::test::{Test, TestMessage};
 use translator::translator::Translator;
@@ -30,10 +30,19 @@ pub enum Message {
 
 impl UI {
     pub fn new() -> (Self, Task<Message>) {
+        let translator = Translator::new();
+        let available = translator.available_locales();
+        let locale = sys_locale::get_locales()
+            .find_map(|sys_locale| {
+                let lang = sys_locale.split(&['-', '_'][..]).next().unwrap_or(&sys_locale);
+                available.contains(&lang).then_some(lang.to_string())
+            })
+            .unwrap_or_else(|| "en".to_string());
+
         (
             UI {
                 page: Page::Login(Login::new().0),
-                translations: Translator::new().get_translation("en"),
+                translations: translator.get_translation(&locale),
             },
             Task::none(),
         )

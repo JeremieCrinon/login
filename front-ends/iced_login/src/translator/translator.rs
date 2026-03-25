@@ -17,6 +17,10 @@ impl Translator {
         Translator { en: en_json, fr: fr_json }
     }
 
+    pub fn available_locales(&self) -> Vec<&str> {
+        vec!["en", "fr"]
+    }
+
     pub fn get_translation (&self, lang: &str) -> HashMap<String, String> {
         let json = match lang {
             "fr" => &self.fr,
