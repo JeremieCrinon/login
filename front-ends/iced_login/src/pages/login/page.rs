@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use iced::{
-    Element, Task, widget::{
-        button, column, text, Text, text_input
+    Element, Fill, Font, Task, font::Weight, widget::{
+        Text, button, column, text, text_input, container
     }
 };
 
@@ -22,7 +22,7 @@ pub enum LoginMessage {
     EmailChanged(String),
     PasswordChanged(String),
     Send,
-    Receive(Result<String, String>),
+    Receive(Result<String, (u16, String)>),
 }
 
 impl Login {
@@ -52,6 +52,7 @@ impl Login {
             }
             LoginMessage::Send => {
                 self.working = true;
+                self.error = String::new();
 
                 let email = self.email.clone();
                 let password = self.password.clone();
@@ -72,15 +73,19 @@ impl Login {
 
                         match result {
                             Ok(response) => {
-                                match response.text().await {
-                                    Ok(text) => Ok(text),
-                                    Err(e) => Err(e.to_string()),
+                                let status = response.status();
+                                let text = response.text().await.unwrap_or_default();
+                                
+                                if status.is_success() {
+                                    Ok(text)
+                                } else {
+                                    Err((status.as_u16(), text))
                                 }
                             }
-                            Err(e) => Err(e.to_string())
+                            Err(e) => Err((0, e.to_string()))
                         }
                     },
-                    |result: Result<String, String>| {
+                    |result: Result<String, (u16, String)>| {
                         LoginMessage::Receive(result).into()
                     }                
                 );
@@ -91,9 +96,14 @@ impl Login {
                     Ok(res) => {
                         println!("Success, {}", res);
                     }
-                    Err(e) => {
-                        println!("Error: {}", e);
-                        self.error = state.translations["unknown_error"].to_string();
+                    Err((status, body)) => {
+                        println!("Error status {}: {}", status, body);
+                        let translations = &state.translations;
+
+                        self.error = match status {
+                            400 => translations["login_invalid"].to_string(),
+                            _ => translations["unknown_error"].to_string()
+                        };
                     }
                 }
                 Task::none()
@@ -110,10 +120,12 @@ impl Login {
         )};
 
         let email_input = text_input(translations["email"].as_str(), &self.email)
-            .on_input(|s| LoginMessage::EmailChanged(s).into());
+            .on_input(|s| LoginMessage::EmailChanged(s).into())
+            .on_submit(LoginMessage::Send.into());
             
         let password_input = text_input(translations["password"].as_str(), &self.password)
             .on_input(|s| LoginMessage::PasswordChanged(s).into())
+            .on_submit(LoginMessage::Send.into())
             .secure(true);
 
         let send_button = button(translations["login_send"].as_str())
@@ -127,7 +139,17 @@ impl Login {
         ];
 
         column![
-            text(translations["login_title"].as_str()),
+            container(text(translations["login_title"].as_str())
+                .size(36)
+                .font(Font {
+                    weight: Weight::Bold,
+                    ..Font::DEFAULT
+                })
+                .width(Fill)
+                .center(),
+            )
+            .padding(10),
+
             login_form
         ].into()
     }

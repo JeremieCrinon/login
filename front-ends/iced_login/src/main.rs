@@ -4,7 +4,8 @@ mod config;
 
 use std::collections::HashMap;
 use iced::{
-    Element, Task
+    Element, Task, keyboard, Subscription, Event, 
+    widget::operation::{focus_next, focus_previous}
 };
 
 use pages::login::{Login, LoginMessage};
@@ -33,7 +34,9 @@ pub struct UI {
 pub enum Message {
     Navigate(Page),
     Login(LoginMessage),
-    Test(TestMessage)
+    Test(TestMessage),
+    FocusNext,
+    FocusPrevious,
 }
 
 impl UI {
@@ -67,6 +70,12 @@ impl UI {
                 self.page = page;
                 Task::none()
             }
+            (_, Message::FocusNext) => {
+                focus_next()
+            }
+            (_, Message::FocusPrevious) => {
+                focus_previous()
+            }
             (Page::Login(page), Message::Login(msg)) => {
                 page.update(msg, &self.state)
             }
@@ -85,10 +94,26 @@ impl UI {
             Page::Test(test) => test.view(&self.state),
         }
     }
+
+    pub fn subscription(&self) -> Subscription<Message> {
+        iced::event::listen_with(|event, _status, _id| {
+            if let Event::Keyboard(keyboard::Event::KeyPressed { key, modifiers, .. }) = event {
+                if let keyboard::Key::Named(keyboard::key::Named::Tab) = key {
+                    return if modifiers.shift() {
+                        Some(Message::FocusPrevious)
+                    } else {
+                        Some(Message::FocusNext)
+                    };
+                }
+            }
+            None
+        })
+    }
 }
 
 fn main() -> iced::Result {
     iced::application(UI::new, UI::update, UI::view)
+        .subscription(UI::subscription)
         .title(CONFIG.app_display_name.as_str())
         .run()
 }
