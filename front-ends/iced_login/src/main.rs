@@ -1,5 +1,6 @@
 mod pages;
 mod translator;
+mod config;
 
 use std::collections::HashMap;
 use iced::{
@@ -9,6 +10,8 @@ use iced::{
 use pages::login::{Login, LoginMessage};
 use pages::test::{Test, TestMessage};
 use translator::translator::Translator;
+
+use config::CONFIG;
 
 #[derive(Debug, Clone)]
 pub enum Page {
@@ -76,6 +79,6 @@ impl UI {
 
 fn main() -> iced::Result {
     iced::application(UI::new, UI::update, UI::view)
-        .title("Iced login")
+        .title(CONFIG.app_display_name.as_str())
         .run()
 }
