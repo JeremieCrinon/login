@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use iced::{
     Element, Task, widget::{
         button, column, text
@@ -34,7 +32,7 @@ impl Test {
         Task::none()
     }
 
-    pub fn view<'a>(&'a self, state: &'a AppState) -> Element<'a, Message> {
+    pub fn view<'a>(&'a self, _state: &'a AppState) -> Element<'a, Message> {
         let msg_button = button("Send msg")
                 .on_press(TestMessage::TestMsg { msg: "Hello, World !".to_string() }.into());
 

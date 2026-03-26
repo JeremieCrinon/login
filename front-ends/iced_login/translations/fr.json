@@ -2,6 +2,7 @@
   "locale": "fr",
   "email": "Email",
   "password": "Mot de passe",
+  "unexpected_error": "Une erreur inattendue est suvenue",
   "login_title": "Se connecter",
   "login_send": "Se connecter"
 }

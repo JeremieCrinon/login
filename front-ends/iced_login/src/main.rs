@@ -68,7 +68,7 @@ impl UI {
                 Task::none()
             }
             (Page::Login(page), Message::Login(msg)) => {
-                page.update(msg)
+                page.update(msg, &self.state)
             }
             (Page::Test(page), Message::Test(msg)) => {
                 page.update(msg)

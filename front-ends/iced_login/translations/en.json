@@ -2,6 +2,7 @@
   "locale": "en",
   "email": "Email",
   "password": "Password",
+  "unknown_error": "An unexpected error occured.",
   "login_title": "Login",
   "login_send": "Login"
 }
