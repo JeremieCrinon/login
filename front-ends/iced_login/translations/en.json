@@ -1,4 +1,7 @@
 {
   "locale": "en",
-  "login_title": "Login"
+  "email": "Email",
+  "password": "Password",
+  "login_title": "Login",
+  "login_send": "Login"
 }
