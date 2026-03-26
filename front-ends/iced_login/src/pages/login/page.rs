@@ -5,7 +5,7 @@ use iced::{
 };
 use std::collections::HashMap;
 
-use crate::Message;
+use crate::{AppState, Message};
 
 #[derive(Debug, Clone)]
 pub struct Login {
@@ -53,7 +53,9 @@ impl Login {
         }
     }
 
-    pub fn view<'a>(&'a self, translations: &'a HashMap<String, String>) -> Element<'a, Message> {
+    pub fn view<'a>(&'a self, state: &'a AppState) -> Element<'a, Message> {
+        let translations = &state.translations;
+
         let error_text: Option<Text> = if self.error.is_empty() {None} else {Some(
             text(self.error.as_str())
                 .style(text::danger)

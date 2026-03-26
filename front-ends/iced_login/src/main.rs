@@ -13,6 +13,11 @@ use translator::translator::Translator;
 
 use config::CONFIG;
 
+pub struct AppState {
+    pub translations: HashMap<String, String>,
+    pub reqwest_client: reqwest::Client,
+}
+
 #[derive(Debug, Clone)]
 pub enum Page {
     Login(Login),
@@ -21,7 +26,7 @@ pub enum Page {
 
 pub struct UI {
     page: Page,
-    translations: HashMap<String, String>,
+    state: AppState
 }
 
 #[derive(Debug, Clone)]
@@ -42,10 +47,15 @@ impl UI {
             })
             .unwrap_or_else(|| "en".to_string());
 
+        let translations = translator.get_translation(&locale);
+        let client = reqwest::Client::new();
+
+        let state = AppState {translations, reqwest_client: client};
+
         (
             UI {
                 page: Page::Login(Login::new().0),
-                translations: translator.get_translation(&locale),
+                state: state
             },
             Task::none(),
         )
@@ -71,8 +81,8 @@ impl UI {
 
     pub fn view(&self) -> Element<'_, Message> {
         match &self.page {
-            Page::Login(login) => login.view(&self.translations),
-            Page::Test(test) => test.view(&self.translations),
+            Page::Login(login) => login.view(&self.state),
+            Page::Test(test) => test.view(&self.state),
         }
     }
 }

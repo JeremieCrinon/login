@@ -5,7 +5,7 @@ use iced::{
         button, column, text
     }
 };
-use crate::Message;
+use crate::{AppState, Message};
 
 #[derive(Debug, Clone)]
 pub struct Test {}
@@ -34,7 +34,7 @@ impl Test {
         Task::none()
     }
 
-    pub fn view<'a>(&'a self, translations: &'a HashMap<String, String>) -> Element<'a, Message> {
+    pub fn view<'a>(&'a self, state: &'a AppState) -> Element<'a, Message> {
         let msg_button = button("Send msg")
                 .on_press(TestMessage::TestMsg { msg: "Hello, World !".to_string() }.into());
 
