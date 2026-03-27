@@ -14,35 +14,41 @@ use translator::translator::Translator;
 
 use config::CONFIG;
 
+/// This struct contains the things we need to pass to pages.
 pub struct AppState {
     pub translations: HashMap<String, String>,
     pub reqwest_client: reqwest::Client,
 }
 
+/// This contains the list of the pages. If you add a new page, and it here
 #[derive(Debug, Clone)]
 pub enum Page {
     Login(Login),
     Test(Test),
 }
 
+/// This is the main iced struct. It will handle the displaying of the other pages
 pub struct UI {
-    page: Page,
+    page: Page, // The current page we are displaying
     state: AppState
 }
 
+/// This is the main message. All the child pages will be extending this enum with their messages
 #[derive(Debug, Clone)]
 pub enum Message {
     Navigate(Page),
-    Login(LoginMessage),
+    Login(LoginMessage), // When a child calls a message of itself, it will be actually a Message containing it's own message
     Test(TestMessage),
-    FocusNext,
-    FocusPrevious,
+    FocusNext, // For tab nav
+    FocusPrevious, // For tab nav
 }
 
 impl UI {
     pub fn new() -> (Self, Task<Message>) {
         let translator = Translator::new();
         let available = translator.available_locales();
+
+        // Take the first system locale available in the translator or use en
         let locale = sys_locale::get_locales()
             .find_map(|sys_locale| {
                 let lang = sys_locale.split(&['-', '_'][..]).next().unwrap_or(&sys_locale);
@@ -51,14 +57,15 @@ impl UI {
             .unwrap_or_else(|| "en".to_string());
 
         let translations = translator.get_translation(&locale);
-        let client = reqwest::Client::new();
 
-        let state = AppState {translations, reqwest_client: client};
+        let client = reqwest::Client::new(); // Create a single reqwest client as creating a new one for each request is slow
+
+        let state = AppState {translations, reqwest_client: client}; // Create the appState that will contain eveything the pages needs
 
         (
             UI {
-                page: Page::Login(Login::new().0),
-                state: state
+                page: Page::Login(Login::new().0), // Start with the login page (will change in the future for an handler that redirects the user where they should be)
+                state: state // Add the appState here
             },
             Task::none(),
         )
@@ -77,7 +84,7 @@ impl UI {
                 focus_previous()
             }
             (Page::Login(page), Message::Login(msg)) => {
-                page.update(msg, &self.state)
+                page.update(msg, &self.state) // Pass to the child page it's own message
             }
             (Page::Test(page), Message::Test(msg)) => {
                 page.update(msg)
@@ -89,12 +96,13 @@ impl UI {
     }
 
     pub fn view(&self) -> Element<'_, Message> {
-        match &self.page {
+        match &self.page { // Display the correct page depending on which is chosen
             Page::Login(login) => login.view(&self.state),
             Page::Test(test) => test.view(&self.state),
         }
     }
 
+    /// This is for tab navigation
     pub fn subscription(&self) -> Subscription<Message> {
         iced::event::listen_with(|event, _status, _id| {
             if let Event::Keyboard(keyboard::Event::KeyPressed { key, modifiers, .. }) = event {

@@ -9,6 +9,7 @@ use iced::{
 use crate::{AppState, Message, Page, pages::test::Test};
 use crate::CONFIG;
 
+/// The login iced struct
 #[derive(Debug, Clone)]
 pub struct Login {
     email: String,
@@ -17,6 +18,7 @@ pub struct Login {
     working: bool,
 }
 
+/// The messages of this page
 #[derive(Debug, Clone)]
 pub enum LoginMessage {
     EmailChanged(String),
@@ -41,12 +43,10 @@ impl Login {
     pub(crate) fn update(&mut self, message: LoginMessage, state: &AppState) -> Task<Message> {
         match message {
             LoginMessage::EmailChanged(new_email) => {
-                println!("New email: {}", &new_email);
                 self.email = new_email;
                 Task::none()
             }
             LoginMessage::PasswordChanged(new_password) => {
-                println!("New password: {}", &new_password);
                 self.password = new_password;
                 Task::none()
             }
@@ -54,6 +54,7 @@ impl Login {
                 self.working = true;
                 self.error = String::new();
 
+                // Clone everything as self won't be available in the async call
                 let email = self.email.clone();
                 let password = self.password.clone();
                 let client = state.reqwest_client.clone();
@@ -61,32 +62,34 @@ impl Login {
 
                 return Task::perform(
                     async move {
+                        // Create the request body as a hashmap and put the content in
                         let mut body = HashMap::new();
                         body.insert("email", email);
                         body.insert("password", password);
 
+                        // Make the request with reqwest
                         let result = client
                             .post(format!("{}/login", api_url))
-                            .json(&body)
+                            .json(&body) // Put the body as json
                             .send()
                             .await;
 
                         match result {
-                            Ok(response) => {
-                                let status = response.status();
-                                let text = response.text().await.unwrap_or_default();
+                            Ok(response) => { // If the result is ok, it doesn't mean the request is successfull, just that it got a response
+                                let status = response.status(); // Get the response status code
+                                let text = response.text().await.unwrap_or_default(); // Get the response content as text
                                 
-                                if status.is_success() {
+                                if status.is_success() { // If the status code is 2xx
                                     Ok(text)
-                                } else {
+                                } else { // Else return an error with the code
                                     Err((status.as_u16(), text))
                                 }
                             }
-                            Err(e) => Err((0, e.to_string()))
+                            Err(e) => Err((0, e.to_string())) // If the result isn't ok, it means we didn't get a response from the server at all, so we just put a 0 status code 
                         }
                     },
                     |result: Result<String, (u16, String)>| {
-                        LoginMessage::Receive(result).into()
+                        LoginMessage::Receive(result).into() // When the async job is finished, we call the receive message that will handle the update 
                     }                
                 );
             }
@@ -96,6 +99,7 @@ impl Login {
 
                 match result {
                     Ok(res) => {
+                        // Parse the json so we can use it
                         let json: serde_json::Value = match serde_json::from_str(&res) {
                             Ok(v) => v,
                             Err(e) => {
@@ -105,6 +109,7 @@ impl Login {
                             }
                         };
 
+                        // Get the token from the response
                         let token = match json["token"].as_str() {
                             Some(t) => t,
                             None => {
@@ -114,6 +119,7 @@ impl Login {
                             }
                         };
 
+                        // Create a new keyring entry for the token
                         let entry = match keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
                             Ok(e) => e,
                             Err(e) => {
@@ -123,17 +129,21 @@ impl Login {
                             }
                         };
 
+                        // Set the token in the entry
                         if let Err(e) = entry.set_password(token) {
                             println!("Error storing token in keyring: {}", e);
                             self.error = translations["unknown_error"].to_string();
                             return Task::none();
                         }
 
+                        // Return a message to navigate to the test page (temporary, it will return to an handler to redirect them where they should be in the future)
                         return Task::done(Message::Navigate(Page::Test(Test::new().0)));
                     }
                     Err((status, body)) => {
+                        // Print the error for debuging
                         println!("Error status {}: {}", status, body);
 
+                        // If the error is 400, the credentials are invalid (expected error) else it's an unexpected error
                         self.error = match status {
                             400 => translations["login_invalid"].to_string(),
                             _ => translations["unknown_error"].to_string()
@@ -147,13 +157,16 @@ impl Login {
     }
 
     pub fn view<'a>(&'a self, state: &'a AppState) -> Element<'a, Message> {
+        // Get the translations from the state
         let translations = &state.translations;
 
+        // If there is an error we create a text element with the error, else it's None
         let error_text: Option<Text> = if self.error.is_empty() {None} else {Some(
             text(self.error.as_str())
                 .style(text::danger)
         )};
 
+        // We create the form inputs
         let email_input = text_input(translations["email"].as_str(), &self.email)
             .on_input(|s| LoginMessage::EmailChanged(s).into())
             .on_submit(LoginMessage::Send.into());
@@ -190,6 +203,7 @@ impl Login {
     }
 }
 
+// Allow LoginMessage to be converted to Message with .into()
 impl From<LoginMessage> for Message {
     fn from(message: LoginMessage) -> Self {
         Self::Login(message)
