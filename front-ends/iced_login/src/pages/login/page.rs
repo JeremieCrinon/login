@@ -6,7 +6,7 @@ use iced::{
     }
 };
 
-use crate::{AppState, Message};
+use crate::{AppState, Message, Page, pages::test::Test};
 use crate::CONFIG;
 
 #[derive(Debug, Clone)]
@@ -92,13 +92,47 @@ impl Login {
             }
             LoginMessage::Receive(result) => {
                 self.working = false;
+                let translations = &state.translations;
+
                 match result {
                     Ok(res) => {
-                        println!("Success, {}", res);
+                        let json: serde_json::Value = match serde_json::from_str(&res) {
+                            Ok(v) => v,
+                            Err(e) => {
+                                println!("Error parsing json from login response: {}", e);
+                                self.error = translations["unknown_error"].to_string();
+                                return Task::none();
+                            }
+                        };
+
+                        let token = match json["token"].as_str() {
+                            Some(t) => t,
+                            None => {
+                                println!("No token in response");
+                                self.error = translations["unknown_error"].to_string();
+                                return Task::none();
+                            }
+                        };
+
+                        let entry = match keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
+                            Ok(e) => e,
+                            Err(e) => {
+                                println!("Error creating keyring entry: {}", e);
+                                self.error = translations["unknown_error"].to_string();
+                                return Task::none();
+                            }
+                        };
+
+                        if let Err(e) = entry.set_password(token) {
+                            println!("Error storing token in keyring: {}", e);
+                            self.error = translations["unknown_error"].to_string();
+                            return Task::none();
+                        }
+
+                        return Task::done(Message::Navigate(Page::Test(Test::new().0)));
                     }
                     Err((status, body)) => {
                         println!("Error status {}: {}", status, body);
-                        let translations = &state.translations;
 
                         self.error = match status {
                             400 => translations["login_invalid"].to_string(),
@@ -106,6 +140,7 @@ impl Login {
                         };
                     }
                 }
+
                 Task::none()
             }
         }

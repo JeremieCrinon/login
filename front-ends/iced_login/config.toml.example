@@ -1,2 +1,3 @@
-app_display_name="Iced login"
-api_url="http://localhost:3000"
+app_name="iced_login" #The app name for internal use 
+app_display_name="Iced login" #The app name displayed to the user
+api_url="http://localhost:3000" #The url of the associated backend
