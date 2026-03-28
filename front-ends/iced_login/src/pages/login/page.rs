@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use iced::{
-    Element, Fill, Font, Task, font::Weight, widget::{
-        Text, button, column, text, text_input, container
+    Element, Fill, Font, Padding, Task, font::Weight, widget::{
+        button, column, container, text, text_input
     }
 };
 
@@ -161,45 +161,87 @@ impl Login {
         let translations = &state.translations;
 
         // If there is an error we create a text element with the error, else it's None
-        let error_text: Option<Text> = if self.error.is_empty() {None} else {Some(
-            text(self.error.as_str())
-                .style(text::danger)
+        let error_text = if self.error.is_empty() {None} else {Some(
+            container(
+                text(self.error.as_str())
+                    .style(text::danger)
+            )
+            .padding(10)
         )};
 
         // We create the form inputs
-        let email_input = text_input(translations["email"].as_str(), &self.email)
-            .on_input(|s| LoginMessage::EmailChanged(s).into())
-            .on_submit(LoginMessage::Send.into());
+        let email_input = container(
+            text_input(translations["email"].as_str(), &self.email)
+                .on_input(|s| LoginMessage::EmailChanged(s).into())
+                .on_submit(LoginMessage::Send.into())
+        )
+        .padding(Padding {
+            top: 0.0,
+            left: 10.0,
+            right: 10.0,
+            bottom: 0.0,
+        });
             
-        let password_input = text_input(translations["password"].as_str(), &self.password)
-            .on_input(|s| LoginMessage::PasswordChanged(s).into())
-            .on_submit(LoginMessage::Send.into())
-            .secure(true);
+        let password_input = container(
+            text_input(translations["password"].as_str(), &self.password)
+                .on_input(|s| LoginMessage::PasswordChanged(s).into())
+                .on_submit(LoginMessage::Send.into())
+                .secure(true)
+        )
+        .padding(Padding {
+            top: 10.0,
+            left: 10.0,
+            right: 10.0,
+            bottom: 0.0,
+        });
 
-        let send_button = button(translations["login_send"].as_str())
-            .on_press(LoginMessage::Send.into());
+        let send_button = container(
+            button(translations["login_send"].as_str())
+                .on_press(LoginMessage::Send.into())
+        )
+        .padding(Padding {
+            top: 10.0,
+            left: 10.0,
+            right: 10.0,
+            bottom: 0.0,
+        });
 
-        let login_form = column![
-            error_text,
-            email_input,
-            password_input,
-            send_button
-        ];
+        let login_form = container(
+            column![
+                error_text,
+                email_input,
+                password_input,
+                send_button
+            ]
+        )
+        .center_x(300);
 
-        column![
-            container(text(translations["login_title"].as_str())
-                .size(36)
-                .font(Font {
-                    weight: Weight::Bold,
-                    ..Font::DEFAULT
-                })
-                .width(Fill)
-                .center(),
-            )
-            .padding(10),
+        let login_card = container(
+            column![
+                container(text(translations["login_title"].as_str())
+                    .size(36)
+                    .font(Font {
+                        weight: Weight::Bold,
+                        ..Font::DEFAULT
+                    })
+                    .width(Fill)
+                    .center(),
+                )
+                .padding(20),
 
-            login_form
-        ].into()
+                container(
+                    login_form
+                )
+                .center_x(Fill)
+                
+            ]
+
+        )
+        .center(Fill)
+        .into();
+
+
+        login_card
     }
 }
 
