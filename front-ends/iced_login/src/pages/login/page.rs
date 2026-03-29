@@ -6,7 +6,7 @@ use iced::{
     }
 };
 
-use crate::{AppState, Message, Page, pages::test::Test};
+use crate::{AppState, Message};
 use crate::CONFIG;
 use crate::styles::card;
 
@@ -120,25 +120,7 @@ impl Login {
                             }
                         };
 
-                        // Create a new keyring entry for the token
-                        let entry = match keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
-                            Ok(e) => e,
-                            Err(e) => {
-                                println!("Error creating keyring entry: {}", e);
-                                self.error = translations["unknown_error"].to_string();
-                                return Task::none();
-                            }
-                        };
-
-                        // Set the token in the entry
-                        if let Err(e) = entry.set_password(token) {
-                            println!("Error storing token in keyring: {}", e);
-                            self.error = translations["unknown_error"].to_string();
-                            return Task::none();
-                        }
-
-                        // Return a message to navigate to the test page (temporary, it will return to an handler to redirect them where they should be in the future)
-                        return Task::done(Message::Navigate(Page::Test(Test::new().0)));
+                        return Task::done(Message::ChangeToken(token.to_string()));
                     }
                     Err((status, body)) => {
                         // Print the error for debuging

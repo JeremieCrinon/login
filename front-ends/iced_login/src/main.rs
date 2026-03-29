@@ -20,6 +20,7 @@ use config::CONFIG;
 pub struct AppState {
     pub translations: HashMap<String, String>,
     pub reqwest_client: reqwest::Client,
+    pub token: Option<String>,
 }
 
 /// This contains the list of the pages. If you add a new page, and it here
@@ -40,10 +41,16 @@ pub struct UI {
 #[derive(Debug, Clone)]
 pub enum Message {
     Navigate(Page),
+    RedirectUser, // Redirect a user to where they should be depending on where they are
+    ChangeToken(String), // Change the token to a new one
+    
+    // Pages
     Login(LoginMessage), // When a child calls a message of itself, it will be actually a Message containing it's own message
     Test(TestMessage),
-    FocusNext, // For tab nav
-    FocusPrevious, // For tab nav
+
+    // Tab nav
+    FocusNext,
+    FocusPrevious,
 }
 
 impl UI {
@@ -63,11 +70,12 @@ impl UI {
 
         let client = reqwest::Client::new(); // Create a single reqwest client as creating a new one for each request is slow
 
-        let state = AppState {translations, reqwest_client: client}; // Create the appState that will contain eveything the pages needs
+        let state = AppState {translations, reqwest_client: client, token: None}; // Create the appState that will contain eveything the pages needs
 
         (
             UI {
-                page: Page::Login(Login::new().0), // Start with the login page (will change in the future for an handler that redirects the user where they should be)
+                page: Page::Loading(Loading::new()), // Start with the loading page for the time working to know where the user should be 
+                // page: Page::Login(Login::new().0), // Temporary to test login page
                 state: state // Add the appState here
             },
             Task::none(),
@@ -85,6 +93,33 @@ impl UI {
             }
             (_, Message::FocusPrevious) => {
                 focus_previous()
+            }
+            (_, Message::ChangeToken(token)) => {
+                // Set the token in memory for quick access on app's lifetime
+                self.state.token = Some(token.clone());
+
+                // Create a new keyring entry for the token
+                let entry = match keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
+                    Ok(e) => e,
+                    Err(e) => {
+                        println!("Error creating keyring entry: {}", e);
+                        //TODO: Redirect to an error page with a button to return to where the user should be
+                        return Task::none();
+                    }
+                };
+
+                // Set the token in the entry
+                if let Err(e) = entry.set_password(token.as_str()) {
+                    println!("Error storing token in keyring: {}", e);
+                    //TODO: Redirect to an error page with a button to return to where the user should be
+                    return Task::none();
+                }
+
+                Task::done(Message::RedirectUser)
+            }
+            (_, Message::RedirectUser) => {
+                //TODO: Check where the user should be redirected
+                Task::done(Message::Navigate(Page::Loading(Loading::new())))
             }
             (Page::Login(page), Message::Login(msg)) => {
                 page.update(msg, &self.state) // Pass to the child page it's own message
