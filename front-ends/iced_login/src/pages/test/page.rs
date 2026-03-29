@@ -3,7 +3,8 @@ use iced::{
         button, column, text, Text
     }
 };
-use crate::{AppState, Message, config::CONFIG};
+use crate::{AppState, Message};
+use crate::helpers::get_token_from_keychain;
 
 #[derive(Debug, Clone)]
 pub struct Test {
@@ -19,26 +20,7 @@ pub enum TestMessage {
 
 impl Test {
     pub fn new() -> (Self, Task<TestMessage>) {
-        let entry: Option<keyring::Entry> = match keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
-            Ok(e) => Some(e),
-            Err(e) => {
-                println!("Error getting the keyring entry: {}", e);
-                None
-            }
-        };
-
-        let token = match entry {
-            Some(e) => {
-                match e.get_password() {
-                    Ok(t) => Some(t),
-                    Err(e) => {
-                        println!("Failed to get password from keyring entry: {}", e);
-                        None
-                    }
-                }
-            }
-            None => None
-        };
+        let token = get_token_from_keychain();
 
         (
             Test {
@@ -66,10 +48,14 @@ impl Test {
             None => None
         };
 
+        let logout_button = button("logout")
+            .on_press(Message::Logout);
+
         column![
             text("Test"),
             msg_button,
-            token_text
+            token_text,
+            logout_button
         ].into()
     }
 }

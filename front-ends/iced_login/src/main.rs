@@ -2,6 +2,7 @@ mod pages;
 mod translator;
 mod config;
 mod styles;
+mod helpers;
 
 use std::collections::HashMap;
 use iced::{
@@ -13,7 +14,7 @@ use pages::login::{Login, LoginMessage};
 use pages::test::{Test, TestMessage};
 use pages::loading::Loading;
 use translator::translator::Translator;
-
+use helpers::get_token_from_keychain;
 use config::CONFIG;
 
 /// This struct contains the things we need to pass to pages.
@@ -43,6 +44,7 @@ pub enum Message {
     Navigate(Page),
     RedirectUser, // Redirect a user to where they should be depending on where they are
     ChangeToken(String), // Change the token to a new one
+    Logout,
     
     // Pages
     Login(LoginMessage), // When a child calls a message of itself, it will be actually a Message containing it's own message
@@ -78,7 +80,7 @@ impl UI {
                 // page: Page::Login(Login::new().0), // Temporary to test login page
                 state: state // Add the appState here
             },
-            Task::none(),
+            Task::done(Message::RedirectUser),
         )
     }
     
@@ -115,11 +117,68 @@ impl UI {
                     return Task::none();
                 }
 
-                Task::done(Message::RedirectUser)
+                // Task::done(Message::RedirectUser)
+                Task::done(Message::Navigate(Page::Test(Test::new().0)))
+            }
+            (_, Message::Logout) => {
+                if let Ok(entry) = keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
+                    let _ = entry.delete_credential();  // Ignore any error
+                }
+
+                self.state.token = None;
+
+                return Task::done(Message::Navigate(Page::Login(Login::new().0)));
             }
             (_, Message::RedirectUser) => {
-                //TODO: Check where the user should be redirected
-                Task::done(Message::Navigate(Page::Loading(Loading::new())))
+                self.page = Page::Loading(Loading::new());
+
+                let state = &self.state;
+                let client = state.reqwest_client.clone();
+                let api_url = CONFIG.api_url.clone();
+
+                let token = get_token_from_keychain();
+
+                // If we don't already have a token in keychain, it means the user isn't authenticated
+                let token = match token {
+                    Some(t) => t,
+                    None => return Task::done(Message::Navigate(Page::Login(Login::new().0))),
+                };
+
+                Task::perform(
+                    async move {
+                        let result = client
+                            .get(format!("{}/user-infos", api_url))
+                            .header("Authorization", format!("Bearer {}", token))
+                            .send()
+                            .await;
+                        
+                        match result {
+                            Ok(response) => {
+                                let status = response.status();
+                                if status == reqwest::StatusCode::UNAUTHORIZED {
+                                    Err("unauthorized".to_string())
+                                } else {
+                                    Ok(())
+                                    // TODO: Parse response and return user roles
+                                }
+                            }
+                            Err(e) => {
+                                println!("Error getting the user from token: {}", e);
+                                Err(e.to_string())
+                            }
+                        }
+                    },
+                    |result| {
+                        match result {
+                            Ok(_) => {
+                                //TODO: Handle roles
+                                Message::Navigate(Page::Test(Test::new().0))
+                            },
+                            Err(e) if e == "unauthorized" => Message::Logout,
+                            Err(_) => Message::Navigate(Page::Test(Test::new().0)), // TODO: Redirect to error page
+                        }
+                    }
+                )            
             }
             (Page::Login(page), Message::Login(msg)) => {
                 page.update(msg, &self.state) // Pass to the child page it's own message
