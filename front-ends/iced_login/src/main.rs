@@ -1,6 +1,7 @@
 mod pages;
 mod translator;
 mod config;
+mod styles;
 
 use std::collections::HashMap;
 use iced::{

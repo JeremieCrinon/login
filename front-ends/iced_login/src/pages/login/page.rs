@@ -8,6 +8,7 @@ use iced::{
 
 use crate::{AppState, Message, Page, pages::test::Test};
 use crate::CONFIG;
+use crate::styles::card;
 
 /// The login iced struct
 #[derive(Debug, Clone)]
@@ -237,11 +238,15 @@ impl Login {
             ]
 
         )
+        .center(300)
+        .style(card)
+        .padding(10);
+
+        container(
+            login_card
+        )
         .center(Fill)
-        .into();
-
-
-        login_card
+        .into()
     }
 }
 
