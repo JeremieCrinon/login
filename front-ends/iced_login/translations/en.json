@@ -3,6 +3,7 @@
   "email": "Email",
   "password": "Password",
   "unknown_error": "An unexpected error occured.",
+  "loading": "Loading",
   "login_title": "Login",
   "login_send": "Login",
   "login_invalid": "Email or password incorrect."

@@ -3,6 +3,7 @@
   "email": "Email",
   "password": "Mot de passe",
   "unexpected_error": "Une erreur inattendue est suvenue",
+  "loading": "Chargement",
   "login_title": "Se connecter",
   "login_send": "Se connecter",
   "login_invalid": "Email ou mot de passe incorrect."

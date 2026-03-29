@@ -197,8 +197,12 @@ impl Login {
         });
 
         let send_button = container(
-            button(translations["login_send"].as_str())
-                .on_press(LoginMessage::Send.into())
+            if self.working {
+                button(text(format!("{}...", translations["loading"])))
+            } else {
+                button(translations["login_send"].as_str())
+                    .on_press(LoginMessage::Send.into())
+            }
         )
         .padding(Padding {
             top: 10.0,

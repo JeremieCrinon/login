@@ -11,6 +11,7 @@ use iced::{
 
 use pages::login::{Login, LoginMessage};
 use pages::test::{Test, TestMessage};
+use pages::loading::Loading;
 use translator::translator::Translator;
 
 use config::CONFIG;
@@ -26,6 +27,7 @@ pub struct AppState {
 pub enum Page {
     Login(Login),
     Test(Test),
+    Loading(Loading),
 }
 
 /// This is the main iced struct. It will handle the displaying of the other pages
@@ -100,6 +102,7 @@ impl UI {
         match &self.page { // Display the correct page depending on which is chosen
             Page::Login(login) => login.view(&self.state),
             Page::Test(test) => test.view(&self.state),
+            Page::Loading(loading) => loading.view(&self.state),
         }
     }
 
