@@ -14,7 +14,7 @@ pub fn get_token_from_keychain() -> Option<String> {
             match e.get_password() {
                 Ok(t) => Some(t),
                 Err(e) => {
-                    println!("Failed to get password from token keyring entry: {}", e);
+                    println!("Failed to get password from token keyring entry, maybe the user isn't logged in: {}", e);
                     None
                 }
             }

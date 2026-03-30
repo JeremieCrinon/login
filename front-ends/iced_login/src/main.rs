@@ -22,6 +22,8 @@ pub struct AppState {
     pub translations: HashMap<String, String>,
     pub reqwest_client: reqwest::Client,
     pub token: Option<String>,
+    pub user_email: Option<String>,
+    pub user_roles: Option<Vec<String>>,
 }
 
 /// This contains the list of the pages. If you add a new page, and it here
@@ -43,6 +45,7 @@ pub struct UI {
 pub enum Message {
     Navigate(Page),
     RedirectUser, // Redirect a user to where they should be depending on where they are
+    RedirectUserHandler {token: String, roles: Vec<String>, email: String}, // Handle the redirection and state update if the user is logged in after a redirect user call 
     ChangeToken(String), // Change the token to a new one
     Logout,
     
@@ -72,7 +75,7 @@ impl UI {
 
         let client = reqwest::Client::new(); // Create a single reqwest client as creating a new one for each request is slow
 
-        let state = AppState {translations, reqwest_client: client, token: None}; // Create the appState that will contain eveything the pages needs
+        let state = AppState {translations, reqwest_client: client, token: None, user_email: None, user_roles: None}; // Create the appState that will contain eveything the pages needs
 
         (
             UI {
@@ -117,8 +120,7 @@ impl UI {
                     return Task::none();
                 }
 
-                // Task::done(Message::RedirectUser)
-                Task::done(Message::Navigate(Page::Test(Test::new().0)))
+                Task::done(Message::RedirectUser)
             }
             (_, Message::Logout) => {
                 if let Ok(entry) = keyring::Entry::new(CONFIG.app_name.as_str(), "token") {
@@ -158,8 +160,41 @@ impl UI {
                                 if status == reqwest::StatusCode::UNAUTHORIZED {
                                     Err("unauthorized".to_string())
                                 } else {
-                                    Ok(())
-                                    // TODO: Parse response and return user roles
+                                    let text = match response.text().await {
+                                        Ok(r) => r,
+                                        Err(e) => {
+                                            println!("Error parsing the response into text: {}", e);
+                                            return Err("unknown".to_string());
+                                        }
+                                    };
+
+                                    let json: serde_json::Value = match serde_json::from_str(&text) {
+                                        Ok(j) => j,
+                                        Err(e) => {
+                                            println!("Error parsing json from response: {}", e);
+                                            return Err("unknown".to_string());
+                                        }
+                                    };
+
+                                    let roles = match json["roles"].as_array() {
+                                        Some(r) => r.clone(),
+                                        None => {
+                                            println!("Error getting the roles from parsed response");
+                                            return Err("unknown".to_string());
+                                        }
+                                    };
+
+                                    let roles: Vec<String> = roles.iter().map(|r| r.as_str().unwrap_or_default().to_string()).collect();
+
+                                    let email = match json["user_mail"].as_str() {
+                                        Some(e) => e,
+                                        None  => {
+                                            println!("Error getting the email from parsed response");
+                                            return Err("unknown".to_string());
+                                        }
+                                    };
+
+                                    Ok((token, roles, email.to_string()))
                                 }
                             }
                             Err(e) => {
@@ -170,15 +205,35 @@ impl UI {
                     },
                     |result| {
                         match result {
-                            Ok(_) => {
-                                //TODO: Handle roles
-                                Message::Navigate(Page::Test(Test::new().0))
+                            Ok((token, roles, email)) => {
+                                Message::RedirectUserHandler { token, roles, email }
                             },
                             Err(e) if e == "unauthorized" => Message::Logout,
                             Err(_) => Message::Navigate(Page::Test(Test::new().0)), // TODO: Redirect to error page
                         }
                     }
                 )            
+            }
+            (_, Message::RedirectUserHandler { token, roles, email }) => {
+                // Set in the state infos about the user
+                self.state.token = Some(token); // We also set it here, the keychain is slow compared to memory
+                self.state.user_roles = Some(roles.clone());
+                self.state.user_email = Some(email);
+
+                if roles.contains(&"new_account".to_string()) {
+                    println!("Redirect to new account page");
+                    //TODO: Redirect to new account page
+                    return Task::done(Message::Navigate(Page::Test(Test::new().0)));
+                }
+
+                if roles.contains(&"unverified_email".to_string()) {
+                    println!("Redirect to unverified email page");
+                    //TODO: Redirect to unverified email page
+                    return Task::done(Message::Navigate(Page::Test(Test::new().0)));
+                }
+
+                //TODO: Redirect to the dashboard
+                return Task::done(Message::Navigate(Page::Test(Test::new().0)));
             }
             (Page::Login(page), Message::Login(msg)) => {
                 page.update(msg, &self.state) // Pass to the child page it's own message

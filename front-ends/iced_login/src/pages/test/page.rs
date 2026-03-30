@@ -39,12 +39,31 @@ impl Test {
         Task::none()
     }
 
-    pub fn view<'a>(&'a self, _state: &'a AppState) -> Element<'a, Message> {
+    pub fn view<'a>(&'a self, state: &'a AppState) -> Element<'a, Message> {
+        let email = &state.user_email;
+        let roles = &state.user_roles;
+        let token_from_memory = &state.token;
+
         let msg_button = button("Send msg")
                 .on_press(TestMessage::TestMsg { msg: "Hello, World !".to_string() }.into());
 
-        let token_text: Option<Text> = match &self.token {
-            Some(t) => Some(text(t.as_str())),
+        let token_keychain: Option<Text> = match &self.token {
+            Some(t) => Some(text(format!("Token from keychain: {}", t.as_str()))),
+            None => None
+        };
+
+        let token_memory: Option<Text> = match token_from_memory {
+            Some(t) => Some(text(format!("Token from memory: {}", t.as_str()))),
+            None => None
+        };
+
+        let email: Option<Text> = match email {
+            Some(e) => Some(text(format!("Email: {}", e.as_str()))),
+            None => None
+        };
+
+        let roles: Option<Text> = match roles {
+            Some(r) => Some(text(format!("Roles: {}", r.join(", ")))),
             None => None
         };
 
@@ -54,7 +73,10 @@ impl Test {
         column![
             text("Test"),
             msg_button,
-            token_text,
+            token_keychain,
+            token_memory,
+            email,
+            roles,
             logout_button
         ].into()
     }
