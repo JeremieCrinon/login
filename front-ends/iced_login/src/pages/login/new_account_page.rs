@@ -3,15 +3,20 @@ use iced::{
         button, column, container, text, text_input, row
     }
 };
+use validator::Validate;
+use serde::Deserialize;
 
+use crate::helpers::validate_password;
 use crate::{AppState, Message};
 use crate::CONFIG;
 use crate::styles::card;
 
 /// The new_account iced struct
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Validate, Deserialize)]
 pub struct NewAccount {
+    #[validate(email(message = "validation_email"))]
     email: String,
+    #[validate(custom(function = "validate_password"))]
     password: String,
     password_confirm: String,
     error: Option<String>,
@@ -56,6 +61,50 @@ impl NewAccount {
                 Task::none()
             }
             NewAccountMessage::Send => {
+                self.working = true;
+                self.error = None;
+
+                let translations = &state.translations;
+
+                match self.validate() {
+                    Ok(_) => (),
+                    Err(e) => {
+                        println!("Validation error: {:?}", e);
+                        // Get the first error message
+                        let error_msg = e.field_errors()
+                        .values()
+                        .next()
+                        .and_then(|errors| errors.first())
+                        .map(|error| {
+                            error.message
+                                .clone()
+                                .map(|msg| msg.to_string())
+                                .unwrap_or_else(|| error.code.to_string())
+                        })
+                        .unwrap_or_else(|| "error_unknown".to_string());                        
+
+                        self.error = Some(translations[&error_msg].to_string());
+                        self.working = false;
+                        return Task::none();                    
+                    }
+                };
+
+                if self.password != self.password_confirm {
+                    println!("Password does not match password confirm");
+                    self.error = Some(translations["validation_password_confirm_not_matching"].to_string());
+                    self.working = false;
+                    return Task::none();
+                }
+
+                println!("Validation passed");
+
+                // Clone everything as self won't be available in the async call
+                let email = self.email.clone();
+                let password = self.password.clone();
+
+                //TODO: Request
+
+                self.working = false;
                 println!("Send");
                 Task::none()
             }
