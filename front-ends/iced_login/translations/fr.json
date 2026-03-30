@@ -2,9 +2,13 @@
   "locale": "fr",
   "email": "Email",
   "password": "Mot de passe",
+  "password_confirm": "Confirmer le mot de passe",
   "unexpected_error": "Une erreur inattendue est suvenue",
   "loading": "Chargement",
+  "logout": "Se déconnecter",
   "login_title": "Se connecter",
   "login_send": "Se connecter",
-  "login_invalid": "Email ou mot de passe incorrect."
+  "login_invalid": "Email ou mot de passe incorrect.",
+  "new_account_title": "Créez votre compte",
+  "new_account_send": "Créer mon compte"
 }

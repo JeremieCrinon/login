@@ -10,7 +10,7 @@ use iced::{
     widget::operation::{focus_next, focus_previous}
 };
 
-use pages::login::{Login, LoginMessage};
+use pages::login::{Login, LoginMessage, NewAccount, NewAccountMessage};
 use pages::test::{Test, TestMessage};
 use pages::loading::Loading;
 use translator::translator::Translator;
@@ -29,9 +29,10 @@ pub struct AppState {
 /// This contains the list of the pages. If you add a new page, and it here
 #[derive(Debug, Clone)]
 pub enum Page {
-    Login(Login),
-    Test(Test),
     Loading(Loading),
+    Login(Login),
+    NewAccount(NewAccount),
+    Test(Test),
 }
 
 /// This is the main iced struct. It will handle the displaying of the other pages
@@ -51,6 +52,7 @@ pub enum Message {
     
     // Pages
     Login(LoginMessage), // When a child calls a message of itself, it will be actually a Message containing it's own message
+    NewAccount(NewAccountMessage),
     Test(TestMessage),
 
     // Tab nav
@@ -221,9 +223,7 @@ impl UI {
                 self.state.user_email = Some(email);
 
                 if roles.contains(&"new_account".to_string()) {
-                    println!("Redirect to new account page");
-                    //TODO: Redirect to new account page
-                    return Task::done(Message::Navigate(Page::Test(Test::new().0)));
+                    return Task::done(Message::Navigate(Page::NewAccount(NewAccount::new(&self.state).0)));
                 }
 
                 if roles.contains(&"unverified_email".to_string()) {
@@ -238,6 +238,9 @@ impl UI {
             (Page::Login(page), Message::Login(msg)) => {
                 page.update(msg, &self.state) // Pass to the child page it's own message
             }
+            (Page::NewAccount(page), Message::NewAccount(msg)) => {
+                page.update(msg, &self.state)
+            }
             (Page::Test(page), Message::Test(msg)) => {
                 page.update(msg)
             }
@@ -250,6 +253,7 @@ impl UI {
     pub fn view(&self) -> Element<'_, Message> {
         match &self.page { // Display the correct page depending on which is chosen
             Page::Login(login) => login.view(&self.state),
+            Page::NewAccount(new_account) => new_account.view(&self.state),
             Page::Test(test) => test.view(&self.state),
             Page::Loading(loading) => loading.view(&self.state),
         }

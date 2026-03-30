@@ -2,9 +2,13 @@
   "locale": "en",
   "email": "Email",
   "password": "Password",
+  "password_confirm": "Confirm the password",
   "unknown_error": "An unexpected error occured.",
   "loading": "Loading",
+  "logout": "Logout",
   "login_title": "Login",
   "login_send": "Login",
-  "login_invalid": "Email or password incorrect."
+  "login_invalid": "Email or password incorrect.",
+  "new_account_title": "Create your account",
+  "new_account_send": "Create my account"
 }

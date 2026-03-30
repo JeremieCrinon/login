@@ -15,11 +15,11 @@ use crate::styles::card;
 pub struct Login {
     email: String,
     password: String,
-    error: String,
+    error: Option<String>,
     working: bool,
 }
 
-/// The messages of this page
+/// The messages of the login page
 #[derive(Debug, Clone)]
 pub enum LoginMessage {
     EmailChanged(String),
@@ -34,7 +34,7 @@ impl Login {
             Login {
                 email: String::new(),
                 password: String::new(),
-                error: String::new(),
+                error: None,
                 working: false
             },
             Task::none(),
@@ -53,7 +53,7 @@ impl Login {
             }
             LoginMessage::Send => {
                 self.working = true;
-                self.error = String::new();
+                self.error = None;
 
                 // Clone everything as self won't be available in the async call
                 let email = self.email.clone();
@@ -105,7 +105,7 @@ impl Login {
                             Ok(v) => v,
                             Err(e) => {
                                 println!("Error parsing json from login response: {}", e);
-                                self.error = translations["unknown_error"].to_string();
+                                self.error = Some(translations["unknown_error"].to_string());
                                 return Task::none();
                             }
                         };
@@ -115,7 +115,7 @@ impl Login {
                             Some(t) => t,
                             None => {
                                 println!("No token in response");
-                                self.error = translations["unknown_error"].to_string();
+                                self.error = Some(translations["unknown_error"].to_string());
                                 return Task::none();
                             }
                         };
@@ -128,8 +128,8 @@ impl Login {
 
                         // If the error is 400, the credentials are invalid (expected error) else it's an unexpected error
                         self.error = match status {
-                            400 => translations["login_invalid"].to_string(),
-                            _ => translations["unknown_error"].to_string()
+                            400 => Some(translations["login_invalid"].to_string()),
+                            _ => Some(translations["unknown_error"].to_string())
                         };
                     }
                 }
@@ -143,14 +143,17 @@ impl Login {
         // Get the translations from the state
         let translations = &state.translations;
 
-        // If there is an error we create a text element with the error, else it's None
-        let error_text = if self.error.is_empty() {None} else {Some(
-            container(
-                text(self.error.as_str())
-                    .style(text::danger)
-            )
-            .padding(10)
-        )};
+        // If there is an error, we create a text element with the error, else it's None
+        let error_text = match &self.error {
+            Some(e) => {Some(
+                container(
+                    text(e.as_str())
+                        .style(text::danger)
+                )
+                .padding(10)
+            )},
+            None => None
+        };
 
         // We create the form inputs
         let email_input = container(
