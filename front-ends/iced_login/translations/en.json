@@ -17,5 +17,9 @@
   "login_send": "Login",
   "login_invalid": "Email or password incorrect.",
   "new_account_title": "Create your account",
-  "new_account_send": "Create my account"
+  "new_account_send": "Create my account",
+  "verify_email_invalid_code": "The code you entered isn't correct",
+  "verify_email_code": "Code received by email",
+  "verify_email_title": "Verify your email adress",
+  "verify_email_send": "Verify my email address"
 }

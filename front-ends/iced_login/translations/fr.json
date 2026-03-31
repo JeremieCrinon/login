@@ -17,5 +17,10 @@
   "login_send": "Se connecter",
   "login_invalid": "Email ou mot de passe incorrect.",
   "new_account_title": "Créez votre compte",
-  "new_account_send": "Créer mon compte"
+  "new_account_send": "Créer mon compte",
+  "verify_email_invalid_code": "Le code que vous avez entré n'est pas correct",
+  "verify_email_code": "Code reçu par email",
+  "verify_email_title": "Vérifiez votre adresse email",
+  "verify_email_send": "Vérifier mon adresse email"
+
 }

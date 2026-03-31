@@ -10,7 +10,7 @@ use iced::{
     widget::operation::{focus_next, focus_previous}
 };
 
-use pages::login::{Login, LoginMessage, NewAccount, NewAccountMessage};
+use pages::login::{Login, LoginMessage, NewAccount, NewAccountMessage, VerifyEmail, VerifyEmailMessage};
 use pages::test::{Test, TestMessage};
 use pages::loading::Loading;
 use translator::translator::Translator;
@@ -32,6 +32,7 @@ pub enum Page {
     Loading(Loading),
     Login(Login),
     NewAccount(NewAccount),
+    VerifyEmail(VerifyEmail),
     Test(Test),
 }
 
@@ -53,6 +54,7 @@ pub enum Message {
     // Pages
     Login(LoginMessage), // When a child calls a message of itself, it will be actually a Message containing it's own message
     NewAccount(NewAccountMessage),
+    VerifyEmail(VerifyEmailMessage),
     Test(TestMessage),
 
     // Tab nav
@@ -82,7 +84,6 @@ impl UI {
         (
             UI {
                 page: Page::Loading(Loading::new()), // Start with the loading page for the time working to know where the user should be 
-                // page: Page::Login(Login::new().0), // Temporary to test login page
                 state: state // Add the appState here
             },
             Task::done(Message::RedirectUser),
@@ -228,8 +229,7 @@ impl UI {
 
                 if roles.contains(&"unverified_email".to_string()) {
                     println!("Redirect to unverified email page");
-                    //TODO: Redirect to unverified email page
-                    return Task::done(Message::Navigate(Page::Test(Test::new().0)));
+                    return Task::done(Message::Navigate(Page::VerifyEmail(VerifyEmail::new().0)));
                 }
 
                 //TODO: Redirect to the dashboard
@@ -239,6 +239,9 @@ impl UI {
                 page.update(msg, &self.state) // Pass to the child page it's own message
             }
             (Page::NewAccount(page), Message::NewAccount(msg)) => {
+                page.update(msg, &self.state)
+            }
+            (Page::VerifyEmail(page), Message::VerifyEmail(msg)) => {
                 page.update(msg, &self.state)
             }
             (Page::Test(page), Message::Test(msg)) => {
@@ -254,6 +257,7 @@ impl UI {
         match &self.page { // Display the correct page depending on which is chosen
             Page::Login(login) => login.view(&self.state),
             Page::NewAccount(new_account) => new_account.view(&self.state),
+            Page::VerifyEmail(verify_email) => verify_email.view(&self.state),
             Page::Test(test) => test.view(&self.state),
             Page::Loading(loading) => loading.view(&self.state),
         }
