@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use iced::{
     Element, Fill, Font, Padding, Task, font::Weight, widget::{
         button, column, container, text, text_input, row
@@ -30,6 +32,7 @@ pub enum NewAccountMessage {
     PasswordChanged(String),
     PasswordConfirmChanged(String),
     Send,
+    Receive(Result<String, (u16, String)>),
 }
 
 impl NewAccount {
@@ -64,7 +67,7 @@ impl NewAccount {
                 self.working = true;
                 self.error = None;
 
-                let translations = &state.translations;
+                let translations = state.translations.clone();
 
                 match self.validate() {
                     Ok(_) => (),
@@ -96,17 +99,76 @@ impl NewAccount {
                     return Task::none();
                 }
 
-                println!("Validation passed");
-
                 // Clone everything as self won't be available in the async call
+                let client = state.reqwest_client.clone();           
                 let email = self.email.clone();
                 let password = self.password.clone();
+                let api_url = CONFIG.api_url.clone();
+                let token = state.token.clone();
 
-                //TODO: Request
+                let token = match token {
+                    Some(t) => t,
+                    None => return Task::done(Message::RedirectUser),
+                };
 
+                return Task::perform(
+                    async move {
+                        // Create the request body as a hashmap and put the content in
+                        let mut body = HashMap::new();
+                        body.insert("new_email", email);
+                        body.insert("new_password", password);
+
+                        // Make the request with reqwest
+                        let result = client
+                            .post(format!("{}/modify-new-account/{}", api_url, translations["locale"]))
+                            .json(&body)
+                            .header("Authorization", format!("Bearer {}", token))
+                            .send()
+                            .await;
+
+                        match result {
+                            Ok(response) => { // If the response if ok, it doesn't mean the status code is 2xx, it just means the request got a response
+                                let status = response.status(); // Get the status code
+                                let text = response.text().await.unwrap_or_default();
+
+                                if status.is_success() {
+                                    Ok(text)
+                                } else {
+                                    Err((status.as_u16(), text))
+                                }
+                            }
+                            Err(e) => Err((0, e.to_string()))
+                        }
+                    }, 
+                    |result: Result<String, (u16, String)>| {
+                        NewAccountMessage::Receive(result).into()
+                    }
+                );
+            }
+        
+            NewAccountMessage::Receive(result) => {
                 self.working = false;
-                println!("Send");
-                Task::none()
+                let translations = &state.translations;
+
+                match result {
+                    Ok(_) => {
+                        // Everything is fine, we call the RedirectUser message that will updated the roles and redirect the user where they should be
+                        return Task::done(Message::RedirectUser);
+                    }
+                    Err((status, body)) => {
+                        // Print the error for debuging
+                        println!("Error status {}: {}", status, body);
+
+                        // If the error is 401, we call the redirect user message that will check if the token is valid
+                        if status == 401 {
+                            return Task::done(Message::RedirectUser);
+                        }
+
+                        // Else, it's an unexpected error
+                        self.error = Some(translations["unknown_error"].to_string());
+                        return Task::none();
+                    }
+                }
             }
         }
     }
