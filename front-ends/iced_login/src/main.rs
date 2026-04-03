@@ -13,6 +13,7 @@ use iced::{
 use pages::login::{Login, LoginMessage, NewAccount, NewAccountMessage, VerifyEmail, VerifyEmailMessage};
 use pages::test::{Test, TestMessage};
 use pages::loading::Loading;
+use pages::error::Error;
 use translator::translator::Translator;
 use helpers::get_token_from_keychain;
 use config::CONFIG;
@@ -34,6 +35,7 @@ pub enum Page {
     NewAccount(NewAccount),
     VerifyEmail(VerifyEmail),
     Test(Test),
+    Error(Error),
 }
 
 /// This is the main iced struct. It will handle the displaying of the other pages
@@ -111,16 +113,14 @@ impl UI {
                     Ok(e) => e,
                     Err(e) => {
                         println!("Error creating keyring entry: {}", e);
-                        //TODO: Redirect to an error page with a button to return to where the user should be
-                        return Task::none();
+                        return Task::done(Message::RedirectUser(Page::Error(Error::new())));
                     }
                 };
 
                 // Set the token in the entry
                 if let Err(e) = entry.set_password(token.as_str()) {
                     println!("Error storing token in keyring: {}", e);
-                    //TODO: Redirect to an error page with a button to return to where the user should be
-                    return Task::none();
+                    return Task::done(Message::RedirectUser(Page::Error(Error::new())));
                 }
 
                 Task::done(Message::RedirectUser)
@@ -212,7 +212,7 @@ impl UI {
                                 Message::RedirectUserHandler { token, roles, email }
                             },
                             Err(e) if e == "unauthorized" => Message::Logout,
-                            Err(_) => Message::Navigate(Page::Test(Test::new().0)), // TODO: Redirect to error page
+                            Err(_) => Message::Navigate(Page::Error(Error::new())), 
                         }
                     }
                 )            
@@ -260,6 +260,7 @@ impl UI {
             Page::VerifyEmail(verify_email) => verify_email.view(&self.state),
             Page::Test(test) => test.view(&self.state),
             Page::Loading(loading) => loading.view(&self.state),
+            Page::Error(error) => error.view(&self.state),
         }
     }
 
