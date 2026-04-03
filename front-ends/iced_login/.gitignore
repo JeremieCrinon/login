@@ -1,3 +1,6 @@
 /target
+/dist
 Cargo.lock
 config.toml
+.dockerfile-hash
+.intentionally-empty-file.o
